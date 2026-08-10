@@ -1,0 +1,494 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SeblakPNK</title>
+    
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- QRCode.js Library -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+    
+    <style>
+        .active-tab {
+            border-bottom: 3px solid #2563eb;
+            color: #2563eb;
+            font-weight: 600;
+        }
+        @media print {
+            .no-print { display: none; }
+            .print-only { display: block !important; }
+        }
+    </style>
+</head>
+<body class="bg-slate-100 text-slate-800 font-sans min-h-screen">
+
+    <!-- KONFIGURASI SCRIPT API GOOGLE SHEETS (DIPASANG OLEH ADMIN) -->
+    <script>
+        // Masukkan URL Web App Apps Script milik Anda di bawah ini
+        const CONFIG_API_URL = "https://script.google.com/macros/s/AKfycbzjHM6Gvv8Z_iMWcv4Yf84SmEOSIvgj3znG2aC7C4VTtQ0ty_yz3jiXJaAdVfbicLk/exec";
+    </script>
+
+    <!-- HEADER / NAVIGATION -->
+    <header class="bg-slate-900 text-white shadow-md sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 py-3 flex justify-between items-center">
+            <div class="flex items-center space-x-3">
+                <span class="text-2xl">📊</span>
+                <div>
+                    <h1 class="font-bold text-lg leading-tight">Seblak</h1>
+                    <p class="text-xs text-slate-400">Database & Reporting System</p>
+                </div>
+            </div>
+        </div>
+        
+        <!-- NAV TABS -->
+        <nav class="bg-slate-800 border-t border-slate-700 overflow-x-auto">
+            <div class="max-w-7xl mx-auto flex space-x-1 px-4 text-sm font-medium text-slate-400">
+                <button onclick="switchTab('profile')" id="tab-profile" class="py-3 px-4 hover:text-white whitespace-nowrap active-tab">🆔 Profil</button>
+                <button onclick="switchTab('baromij')" id="tab-baromij" class="py-3 px-4 hover:text-white whitespace-nowrap">📋 Agenda Kelas</button>
+                <button onclick="switchTab('yaumiyan')" id="tab-yaumiyan" class="py-3 px-4 hover:text-white whitespace-nowrap">📊 Yaumiyan</button>
+                <button onclick="switchTab('ib')" id="tab-ib" class="py-3 px-4 hover:text-white whitespace-nowrap">💰 Lapor IB</button>
+            </div>
+        </nav>
+    </header>
+
+    <!-- MAIN CONTAINER -->
+    <main class="max-w-7xl mx-auto px-4 py-6">
+
+        <!-- ALERT CONTAINER -->
+        <div id="alertBox" class="hidden mb-6 p-4 rounded-lg flex items-center justify-between text-sm font-medium"></div>
+
+        <!-- TAB 1: PROFIL & MYID -->
+        <section id="sec-profile" class="tab-content space-y-6">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <!-- FORM EDIT PROFIL -->
+                <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-200">
+                    <h2 class="text-xl font-bold mb-4 flex items-center gap-2">📝 Profil</h2>
+                    <form id="formProfile" onsubmit="handleProfileSubmit(event)" class="space-y-4">
+                        
+                        <div>
+                            <label class="block text-sm font-medium mb-1">Proda *</label>
+                            <select id="regSektor" required class="w-full p-2.5 border rounded-lg focus:ring-2 focus:ring-blue-500 text-sm">
+                                <option value="BK">BK</option>
+                                <option value="KB">KB</option>
+                                <option value="KH">KH</option>
+                                <option value="KM">KM</option>
+                                <option value="KP">KP</option>
+                                <option value="KS">KS</option>
+                                <option value="KT">KT</option>
+                                <option value="KU">KU</option>
+                                <option value="LD">LD</option>
+                                <option value="MP">MP</option>
+                                <option value="MW">MW</option>
+                                <option value="SB">SB</option>
+                                <option value="SG">SG</option>
+                                <option value="SK">SK</option>
+                                <option value="ST">ST</option>
+                            </select>
+                        </div>
+
+                        <!-- GENERATOR KODE KELAS -->
+                        <div class="p-3 bg-slate-50 border rounded-lg space-y-3">
+                            <label class="block text-xs font-bold uppercase text-slate-500">Kode Kelas</label>
+                            <div class="grid grid-cols-3 gap-2">
+                                <select id="regK1" class="p-2 border rounded text-sm">
+                                    <option value="AA">AA</option>
+                                    <option value="AK">AK</option>
+                                    <option value="AS">AS</option>
+                                    <option value="AX">AX</option>
+                                    <option value="IA">IA</option>
+                                    <option value="IK">IK</option>
+                                    <option value="IS">IS</option>
+                                    <option value="IX">IX</option>
+                                </select>
+                                <select id="regK2" class="p-2 border rounded text-sm">
+                                    <option value="1">1</option>
+                                    <option value="2">2</option>
+                                    <option value="3">3</option>
+                                    <option value="4">4</option>
+                                    <option value="5">5</option>
+                                </select>
+                                <select id="regK3" class="p-2 border rounded text-sm">
+                                    <option value="01">01</option>
+                                    <option value="02">02</option>
+                                    <option value="03">03</option>
+                                    <option value="04">04</option>
+                                    <option value="05">05</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label class="block text-xs text-slate-500">ID Kelas Final:</label>
+                                <input type="text" id="regIdKelas" readonly class="w-full p-2 bg-slate-200 rounded font-mono text-sm font-bold">
+                            </div>
+                        </div>
+
+                        <div>
+                            <label class="block text-sm font-medium mb-1">ID Anggota (Format: 3 Huruf + 2 Angka, Misal: WAC01) *</label>
+                            <input type="text" id="regIdAnggota" required pattern="^[A-Za-z]{3}\d{2}$" placeholder="WAC01" class="w-full p-2.5 border rounded-lg uppercase focus:ring-2 focus:ring-blue-500 text-sm">
+                        </div>
+
+                        <button type="submit" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-2.5 rounded-lg transition shadow-sm">
+                            Simpan Profil
+                        </button>
+                    </form>
+                </div>
+
+                <!-- TAMPILAN ID CARD / QR CODE -->
+                <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-200 flex flex-col items-center justify-center text-center">
+                    <h2 class="text-xl font-bold mb-2">🆔 Kartu Digital (MyID)</h2>
+                    <p class="text-xs text-slate-500 mb-6">QR Code Identitas Kelas & Anggota</p>
+
+                    <div id="qrcode" class="p-4 bg-white border-2 border-dashed border-slate-300 rounded-xl mb-4 min-h-[200px] min-w-[200px] flex items-center justify-center">
+                        <span class="text-slate-400 text-sm">Data profil belum diisi</span>
+                    </div>
+
+                    <div id="cardDetails" class="w-full space-y-2 text-sm text-left bg-slate-50 p-4 rounded-lg border">
+                        <p><span class="text-slate-500">Proda:</span> <strong id="lblSektor">-</strong></p>
+                        <p><span class="text-slate-500">Kelas:</span> <strong id="lblKelas">-</strong></p>
+                        <p><span class="text-slate-500">ID Anggota:</span> <strong id="lblAnggota" class="text-blue-600">-</strong></p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- TAB 2: AGENDA KELAS -->
+        <section id="sec-baromij" class="tab-content hidden max-w-2xl mx-auto">
+            <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-200 space-y-6">
+                <div>
+                    <h2 class="text-xl font-bold text-slate-800">📋 Agenda Kelas</h2>
+                    <p class="text-xs text-slate-500">Khusus Walas / Penanggung Jawab Kelas Pekanan</p>
+                </div>
+
+                <form id="formBaromij" onsubmit="handleBaromijSubmit(event)" class="space-y-4">
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-sm">
+                        <label class="flex items-center justify-between p-3 bg-slate-50 rounded-lg border hover:bg-slate-100 cursor-pointer">
+                            <span>Walas Hadir</span>
+                            <input type="checkbox" name="walashadir" class="w-5 h-5 accent-blue-600">
+                        </label>
+                        <label class="flex items-center justify-between p-3 bg-slate-50 rounded-lg border hover:bg-slate-100 cursor-pointer">
+                            <span>Tilawah / Hafalan</span>
+                            <input type="checkbox" name="tilawah_hafalan" class="w-5 h-5 accent-blue-600">
+                        </label>
+                        <label class="flex items-center justify-between p-3 bg-slate-50 rounded-lg border hover:bg-slate-100 cursor-pointer">
+                            <span>Taujih Walas</span>
+                            <input type="checkbox" name="kalam_naqib" class="w-5 h-5 accent-blue-600">
+                        </label>
+                        <label class="flex items-center justify-between p-3 bg-slate-50 rounded-lg border hover:bg-slate-100 cursor-pointer">
+                            <span>Kultum Siswa</span>
+                            <input type="checkbox" name="tatsqif_usroh" class="w-5 h-5 accent-blue-600">
+                        </label>
+                        <label class="flex items-center justify-between p-3 bg-slate-50 rounded-lg border hover:bg-slate-100 cursor-pointer">
+                            <span>Pengumuman</span>
+                            <input type="checkbox" name="talimat" class="w-5 h-5 accent-blue-600">
+                        </label>
+                    </div>
+
+                    <label class="flex items-center justify-between p-3 bg-blue-50 rounded-lg border border-blue-200 cursor-pointer text-sm">
+                        <span class="font-semibold text-blue-900">Kelas Belajar Offline?</span>
+                        <input type="checkbox" name="kelasoffline" class="w-5 h-5 accent-blue-600">
+                    </label>
+
+                    <div>
+                        <label class="block text-sm font-medium mb-1">Keterangan</label>
+                        <textarea name="keterangan" rows="3" placeholder="Isikan keterangan kegiatan..." class="w-full p-2.5 border rounded-lg text-sm"></textarea>
+                    </div>
+
+                    <button type="submit" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-3 rounded-lg shadow-sm transition">
+                        Kirim Laporan Agenda Kelas
+                    </button>
+                </form>
+            </div>
+        </section>
+
+        <!-- TAB 3: YAUMIYAN -->
+        <section id="sec-yaumiyan" class="tab-content hidden max-w-2xl mx-auto">
+            <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-200 space-y-6">
+                <div>
+                    <h2 class="text-xl font-bold text-slate-800">📊 Evaluasi Mutaba'ah Yaumiyan</h2>
+                    <p class="text-xs text-slate-500">Laporan Isian Amalan Yaumiyan Anggota</p>
+                </div>
+
+                <form id="formYaumiyan" onsubmit="handleYaumiyanSubmit(event)" class="space-y-4">
+                    <label class="flex items-center justify-between p-3 bg-slate-50 rounded-lg border cursor-pointer text-sm">
+                        <span class="font-medium">Hadir Kelas Pekan Ini?</span>
+                        <input type="checkbox" name="kehadiran_kelas" class="w-5 h-5 accent-blue-600">
+                    </label>
+
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-sm font-medium mb-1">Sholat Jamaah (0 - 35)</label>
+                            <input type="number" name="sholat_jamaah" min="0" max="35" value="0" class="w-full p-2.5 border rounded-lg text-sm">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium mb-1">Qiyamul Lail (0 - 7 Malam)</label>
+                            <input type="number" name="qiyamul_lail" min="0" max="7" value="0" class="w-full p-2.5 border rounded-lg text-sm">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium mb-1">Tilawah Al-Qur'an (0 - 30 Juz)</label>
+                            <input type="number" name="tilawah" min="0" max="30" value="0" class="w-full p-2.5 border rounded-lg text-sm">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium mb-1">Shoum Sunnah (0 - 7 Hari)</label>
+                            <input type="number" name="shoum_sunnah" min="0" max="7" value="0" class="w-full p-2.5 border rounded-lg text-sm">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium mb-1">Olahraga (0 - 7 Kali)</label>
+                            <input type="number" name="olah_raga" min="0" max="7" value="0" class="w-full p-2.5 border rounded-lg text-sm">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium mb-1">Al-Ma'tsurat (0 - 14 Kali)</label>
+                            <input type="number" name="al_matsurot" min="0" max="14" value="0" class="w-full p-2.5 border rounded-lg text-sm">
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-medium mb-1">Keterangan</label>
+                        <input type="text" name="keterangan" value="-" class="w-full p-2.5 border rounded-lg text-sm">
+                    </div>
+
+                    <button type="submit" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-medium py-3 rounded-lg shadow-sm transition">
+                        Kirim Laporan Yaumiyan
+                    </button>
+                </form>
+            </div>
+        </section>
+
+        <!-- TAB 4: LAPOR IB -->
+        <section id="sec-ib" class="tab-content hidden max-w-md mx-auto">
+            <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-200 space-y-6">
+                <div>
+                    <h2 class="text-xl font-bold text-slate-800">💳 Laporan Kontribusi IB</h2>
+                    <p class="text-xs text-slate-500">Konfirmasi Setoran Infaq/IB Bulanan</p>
+                </div>
+
+                <form id="formIb" onsubmit="handleIbSubmit(event)" class="space-y-4">
+                    <div>
+                        <label class="block text-sm font-medium mb-1">Bulan Pelaporan *</label>
+                        <select id="ibBulan" required class="w-full p-2.5 border rounded-lg text-sm">
+                            <option value="01">01 - Januari</option><option value="02">02 - Februari</option>
+                            <option value="03">03 - Maret</option><option value="04">04 - April</option>
+                            <option value="05">05 - Mei</option><option value="06">06 - Juni</option>
+                            <option value="07">07 - Juli</option><option value="08">08 - Agustus</option>
+                            <option value="09">09 - September</option><option value="10">10 - Oktober</option>
+                            <option value="11">11 - November</option><option value="12">12 - Desember</option>
+                        </select>
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-medium mb-1">Tahun Pelaporan *</label>
+                        <select id="ibTahun" required class="w-full p-2.5 border rounded-lg text-sm"></select>
+                    </div>
+
+                    <button type="submit" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-medium py-3 rounded-lg shadow-sm transition">
+                        Laporkan Setoran IB
+                    </button>
+                </form>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- SCRIPT LOGIC MAIN (VANILLA JS) -->
+    <script>
+        let currentUser = JSON.parse(localStorage.getItem('ISIM_USER_PROFILE')) || null;
+        let qrCodeObj = null;
+
+        document.addEventListener('DOMContentLoaded', () => {
+            initYearOptions();
+            loadProfileToUI();
+            updateKodeKelasListener();
+        });
+
+        // TABS SWITCHER
+        function switchTab(tabName) {
+            document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
+            document.querySelectorAll('nav button').forEach(el => el.classList.remove('active-tab'));
+            
+            document.getElementById(`sec-${tabName}`).classList.remove('hidden');
+            document.getElementById(`tab-${tabName}`).classList.add('active-tab');
+        }
+
+        // ALERT HELPER
+        function showAlert(msg, colorClass) {
+            const box = document.getElementById('alertBox');
+            box.className = `mb-6 p-4 rounded-lg flex items-center justify-between text-sm font-medium border ${colorClass}`;
+            box.innerHTML = `<span>${msg}</span><button onclick="this.parentElement.classList.add('hidden')" class="font-bold ml-4">✕</button>`;
+            box.classList.remove('hidden');
+        }
+
+        // GENERATOR KODE KELAS
+        function updateKodeKelasListener() {
+            const k1 = document.getElementById('regK1');
+            const k2 = document.getElementById('regK2');
+            const k3 = document.getElementById('regK3');
+            const target = document.getElementById('regIdKelas');
+
+            function update() {
+                target.value = `${k1.value}${k2.value}${k3.value}`;
+            }
+
+            k1.addEventListener('change', update);
+            k2.addEventListener('change', update);
+            k3.addEventListener('change', update);
+            update();
+        }
+
+        function initYearOptions() {
+            const sel = document.getElementById('ibTahun');
+            const curr = new Date().getFullYear();
+            for (let y = curr; y <= curr + 3; y++) {
+                const opt = document.createElement('option');
+                opt.value = String(y).slice(-2);
+                opt.textContent = y;
+                sel.appendChild(opt);
+            }
+        }
+
+        // PROFIL & MYID SUBMIT
+        function handleProfileSubmit(e) {
+            e.preventDefault();
+            const profileData = {
+                id_sektor: document.getElementById('regSektor').value,
+                id_kelas: document.getElementById('regIdKelas').value,
+                id_anggota: document.getElementById('regIdAnggota').value.trim().toUpperCase()
+            };
+
+            currentUser = profileData;
+            localStorage.setItem('ISIM_USER_PROFILE', JSON.stringify(profileData));
+            loadProfileToUI();
+
+            // Kirim ke Google Sheet
+            sendToGoogleSheet('saveProfile', profileData, (res) => {
+                showAlert('Profil berhasil disimpan!', 'bg-emerald-100 text-emerald-800 border-emerald-300');
+            });
+        }
+
+        function loadProfileToUI() {
+            if (!currentUser) return;
+
+            document.getElementById('regSektor').value = currentUser.id_sektor || '';
+            document.getElementById('regIdAnggota').value = currentUser.id_anggota || '';
+
+            document.getElementById('lblSektor').textContent = currentUser.id_sektor || '-';
+            document.getElementById('lblKelas').textContent = currentUser.id_kelas || '-';
+            document.getElementById('lblAnggota').textContent = currentUser.id_anggota || '-';
+
+            // Generate QR Code
+            const qrText = `${currentUser.id_sektor} ${currentUser.id_kelas} ${currentUser.id_anggota}`;
+            const qrContainer = document.getElementById('qrcode');
+            qrContainer.innerHTML = '';
+            qrCodeObj = new QRCode(qrContainer, {
+                text: qrText,
+                width: 180,
+                height: 180,
+                colorDark : "#0f172a",
+                colorLight : "#ffffff",
+                correctLevel : QRCode.CorrectLevel.M
+            });
+        }
+
+        // AGENDA KELAS SUBMIT
+        function handleBaromijSubmit(e) {
+            e.preventDefault();
+            if (!checkUserRegistered()) return;
+
+            const form = document.getElementById('formBaromij');
+            const data = {
+                id_sektor: currentUser.id_sektor,
+                id_kelas: currentUser.id_kelas,
+                id_anggota: currentUser.id_anggota,
+                walashadir: form.walashadir.checked ? 'ya' : 'tidak',
+                tilawah_hafalan: form.tilawah_hafalan.checked ? 'ya' : 'tidak',
+                kalam_naqib: form.kalam_naqib.checked ? 'ya' : 'tidak',
+                tatsqif_usroh: form.tatsqif_usroh.checked ? 'ya' : 'tidak',
+                talimat: form.talimat.checked ? 'ya' : 'tidak',
+                kelasoffline: form.kelasoffline.checked ? 'ya' : 'tidak',
+                keterangan: form.keterangan.value || '-'
+            };
+
+            sendToGoogleSheet('saveBaromij', data, (res) => {
+                showAlert('Laporan Agenda Kelas berhasil dikirim!', 'bg-emerald-100 text-emerald-800 border-emerald-300');
+                form.reset();
+            });
+        }
+
+        // YAUMIYAN SUBMIT
+        function handleYaumiyanSubmit(e) {
+            e.preventDefault();
+            if (!checkUserRegistered()) return;
+
+            const form = document.getElementById('formYaumiyan');
+            const data = {
+                id_sektor: currentUser.id_sektor,
+                id_kelas: currentUser.id_kelas,
+                id_anggota: currentUser.id_anggota,
+                kehadiran_kelas: form.kehadiran_kelas.checked ? 'ya' : 'tidak',
+                sholat_jamaah: form.sholat_jamaah.value || 0,
+                qiyamul_lail: form.qiyamul_lail.value || 0,
+                tilawah: form.tilawah.value || 0,
+                shoum_sunnah: form.shoum_sunnah.value || 0,
+                olah_raga: form.olah_raga.value || 0,
+                al_matsurot: form.al_matsurot.value || 0,
+                keterangan: form.keterangan.value || '-'
+            };
+
+            sendToGoogleSheet('saveYaumiyan', data, (res) => {
+                showAlert('Laporan Yaumiyan berhasil dikirim!', 'bg-emerald-100 text-emerald-800 border-emerald-300');
+                form.reset();
+            });
+        }
+
+        // LAPOR IB SUBMIT
+        function handleIbSubmit(e) {
+            e.preventDefault();
+            if (!checkUserRegistered()) return;
+
+            const data = {
+                id_sektor: currentUser.id_sektor,
+                id_kelas: currentUser.id_kelas,
+                id_anggota: currentUser.id_anggota,
+                bulan: document.getElementById('ibBulan').value,
+                tahun: document.getElementById('ibTahun').value
+            };
+
+            sendToGoogleSheet('saveIb', data, (res) => {
+                showAlert(`Lapor IB Bulan ${data.bulan}/20${data.tahun} Berhasil Disimpan!`, 'bg-emerald-100 text-emerald-800 border-emerald-300');
+            });
+        }
+
+        function checkUserRegistered() {
+            if (!currentUser || !currentUser.id_anggota) {
+                showAlert('Silakan mendaftarkan ID Profil Anda di tab Profil terlebih dahulu!', 'bg-amber-100 text-amber-800 border-amber-300');
+                switchTab('profile');
+                return false;
+            }
+            return true;
+        }
+
+        // AJAX API DRIVER FOR GOOGLE APPS SCRIPT
+        function sendToGoogleSheet(action, payload, callback) {
+            if (!CONFIG_API_URL || CONFIG_API_URL.includes("YOUR_EXEC_URL_HERE")) {
+                showAlert('URL Google Apps Script belum dikonfigurasi pada kode HTML!', 'bg-red-100 text-red-800 border-red-300');
+                return;
+            }
+
+            const body = JSON.stringify({ action, ...payload });
+
+            fetch(CONFIG_API_URL, {
+                method: 'POST',
+                mode: 'no-cors',
+                headers: { 'Content-Type': 'application/json' },
+                body: body
+            })
+            .then(() => {
+                callback({ success: true });
+            })
+            .catch(err => {
+                showAlert('Gagal menghubungi Google Apps Script: ' + err, 'bg-red-100 text-red-800 border-red-300');
+            });
+        }
+    </script>
+</body>
+</html>
