@@ -544,6 +544,41 @@
         });
 
         /* =========================================================
+           FORMAT TIMESTAMP ENGINE (dd MMM yy HH:mm)
+        ========================================================= */
+        function formatTimestamp(val) {
+            if (!val) return '-';
+            let str = String(val).trim();
+            let dateObj = null;
+
+            // Memproses string format Google Apps Script: Date(YYYY,M,D,H,m,s)
+            const match = str.match(/^Date\((\d+),\s*(\d+),\s*(\d+)(?:,\s*(\d+))?(?:,\s*(\d+))?(?:,\s*(\d+))?\)$/i);
+            if (match) {
+                const year = parseInt(match[1]);
+                const month = parseInt(match[2]); // 0-indexed dari Apps Script
+                const day = parseInt(match[3]);
+                const hour = parseInt(match[4] || 0);
+                const minute = parseInt(match[5] || 0);
+                const second = parseInt(match[6] || 0);
+                dateObj = new Date(year, month, day, hour, minute, second);
+            } else {
+                dateObj = new Date(str);
+            }
+
+            if (!dateObj || isNaN(dateObj.getTime())) return escapeHtml(str);
+
+            const months = ["Jan", "Feb", "Mar", "Apr", "Mei", "Jun", "Jul", "Agu", "Sep", "Okt", "Nov", "Des"];
+            
+            const dd = String(dateObj.getDate()).padStart(2, '0');
+            const mmm = months[dateObj.getMonth()];
+            const yy = String(dateObj.getFullYear()).slice(-2);
+            const hh = String(dateObj.getHours()).padStart(2, '0');
+            const mm = String(dateObj.getMinutes()).padStart(2, '0');
+
+            return `${dd} ${mmm} ${yy} ${hh}:${mm}`;
+        }
+
+        /* =========================================================
            INIT BUTTON CLUSTERS UNTUK INPUT YAUMIYAN
         ========================================================= */
         const yaumiyanRanges = {
@@ -922,11 +957,21 @@
             });
         }
 
+        function parseTimestampToMs(val) {
+            if (!val) return 0;
+            let str = String(val).trim();
+            const match = str.match(/^Date\((\d+),\s*(\d+),\s*(\d+)(?:,\s*(\d+))?(?:,\s*(\d+))?(?:,\s*(\d+))?\)$/i);
+            if (match) {
+                return new Date(parseInt(match[1]), parseInt(match[2]), parseInt(match[3]), parseInt(match[4]||0), parseInt(match[5]||0), parseInt(match[6]||0)).getTime();
+            }
+            return new Date(str).getTime() || 0;
+        }
+
         function sortByTimestampDesc(rows, sheetData) {
             const tsCol = columnInfo(sheetData).timestamp;
             return [...rows].sort((a, b) => {
-                const tsA = tsCol ? new Date(a[tsCol]).getTime() || 0 : 0;
-                const tsB = tsCol ? new Date(b[tsCol]).getTime() || 0 : 0;
+                const tsA = tsCol ? parseTimestampToMs(a[tsCol]) : 0;
+                const tsB = tsCol ? parseTimestampToMs(b[tsCol]) : 0;
                 return tsB - tsA;
             });
         }
@@ -1022,7 +1067,7 @@
                     const rAnggota = cols.anggota ? clean(r[cols.anggota]) : currentUser.id_anggota;
 
                     html += `<tr>
-                        <td>${escapeHtml(r[cols.ts] || '-')}</td>
+                        <td>${formatTimestamp(r[cols.ts])}</td>
                         <td>${escapeHtml(rSektor || '-')}</td>
                         <td>${escapeHtml(rKelas || '-')}</td>
                         <td><strong>${escapeHtml(rAnggota || '-')}</strong></td>
@@ -1107,7 +1152,7 @@
                     const rAnggota = cols.anggota ? clean(r[cols.anggota]) : currentUser.id_anggota;
 
                     html += `<tr>
-                        <td>${escapeHtml(r[cols.ts] || '-')}</td>
+                        <td>${formatTimestamp(r[cols.ts])}</td>
                         <td>${escapeHtml(rSektor || '-')}</td>
                         <td>${escapeHtml(rKelas || '-')}</td>
                         <td><strong>${escapeHtml(rAnggota || '-')}</strong></td>
@@ -1188,8 +1233,8 @@
                 const mA = normMonth(a[mCol]); const mB = normMonth(b[mCol]);
                 if (mA !== mB) return mB - mA;
 
-                const tsA = cols.timestamp ? new Date(a[cols.timestamp]).getTime() || 0 : 0;
-                const tsB = cols.timestamp ? new Date(b[cols.timestamp]).getTime() || 0 : 0;
+                const tsA = cols.timestamp ? parseTimestampToMs(a[cols.timestamp]) : 0;
+                const tsB = cols.timestamp ? parseTimestampToMs(b[cols.timestamp]) : 0;
                 return tsB - tsA;
             });
 
@@ -1207,7 +1252,7 @@
                 const rowAnggota = cols.idAnggota ? clean(row[cols.idAnggota]) : currentUser.id_anggota;
 
                 html += `<tr>
-                    <td>${escapeHtml(row[cols.timestamp] || '-')}</td>
+                    <td>${formatTimestamp(row[cols.timestamp])}</td>
                     <td>${escapeHtml(rowSektor || '-')}</td>
                     <td>${escapeHtml(rowKelas || '-')}</td>
                     <td><strong>${escapeHtml(rowAnggota || '-')}</strong></td>
