@@ -264,7 +264,7 @@ button {
   position: relative;
 }
 
-.search-input {
+.search-input.search-with-icon {
   padding-left: 34px;
 }
 
@@ -542,24 +542,6 @@ tr:hover td {
 }
 
 /* =========================================================
-   STATUS PROGRESS
-========================================================= */
-
-.progress {
-  height: 7px;
-  background: #edf0f2;
-  border-radius: 999px;
-  overflow: hidden;
-  min-width: 100px;
-}
-
-.progress-fill {
-  height: 100%;
-  border-radius: 999px;
-  background: #16803c;
-}
-
-/* =========================================================
    FOOTER
 ========================================================= */
 
@@ -575,819 +557,278 @@ tr:hover td {
 ========================================================= */
 
 @media (max-width: 760px) {
-
-  .header {
-    padding: 15px 12px 17px;
-  }
-
-  .title {
-    font-size: 19px;
-  }
-
-  .subtitle {
-    font-size: 10px;
-  }
-
-  .container {
-    padding: 9px;
-  }
-
-  .tabs {
-    top: 84px;
-  }
-
-  .tab {
-    font-size: 9px;
-    padding: 9px 3px;
-  }
-
-  .filter-grid,
-  .filter-grid.four {
-    grid-template-columns: 1fr 1fr;
-  }
-
-  .stats {
-    grid-template-columns: 1fr 1fr;
-  }
-
-  .card {
-    padding: 13px;
-  }
-
-  .card-title {
-    font-size: 15px;
-  }
+  .header { padding: 15px 12px 17px; }
+  .title { font-size: 19px; }
+  .subtitle { font-size: 10px; }
+  .container { padding: 9px; }
+  .tabs { top: 84px; }
+  .tab { font-size: 9px; padding: 9px 3px; }
+  .filter-grid, .filter-grid.four { grid-template-columns: 1fr 1fr; }
+  .stats { grid-template-columns: 1fr 1fr; }
+  .card { padding: 13px; }
+  .card-title { font-size: 15px; }
 }
 
 @media (max-width: 440px) {
-
-  .header-row {
-    align-items: flex-start;
-  }
-
-  .header-actions {
-    flex-shrink: 0;
-  }
-
-  .refresh-btn {
-    padding: 7px 8px;
-    font-size: 10px;
-  }
-
-  .filter-grid,
-  .filter-grid.four {
-    grid-template-columns: 1fr;
-  }
-
-  .stats {
-    grid-template-columns: 1fr 1fr;
-  }
-
-  .stat-number {
-    font-size: 18px;
-  }
-
-  .stat-label {
-    font-size: 9px;
-  }
-
-  .chart {
-    min-width: 500px;
-  }
+  .header-row { align-items: flex-start; }
+  .header-actions { flex-shrink: 0; }
+  .refresh-btn { padding: 7px 8px; font-size: 10px; }
+  .filter-grid, .filter-grid.four { grid-template-columns: 1fr; }
+  .stats { grid-template-columns: 1fr 1fr; }
+  .stat-number { font-size: 18px; }
+  .stat-label { font-size: 9px; }
+  .chart { min-width: 500px; }
 }
 </style>
 </head>
 
-
 <body>
 
-<!-- =========================================================
-     HEADER
-========================================================= -->
-
+<!-- HEADER -->
 <header class="header">
-
   <div class="header-inner">
-
     <div class="header-row">
-
       <div>
-        <h1 class="title">
-          Laporan Seblak KBR KP
-        </h1>
-
-        <div class="subtitle">
-          Dashboard laporan pengisian Seblak KBR
-        </div>
+        <h1 class="title">Laporan Seblak KBR KP</h1>
+        <div class="subtitle">Dashboard laporan pengisian Seblak KBR</div>
       </div>
-
       <div class="header-actions">
-
-        <button
-          class="refresh-btn"
-          onclick="loadAllData(true)"
-        >
-          ↻ Refresh
-        </button>
-
+        <button class="refresh-btn" onclick="loadAllData(true)">↻ Refresh</button>
       </div>
-
     </div>
-
-    <div
-      id="connection"
-      class="connection"
-    >
+    <div id="connection" class="connection">
       <span class="connection-dot"></span>
-      <span id="connectionText">
-        Memuat data...
-      </span>
+      <span id="connectionText">Memuat data...</span>
     </div>
-
   </div>
-
 </header>
-
 
 <main class="container">
 
-
-<!-- =========================================================
-     TAB NAVIGASI
-========================================================= -->
-
+<!-- TAB NAVIGASI -->
 <nav class="tabs">
-
-  <button
-    class="tab active"
-    data-tab="profil"
-  >
-    👥<br>
-    Profil
-  </button>
-
-  <button
-    class="tab"
-    data-tab="baromij"
-  >
-    📊<br>
-    Agenda
-  </button>
-
-  <button
-    class="tab"
-    data-tab="yaumiyan"
-  >
-    📋<br>
-    Yaumiyan
-  </button>
-
-  <button
-    class="tab"
-    data-tab="ib"
-  >
-    📅<br>
-    IB
-  </button>
-
+  <button class="tab active" data-tab="profil">👥<br>Profil</button>
+  <button class="tab" data-tab="baromij">📊<br>Agenda</button>
+  <button class="tab" data-tab="yaumiyan">📋<br>Yaumiyan</button>
+  <button class="tab" data-tab="ib">📅<br>IB</button>
 </nav>
 
-
-<!-- =========================================================
-     TAB 1 : PROFIL
-========================================================= -->
-
-<section
-  id="profil"
-  class="panel active"
->
-
+<!-- TAB 1 : PROFIL -->
+<section id="profil" class="panel active">
   <div class="card">
-
-    <h2 class="card-title">
-      Laporan Anggota
-    </h2>
-
-    <p class="card-subtitle">
-      Gunakan filter untuk melihat seluruh anggota,
-      daerah tertentu, atau kelas tertentu.
-    </p>
-
+    <h2 class="card-title">Laporan Anggota</h2>
+    <p class="card-subtitle">Gunakan filter untuk melihat seluruh anggota, daerah tertentu, atau kelas tertentu.</p>
     <div class="filter-grid">
-
       <div class="field">
-
-        <label>
-          Tampilkan
-        </label>
-
+        <label>Tampilkan</label>
         <select id="profilFilter">
-
-          <option value="all">
-            Seluruh Database
-          </option>
-
-          <option value="sektor">
-            Per Daerah
-          </option>
-
-          <option value="kelas">
-            Per Kelas
-          </option>
-
+          <option value="all">Seluruh Database</option>
+          <option value="sektor">Per Daerah</option>
+          <option value="kelas">Per Kelas</option>
         </select>
-
       </div>
-
-
       <div class="field">
-
-        <label>
-          Pilihan
-        </label>
-
-        <select id="profilValue">
-          <option value="">
-            Semua
-          </option>
-        </select>
-
+        <label>Pilihan</label>
+        <select id="profilValue"><option value="">Semua</option></select>
       </div>
-
-
       <div class="field">
-
-        <label>
-          Cari Anggota
-        </label>
-
+        <label>Cari Anggota</label>
         <div class="search-box">
-
-          <span class="search-icon">
-            🔎
-          </span>
-
-          <input
-            id="profilSearch"
-            class="search-input"
-            type="search"
-            placeholder="ID anggota..."
-          >
-
+          <span class="search-icon">🔎</span>
+          <input id="profilSearch" class="search-input search-with-icon" type="search" placeholder="ID anggota...">
         </div>
-
       </div>
-
     </div>
-
   </div>
-
-
-  <div
-    id="profilStats"
-    class="stats"
-  ></div>
-
-
+  <div id="profilStats" class="stats"></div>
   <div class="card">
-
     <div class="table-head">
-
-      <h3 class="table-title">
-        Daftar Anggota
-      </h3>
-
-      <span
-        id="profilCount"
-        class="table-count"
-      ></span>
-
+      <h3 class="table-title">Daftar Anggota</h3>
+      <span id="profilCount" class="table-count"></span>
     </div>
-
-    <div
-      id="profilTable"
-      class="table-scroll"
-    ></div>
-
+    <div id="profilTable" class="table-scroll"></div>
   </div>
-
 </section>
 
-
-<!-- =========================================================
-     TAB 2 : BAROMIJ
-========================================================= -->
-
-<section
-  id="baromij"
-  class="panel"
->
-
+<!-- TAB 2 : BAROMIJ -->
+<section id="baromij" class="panel">
   <div class="card">
-
-    <h2 class="card-title">
-      Laporan Agenda Kelas
-    </h2>
-
-    <p class="card-subtitle">
-      Grafik menunjukkan persentase data yang bernilai
-      "ya" pada setiap agenda.
-    </p>
-
-
-    <div class="filter-grid">
-
-      <div class="field">
-
-        <label>
-          Tampilkan
-        </label>
-
-        <select id="baromijFilter">
-
-          <option value="all">
-            Seluruh Database
-          </option>
-
-          <option value="sektor">
-            Per Daerah
-          </option>
-
-          <option value="kelas">
-            Per Kelas
-          </option>
-
-        </select>
-
-      </div>
-
-
-      <div class="field">
-
-        <label>
-          Pilihan
-        </label>
-
-        <select id="baromijValue">
-
-          <option value="">
-            Semua
-          </option>
-
-        </select>
-
-      </div>
-
-
-      <div class="field">
-
-        <label>
-          Cari Anggota
-        </label>
-
-        <div class="search-box">
-
-          <span class="search-icon">
-            🔎
-          </span>
-
-          <input
-            id="baromijSearch"
-            class="search-input"
-            type="search"
-            placeholder="ID anggota..."
-          >
-
-        </div>
-
-      </div>
-
-    </div>
-
-  </div>
-
-
-  <div
-    id="baromijStats"
-    class="stats"
-  ></div>
-
-
-  <div class="card">
-
-    <div class="table-head">
-
-      <h3 class="table-title">
-        Rata-rata Agenda
-      </h3>
-
-      <span class="table-count">
-        Persentase
-      </span>
-
-    </div>
-
-    <div class="chart-area">
-
-      <div
-        id="baromijChart"
-        class="chart"
-      ></div>
-
-    </div>
-
-    <div class="chart-note">
-      Semakin tinggi batang, semakin tinggi persentase
-      pelaksanaan agenda.
-    </div>
-
-  </div>
-
-
-  <div class="card">
-
-    <div class="table-head">
-
-      <h3 class="table-title">
-        Keterangan
-      </h3>
-
-      <span
-        id="baromijKetCount"
-        class="table-count"
-      ></span>
-
-    </div>
-
-    <div
-      id="baromijKetTable"
-      class="table-scroll"
-    ></div>
-
-  </div>
-
-</section>
-
-
-<!-- =========================================================
-     TAB 3 : YAUMIYAN
-========================================================= -->
-
-<section
-  id="yaumiyan"
-  class="panel"
->
-
-  <div class="card">
-
-    <h2 class="card-title">
-      Laporan Yaumiyan
-    </h2>
-
-    <p class="card-subtitle">
-      Pantau rata-rata aktivitas yaumiyan dan status
-      pengisian anggota.
-    </p>
-
-
-    <div class="filter-grid">
-
-      <div class="field">
-
-        <label>
-          Tampilkan
-        </label>
-
-        <select id="yaumiyanFilter">
-
-          <option value="all">
-            Seluruh Database
-          </option>
-
-          <option value="sektor">
-            Per Daerah
-          </option>
-
-          <option value="kelas">
-            Per Kelas
-          </option>
-
-          <option value="anggota">
-            Per Anggota
-          </option>
-
-        </select>
-
-      </div>
-
-
-      <div class="field">
-
-        <label>
-          Pilihan
-        </label>
-
-        <select id="yaumiyanValue">
-
-          <option value="">
-            Semua
-          </option>
-
-        </select>
-
-      </div>
-
-
-      <div class="field">
-
-        <label>
-          Cari Anggota
-        </label>
-
-        <div class="search-box">
-
-          <span class="search-icon">
-            🔎
-          </span>
-
-          <input
-            id="yaumiyanSearch"
-            class="search-input"
-            type="search"
-            placeholder="ID anggota..."
-          >
-
-        </div>
-
-      </div>
-
-    </div>
-
-  </div>
-
-
-  <div
-    id="yaumiyanStats"
-    class="stats"
-  ></div>
-
-
-  <div class="card">
-
-    <div class="table-head">
-
-      <h3 class="table-title">
-        Rata-rata Yaumiyan
-      </h3>
-
-      <span class="table-count">
-        Persentase / rata-rata
-      </span>
-
-    </div>
-
-    <div class="chart-area">
-
-      <div
-        id="yaumiyanChart"
-        class="chart"
-      ></div>
-
-    </div>
-
-    <div class="chart-note">
-      Kehadiran kelas dihitung dari nilai "ya".
-      Aktivitas lainnya dihitung berdasarkan rata-rata
-      nilai angka yang tersimpan.
-    </div>
-
-  </div>
-
-
-  <div class="card">
-
-    <div class="table-head">
-
-      <h3 class="table-title">
-        Keterangan
-      </h3>
-
-      <span
-        id="yaumiyanKetCount"
-        class="table-count"
-      ></span>
-
-    </div>
-
-    <div
-      id="yaumiyanKetTable"
-      class="table-scroll"
-    ></div>
-
-  </div>
-
-
-  <!-- STATUS KELAS -->
-
-  <div
-    id="yaumiyanStatusCard"
-    class="card hidden"
-  >
-
-    <div class="table-head">
-
-      <h3 class="table-title">
-        Status Pengisian Kelas
-      </h3>
-
-      <span
-        id="yaumiyanStatusCount"
-        class="table-count"
-      ></span>
-
-    </div>
-
-    <div
-      id="yaumiyanStatusTable"
-      class="table-scroll"
-    ></div>
-
-  </div>
-
-</section>
-
-
-<!-- =========================================================
-     TAB 4 : IB
-========================================================= -->
-
-<section
-  id="ib"
-  class="panel"
->
-
-  <div class="card">
-
-    <h2 class="card-title">
-      Laporan IB
-    </h2>
-
-    <p class="card-subtitle">
-      Pilih bulan dan tahun untuk melihat anggota yang
-      sudah dan belum mengisi laporan IB.
-    </p>
-
-
+    <h2 class="card-title">Laporan Agenda Kelas</h2>
+    <p class="card-subtitle">Grafik menunjukkan persentase data yang bernilai "ya" pada setiap agenda.</p>
     <div class="filter-grid four">
-
       <div class="field">
-
-        <label>
-          Tampilkan
-        </label>
-
-        <select id="ibFilter">
-
-          <option value="all">
-            Seluruh Database
-          </option>
-
-          <option value="sektor">
-            Per Daerah
-          </option>
-
-          <option value="kelas">
-            Per Kelas
-          </option>
-
-          <option value="anggota">
-            Per Anggota
-          </option>
-
+        <label>Tampilkan</label>
+        <select id="baromijFilter">
+          <option value="all">Seluruh Database</option>
+          <option value="sektor">Per Daerah</option>
+          <option value="kelas">Per Kelas</option>
         </select>
-
       </div>
-
-
       <div class="field">
-
-        <label>
-          Pilihan
-        </label>
-
-        <select id="ibValue">
-
-          <option value="">
-            Semua
-          </option>
-
-        </select>
-
+        <label>Pilihan</label>
+        <select id="baromijValue"><option value="">Semua</option></select>
       </div>
-
-
       <div class="field">
-
-        <label>
-          Bulan
-        </label>
-
-        <select id="ibMonth">
-        </select>
-
+        <label>Mulai Tanggal</label>
+        <input type="date" id="baromijStartDate" class="search-input">
       </div>
-
-
       <div class="field">
-
-        <label>
-          Tahun
-        </label>
-
-        <select id="ibYear">
-        </select>
-
+        <label>Sampai Tanggal</label>
+        <input type="date" id="baromijEndDate" class="search-input">
       </div>
-
     </div>
-
-
     <div style="margin-top:9px">
-
       <div class="field">
-
-        <label>
-          Cari Anggota
-        </label>
-
+        <label>Cari Anggota</label>
         <div class="search-box">
-
-          <span class="search-icon">
-            🔎
-          </span>
-
-          <input
-            id="ibSearch"
-            class="search-input"
-            type="search"
-            placeholder="ID anggota..."
-          >
-
+          <span class="search-icon">🔎</span>
+          <input id="baromijSearch" class="search-input search-with-icon" type="search" placeholder="ID anggota...">
         </div>
-
       </div>
-
     </div>
-
   </div>
-
-
-  <div
-    id="ibStats"
-    class="stats"
-  ></div>
-
-
+  <div id="baromijStats" class="stats"></div>
   <div class="card">
-
     <div class="table-head">
-
-      <h3 class="table-title">
-        Status Pengisian IB
-      </h3>
-
-      <span
-        id="ibStatusCount"
-        class="table-count"
-      ></span>
-
+      <h3 class="table-title">Rata-rata Agenda</h3>
+      <span class="table-count">Persentase</span>
     </div>
-
-    <div
-      id="ibStatusTable"
-      class="table-scroll"
-    ></div>
-
+    <div class="chart-area">
+      <div id="baromijChart" class="chart"></div>
+    </div>
+    <div class="chart-note">Semakin tinggi batang, semakin tinggi persentase pelaksanaan agenda.</div>
   </div>
-
+  <div class="card">
+    <div class="table-head">
+      <h3 class="table-title">Keterangan</h3>
+      <span id="baromijKetCount" class="table-count"></span>
+    </div>
+    <div id="baromijKetTable" class="table-scroll"></div>
+  </div>
 </section>
 
+<!-- TAB 3 : YAUMIYAN -->
+<section id="yaumiyan" class="panel">
+  <div class="card">
+    <h2 class="card-title">Laporan Yaumiyan</h2>
+    <p class="card-subtitle">Pantau rata-rata aktivitas yaumiyan dan status pengisian anggota.</p>
+    <div class="filter-grid four">
+      <div class="field">
+        <label>Tampilkan</label>
+        <select id="yaumiyanFilter">
+          <option value="all">Seluruh Database</option>
+          <option value="sektor">Per Daerah</option>
+          <option value="kelas">Per Kelas</option>
+          <option value="anggota">Per Anggota</option>
+        </select>
+      </div>
+      <div class="field">
+        <label>Pilihan</label>
+        <select id="yaumiyanValue"><option value="">Semua</option></select>
+      </div>
+      <div class="field">
+        <label>Mulai Tanggal</label>
+        <input type="date" id="yaumiyanStartDate" class="search-input">
+      </div>
+      <div class="field">
+        <label>Sampai Tanggal</label>
+        <input type="date" id="yaumiyanEndDate" class="search-input">
+      </div>
+    </div>
+    <div style="margin-top:9px">
+      <div class="field">
+        <label>Cari Anggota</label>
+        <div class="search-box">
+          <span class="search-icon">🔎</span>
+          <input id="yaumiyanSearch" class="search-input search-with-icon" type="search" placeholder="ID anggota...">
+        </div>
+      </div>
+    </div>
+  </div>
+  <div id="yaumiyanStats" class="stats"></div>
+  <div class="card">
+    <div class="table-head">
+      <h3 class="table-title">Rata-rata Yaumiyan</h3>
+      <span class="table-count">Persentase / rata-rata</span>
+    </div>
+    <div class="chart-area">
+      <div id="yaumiyanChart" class="chart"></div>
+    </div>
+    <div class="chart-note">Kehadiran kelas dihitung dari nilai "ya". Aktivitas lainnya dihitung berdasarkan rata-rata nilai angka.</div>
+  </div>
+  <div class="card">
+    <div class="table-head">
+      <h3 class="table-title">Keterangan</h3>
+      <span id="yaumiyanKetCount" class="table-count"></span>
+    </div>
+    <div id="yaumiyanKetTable" class="table-scroll"></div>
+  </div>
+  <div id="yaumiyanStatusCard" class="card hidden">
+    <div class="table-head">
+      <h3 class="table-title">Status Pengisian Kelas</h3>
+      <span id="yaumiyanStatusCount" class="table-count"></span>
+    </div>
+    <div id="yaumiyanStatusTable" class="table-scroll"></div>
+  </div>
+</section>
 
-<div class="footer">
-  Laporan Seblak KBR KP · Data dari Google Sheet
-</div>
+<!-- TAB 4 : IB -->
+<section id="ib" class="panel">
+  <div class="card">
+    <h2 class="card-title">Laporan IB</h2>
+    <p class="card-subtitle">Pilih bulan dan tahun untuk melihat anggota yang sudah dan belum mengisi laporan IB.</p>
+    <div class="filter-grid four">
+      <div class="field">
+        <label>Tampilkan</label>
+        <select id="ibFilter">
+          <option value="all">Seluruh Database</option>
+          <option value="sektor">Per Daerah</option>
+          <option value="kelas">Per Kelas</option>
+          <option value="anggota">Per Anggota</option>
+        </select>
+      </div>
+      <div class="field">
+        <label>Pilihan</label>
+        <select id="ibValue"><option value="">Semua</option></select>
+      </div>
+      <div class="field">
+        <label>Bulan</label>
+        <select id="ibMonth"></select>
+      </div>
+      <div class="field">
+        <label>Tahun</label>
+        <select id="ibYear"></select>
+      </div>
+    </div>
+    <div style="margin-top:9px">
+      <div class="field">
+        <label>Cari Anggota</label>
+        <div class="search-box">
+          <span class="search-icon">🔎</span>
+          <input id="ibSearch" class="search-input search-with-icon" type="search" placeholder="ID anggota...">
+        </div>
+      </div>
+    </div>
+  </div>
+  <div id="ibStats" class="stats"></div>
+  <div class="card">
+    <div class="table-head">
+      <h3 class="table-title">Status Pengisian IB</h3>
+      <span id="ibStatusCount" class="table-count"></span>
+    </div>
+    <div id="ibStatusTable" class="table-scroll"></div>
+  </div>
+</section>
+
+<div class="footer">Laporan Seblak KBR KP · Data dari Google Sheet</div>
 
 </main>
 
-
 <script>
-
 /* =========================================================
    KONFIGURASI UTAMA
 ========================================================= */
-
-const GOOGLE_SHEET_ID =
-  "1rEycScG3ByhgymdLW9J8rMkjz5cBxPgYNlHMah86HXA";
+const GOOGLE_SHEET_ID = "1rEycScG3ByhgymdLW9J8rMkjz5cBxPgYNlHMah86HXA";
 
 const SHEETS = {
   profil: "Profil",
@@ -1396,11 +837,6 @@ const SHEETS = {
   ib: "IB"
 };
 
-
-/* =========================================================
-   DATA GLOBAL
-========================================================= */
-
 const DATA = {
   profil: [],
   baromij: [],
@@ -1408,25 +844,17 @@ const DATA = {
   ib: []
 };
 
-
 /* =========================================================
-   HELPER
+   HELPER UTAMA
 ========================================================= */
-
 function clean(value) {
-  if (value === null || value === undefined) {
-    return "";
-  }
+  if (value === null || value === undefined) return "";
   return String(value).trim();
 }
 
-
 function key(value) {
-  return clean(value)
-    .toLowerCase()
-    .replace(/\s+/g, "_");
+  return clean(value).toLowerCase().replace(/\s+/g, "_");
 }
-
 
 function escapeHtml(value) {
   return clean(value)
@@ -1437,65 +865,144 @@ function escapeHtml(value) {
     .replace(/'/g, "&#039;");
 }
 
-
 function numberValue(value) {
-  if (value === null || value === undefined || value === "") {
-    return null;
-  }
-
-  if (typeof value === "number") {
-    return Number.isFinite(value) ? value : null;
-  }
-
-  let text = String(value)
-    .trim()
-    .replace("%", "")
-    .replace(",", ".");
-
+  if (value === null || value === undefined || value === "") return null;
+  if (typeof value === "number") return Number.isFinite(value) ? value : null;
+  let text = String(value).trim().replace("%", "").replace(",", ".");
   const n = Number(text);
   return Number.isFinite(n) ? n : null;
 }
 
-
 function formatNumber(value) {
-  return Number(value || 0)
-    .toLocaleString("id-ID", {
-      maximumFractionDigits: 1
-    });
+  return Number(value || 0).toLocaleString("id-ID", { maximumFractionDigits: 1 });
 }
-
 
 function formatPercent(value) {
-  return Number(value || 0)
-    .toLocaleString("id-ID", {
-      minimumFractionDigits: 0,
-      maximumFractionDigits: 1
-    }) + "%";
+  return Number(value || 0).toLocaleString("id-ID", { minimumFractionDigits: 0, maximumFractionDigits: 1 }) + "%";
+}
+
+/* =========================================================
+   HELPER FORMAT TANGGAL (dd MMM yy HH:mm)
+========================================================= */
+const MONTH_NAMES_ID = [
+  "Jan", "Feb", "Mar", "Apr", "Mei", "Jun", 
+  "Jul", "Agu", "Sep", "Okt", "Nov", "Des"
+];
+
+function formatDateFormatted(dateStr) {
+  if (!dateStr) return "-";
+
+  let d = null;
+
+  // Format Date(2026,7,11,10,26,9)
+  const dateMatch = String(dateStr).match(/Date\s*\(\s*(\d+)\s*,\s*(\d+)\s*,\s*(\d+)(?:\s*,\s*(\d+)\s*,\s*(\d+)\s*,\s*(\d+))?\s*\)/i);
+  if (dateMatch) {
+    const y = parseInt(dateMatch[1], 10);
+    const m = parseInt(dateMatch[2], 10);
+    const day = parseInt(dateMatch[3], 10);
+    const hh = parseInt(dateMatch[4] || 0, 10);
+    const mm = parseInt(dateMatch[5] || 0, 10);
+    const ss = parseInt(dateMatch[6] || 0, 10);
+    d = new Date(y, m, day, hh, mm, ss);
+  } else {
+    d = parseDate(dateStr);
+  }
+
+  if (!d || isNaN(d.getTime())) return escapeHtml(dateStr);
+
+  const day = String(d.getDate()).padStart(2, "0");
+  const monthName = MONTH_NAMES_ID[d.getMonth()] || "";
+  const yearShort = String(d.getFullYear()).slice(-2);
+  const hours = String(d.getHours()).padStart(2, "0");
+  const minutes = String(d.getMinutes()).padStart(2, "0");
+
+  return `${day} ${monthName} ${yearShort} ${hours}:${minutes}`;
 }
 
 
-/* =========================================================
-   MENCARI KOLOM
-========================================================= */
+function parseDate(dateStr) {
+  if (!dateStr) return null;
 
-function findColumn(rows, candidates) {
-  if (!rows || !rows.length) {
-    return null;
+  const str = String(dateStr).trim();
+
+  // 1. Tangani Format Khas Google Sheet GViz: Date(2026,7,11,10,26,9)
+  const gvizMatch = str.match(/Date\s*\(\s*(\d+)\s*,\s*(\d+)\s*,\s*(\d+)(?:\s*,\s*(\d+)\s*,\s*(\d+)\s*,\s*(\d+))?\s*\)/i);
+  if (gvizMatch) {
+    const y = parseInt(gvizMatch[1], 10);
+    const m = parseInt(gvizMatch[2], 10); // Bulan dari GViz sudah 0-index (0 = Jan, 1 = Feb, dst)
+    const d = parseInt(gvizMatch[3], 10);
+    const hh = parseInt(gvizMatch[4] || 0, 10);
+    const mm = parseInt(gvizMatch[5] || 0, 10);
+    const ss = parseInt(gvizMatch[6] || 0, 10);
+    return new Date(y, m, d, hh, mm, ss);
   }
 
-  const columns = Object.keys(rows[0]);
-
-  for (const candidate of candidates) {
-    const wanted = key(candidate);
-    const found = columns.find(column => key(column) === wanted);
-    if (found) {
-      return found;
-    }
+  // 2. Tangani format ISO / HTML Date Input: YYYY-MM-DD atau YYYY-MM-DD HH:mm:ss
+  const isoMatch = str.match(/^(\d{4})[-/](\d{1,2})[-/](\d{1,2})(?:\s+(\d{1,2}):(\d{1,2})(?::(\d{1,2}))?)?/);
+  if (isoMatch) {
+    const y = parseInt(isoMatch[1], 10);
+    const m = parseInt(isoMatch[2], 10) - 1;
+    const d = parseInt(isoMatch[3], 10);
+    const hh = parseInt(isoMatch[4] || 0, 10);
+    const mm = parseInt(isoMatch[5] || 0, 10);
+    const ss = parseInt(isoMatch[6] || 0, 10);
+    return new Date(y, m, d, hh, mm, ss);
   }
+
+  // 3. Tangani format lokal: DD/MM/YYYY atau DD-MM-YYYY
+  const idMatch = str.match(/^(\d{1,2})[-/](\d{1,2})[-/](\d{4})(?:\s+(\d{1,2}):(\d{1,2})(?::(\d{1,2}))?)?/);
+  if (idMatch) {
+    const d = parseInt(idMatch[1], 10);
+    const m = parseInt(idMatch[2], 10) - 1;
+    const y = parseInt(idMatch[3], 10);
+    const hh = parseInt(idMatch[4] || 0, 10);
+    const mm = parseInt(idMatch[5] || 0, 10);
+    const ss = parseInt(idMatch[6] || 0, 10);
+    return new Date(y, m, d, hh, mm, ss);
+  }
+
+  // 4. Fallback bawaan
+  const parsed = new Date(str);
+  if (!isNaN(parsed.getTime())) return parsed;
 
   return null;
 }
 
+
+function filterDateRange(rows, startDateStr, endDateStr) {
+  if (!startDateStr && !endDateStr) return rows;
+
+  const cols = columnInfo(rows);
+  if (!cols.timestamp) return rows;
+
+  const startDate = startDateStr ? parseDate(startDateStr) : null;
+  const endDate = endDateStr ? parseDate(endDateStr) : null;
+
+  if (startDate) startDate.setHours(0, 0, 0, 0);
+  if (endDate) endDate.setHours(23, 59, 59, 999);
+
+  return rows.filter(row => {
+    const rowDate = parseDate(row[cols.timestamp]);
+    if (!rowDate) return false;
+    if (startDate && rowDate < startDate) return false;
+    if (endDate && rowDate > endDate) return false;
+    return true;
+  });
+}
+
+/* =========================================================
+   MENCARI KOLOM
+========================================================= */
+function findColumn(rows, candidates) {
+  if (!rows || !rows.length) return null;
+  const columns = Object.keys(rows[0]);
+  for (const candidate of candidates) {
+    const wanted = key(candidate);
+    const found = columns.find(column => key(column) === wanted);
+    if (found) return found;
+  }
+  return null;
+}
 
 function columnInfo(data) {
   return {
@@ -1507,75 +1014,36 @@ function columnInfo(data) {
   };
 }
 
-
 /* =========================================================
-   GOOGLE SHEET GVIZ
+   FETCH GOOGLE SHEET
 ========================================================= */
-
 async function fetchSheet(sheetName) {
-  const url =
-    "https://docs.google.com/spreadsheets/d/" +
-    GOOGLE_SHEET_ID +
-    "/gviz/tq?tqx=out:json&sheet=" +
-    encodeURIComponent(sheetName);
-
+  const url = "https://docs.google.com/spreadsheets/d/" + GOOGLE_SHEET_ID + "/gviz/tq?tqx=out:json&sheet=" + encodeURIComponent(sheetName);
   const response = await fetch(url, { cache: "no-store" });
-
-  if (!response.ok) {
-    throw new Error("HTTP " + response.status + " saat membaca sheet " + sheetName);
-  }
+  if (!response.ok) throw new Error("HTTP " + response.status + " saat membaca sheet " + sheetName);
 
   const text = await response.text();
-
   const start = text.indexOf("{");
   const end = text.lastIndexOf("}");
+  if (start === -1 || end === -1) throw new Error("Response tidak valid untuk sheet " + sheetName);
 
-  if (start === -1 || end === -1) {
-    throw new Error("Response Google Sheet tidak valid untuk sheet " + sheetName);
-  }
-
-  let json;
-  try {
-    json = JSON.parse(text.substring(start, end + 1));
-  } catch (error) {
-    throw new Error("Google Sheet tidak mengembalikan JSON yang valid untuk sheet " + sheetName);
-  }
-
-  if (!json.table || !json.table.cols) {
-    throw new Error("Sheet " + sheetName + " tidak dapat dibaca. Pastikan sheet publik.");
-  }
+  let json = JSON.parse(text.substring(start, end + 1));
+  if (!json.table || !json.table.cols) throw new Error("Sheet " + sheetName + " tidak dapat dibaca.");
 
   const headers = json.table.cols.map((col, index) => clean(col.label) || "kolom_" + (index + 1));
 
-  const rows = (json.table.rows || []).map(row => {
+  return (json.table.rows || []).map(row => {
     const object = {};
     headers.forEach((header, index) => {
       const cell = row.c?.[index];
-      if (!cell) {
-        object[header] = "";
-        return;
-      }
-      object[header] = cell.v !== null && cell.v !== undefined
-        ? cell.v
-        : (cell.f !== null && cell.f !== undefined ? cell.f : "");
+      object[header] = !cell ? "" : (cell.v !== null && cell.v !== undefined ? cell.v : (cell.f || ""));
     });
     return object;
   });
-
-  return rows;
 }
 
-
-/* =========================================================
-   LOAD SEMUA DATA
-========================================================= */
-
 async function loadAllData(isRefresh = false) {
-  setConnection(
-    isRefresh ? "Memperbarui data..." : "Memuat data...",
-    "loading"
-  );
-
+  setConnection(isRefresh ? "Memperbarui data..." : "Memuat data...", "loading");
   showLoading();
 
   try {
@@ -1586,165 +1054,82 @@ async function loadAllData(isRefresh = false) {
       fetchSheet(SHEETS.ib)
     ]);
 
-    DATA.profil = results[0];
-    DATA.baromij = results[1];
-    DATA.yaumiyan = results[2];
-    DATA.ib = results[3];
+    DATA.profil = results[0].filter(row => Object.values(row).some(v => clean(v)));
+    DATA.baromij = results[1].filter(row => Object.values(row).some(v => clean(v)));
+    DATA.yaumiyan = results[2].filter(row => Object.values(row).some(v => clean(v)));
+    DATA.ib = results[3].filter(row => Object.values(row).some(v => clean(v)));
 
-    DATA.profil = DATA.profil.filter(row => Object.values(row).some(value => clean(value)));
-    DATA.baromij = DATA.baromij.filter(row => Object.values(row).some(value => clean(value)));
-    DATA.yaumiyan = DATA.yaumiyan.filter(row => Object.values(row).some(value => clean(value)));
-    DATA.ib = DATA.ib.filter(row => Object.values(row).some(value => clean(value)));
-
-    setConnection(
-      "Terhubung · " +
-      (DATA.profil.length + DATA.baromij.length + DATA.yaumiyan.length + DATA.ib.length).toLocaleString("id-ID") +
-      " data",
-      "success"
-    );
+    setConnection("Terhubung · " + (DATA.profil.length + DATA.baromij.length + DATA.yaumiyan.length + DATA.ib.length).toLocaleString("id-ID") + " data", "success");
 
     initializeFilters();
     initializeIB();
     renderAll();
-
   } catch (error) {
-    console.error("ERROR LOAD DATA:", error);
+    console.error(error);
     setConnection("Gagal memuat data", "error");
     showGlobalError(error);
   }
 }
 
-
-/* =========================================================
-   STATUS KONEKSI
-========================================================= */
-
 function setConnection(text, status) {
-  const wrapper = document.getElementById("connection");
-  const textElement = document.getElementById("connectionText");
-
-  wrapper.className = "connection " + status;
-  textElement.textContent = text;
+  document.getElementById("connection").className = "connection " + status;
+  document.getElementById("connectionText").textContent = text;
 }
-
-
-/* =========================================================
-   GLOBAL ERROR & LOADING
-========================================================= */
 
 function showGlobalError(error) {
-  const message = `
-    <div class="error-box">
-      <strong>Gagal memuat data Google Sheet.</strong><br><br>
-      Pastikan Google Sheet sudah dibagikan sebagai <strong>Anyone with the link → Viewer</strong>.<br><br>
-      <strong>Detail:</strong> ${escapeHtml(error.message)}<br><br>
-      ID Google Sheet:<br><code>${GOOGLE_SHEET_ID}</code>
-    </div>
-  `;
-
+  const message = `<div class="error-box"><strong>Gagal memuat data.</strong><br>${escapeHtml(error.message)}</div>`;
   ["profilTable", "baromijKetTable", "yaumiyanKetTable", "yaumiyanStatusTable", "ibStatusTable"].forEach(id => {
-    const element = document.getElementById(id);
-    if (element) element.innerHTML = message;
+    const el = document.getElementById(id);
+    if (el) el.innerHTML = message;
   });
 }
-
 
 function showLoading() {
-  const html = `
-    <div class="loading">
-      <div class="spinner"></div>
-      Memuat data Google Sheet...
-    </div>
-  `;
-
+  const html = `<div class="loading"><div class="spinner"></div>Memuat data Google Sheet...</div>`;
   ["profilTable", "baromijKetTable", "yaumiyanKetTable", "yaumiyanStatusTable", "ibStatusTable"].forEach(id => {
-    const element = document.getElementById(id);
-    if (element) element.innerHTML = html;
+    const el = document.getElementById(id);
+    if (el) el.innerHTML = html;
   });
 }
 
-
 /* =========================================================
-   UNIQUE VALUES
+   MASTER ANGGOTA (Unik: sektor + kelas + id_anggota)
 ========================================================= */
-
-function uniqueValues(rows, column) {
-  if (!column) return [];
-  return [
-    ...new Set(rows.map(row => clean(row[column])).filter(Boolean))
-  ].sort((a, b) => a.localeCompare(b, "id", { numeric: true }));
-}
-
-
-/* =========================================================
-   MASTER ANGGOTA
-========================================================= */
-
 function getMasterMembers() {
   const cols = columnInfo(DATA.profil);
   if (!cols.idAnggota) return [];
 
   const map = new Map();
-
   DATA.profil.forEach(row => {
     const id = clean(row[cols.idAnggota]);
+    const sektor = cols.idSektor ? clean(row[cols.idSektor]) : "";
+    const kelas = cols.idKelas ? clean(row[cols.idKelas]) : "";
     if (!id) return;
 
-    if (!map.has(id)) {
-      map.set(id, {
-        id: id,
-        sektor: cols.idSektor ? clean(row[cols.idSektor]) : "",
-        kelas: cols.idKelas ? clean(row[cols.idKelas]) : ""
-      });
+    const compositeKey = `${sektor}___${kelas}___${id}`;
+    if (!map.has(compositeKey)) {
+      map.set(compositeKey, { id, sektor, kelas });
     }
   });
 
   return [...map.values()];
 }
 
-
-/* =========================================================
-   FILTER MASTER
-========================================================= */
-
 function getFilterOptions(type) {
   const members = getMasterMembers();
-
-  if (type === "sektor") {
-    return [...new Set(members.map(item => item.sektor).filter(Boolean))].sort();
-  }
-
-  if (type === "kelas") {
-    return [...new Set(members.map(item => item.kelas).filter(Boolean))].sort();
-  }
-
-  if (type === "anggota") {
-    return members.map(item => item.id).sort((a,b) => a.localeCompare(b, "id", { numeric: true }));
-  }
-
+  if (type === "sektor") return [...new Set(members.map(item => item.sektor).filter(Boolean))].sort();
+  if (type === "kelas") return [...new Set(members.map(item => item.kelas).filter(Boolean))].sort();
+  if (type === "anggota") return members.map(item => item.id).sort((a,b) => a.localeCompare(b, "id", { numeric: true }));
   return [];
 }
-
-
-/* =========================================================
-   POPULATE FILTER
-========================================================= */
 
 function populateFilter(type, selectId) {
   const select = document.getElementById(selectId);
   if (!select) return;
-
   select.innerHTML = `<option value="">Semua</option>`;
-
-  if (type === "all") {
-    select.disabled = true;
-    return;
-  }
-
+  if (type === "all") { select.disabled = true; return; }
   select.disabled = false;
-  const options = getFilterOptions(type);
-
-  options.forEach(value => {
+  getFilterOptions(type).forEach(value => {
     const option = document.createElement("option");
     option.value = value;
     option.textContent = value;
@@ -1752,45 +1137,24 @@ function populateFilter(type, selectId) {
   });
 }
 
-
-/* =========================================================
-   FILTER ROW & SEARCH
-========================================================= */
-
 function filterRows(rows, type, value) {
   if (type === "all" || !value) return [...rows];
-
   const cols = columnInfo(rows);
-  let column = null;
-
-  if (type === "sektor") column = cols.idSektor;
-  if (type === "kelas") column = cols.idKelas;
-  if (type === "anggota") column = cols.idAnggota;
-
+  let column = type === "sektor" ? cols.idSektor : (type === "kelas" ? cols.idKelas : cols.idAnggota);
   if (!column) return [];
-
   return rows.filter(row => clean(row[column]) === clean(value));
 }
-
 
 function applySearch(rows, search) {
   const text = clean(search).toLowerCase();
   if (!text) return rows;
-
   const cols = columnInfo(rows);
   if (!cols.idAnggota) return rows;
-
   return rows.filter(row => clean(row[cols.idAnggota]).toLowerCase().includes(text));
 }
 
-
-/* =========================================================
-   STATISTIK & TABLE & CHART
-========================================================= */
-
 function renderStats(elementId, items) {
-  const element = document.getElementById(elementId);
-  element.innerHTML = items.map(item => `
+  document.getElementById(elementId).innerHTML = items.map(item => `
     <div class="stat ${item.color || ""}">
       <div class="stat-number">${escapeHtml(item.value)}</div>
       <div class="stat-label">${escapeHtml(item.label)}</div>
@@ -1798,19 +1162,15 @@ function renderStats(elementId, items) {
   `).join("");
 }
 
-
 function renderTable(elementId, rows, columns, labels = {}) {
   const element = document.getElementById(elementId);
-
   if (!rows.length) {
     element.innerHTML = `<div class="empty">Tidak ada data yang sesuai.</div>`;
     return;
   }
 
   let html = `<table><thead><tr>`;
-  columns.forEach(column => {
-    html += `<th>${escapeHtml(labels[column] || column)}</th>`;
-  });
+  columns.forEach(column => { html += `<th>${escapeHtml(labels[column] || column)}</th>`; });
   html += `</tr></thead><tbody>`;
 
   rows.forEach(row => {
@@ -1830,10 +1190,8 @@ function renderTable(elementId, rows, columns, labels = {}) {
   element.innerHTML = html;
 }
 
-
 function renderChart(elementId, items, maxValue = 100) {
   const element = document.getElementById(elementId);
-
   if (!items.length) {
     element.innerHTML = `<div class="empty">Tidak ada data grafik.</div>`;
     return;
@@ -1860,99 +1218,54 @@ function renderChart(elementId, items, maxValue = 100) {
   element.innerHTML = html;
 }
 
-
-/* =========================================================
-   PERHITUNGAN AGREGASI
-========================================================= */
-
 function yesPercentage(rows, column) {
   if (!rows.length || !column) return 0;
-
-  let yes = 0;
-  let total = 0;
-
+  let yes = 0, total = 0;
   rows.forEach(row => {
     const value = clean(row[column]).toLowerCase();
     if (!value) return;
-
-    if (value === "ya" || value === "yes" || value === "1" || value === "true") {
-      yes++;
-      total++;
-    } else if (value === "tidak" || value === "no" || value === "0" || value === "false") {
-      total++;
-    }
+    if (["ya", "yes", "1", "true"].includes(value)) { yes++; total++; }
+    else if (["tidak", "no", "0", "false"].includes(value)) { total++; }
   });
-
-  if (!total) return 0;
-  return (yes / total) * 100;
+  return total ? (yes / total) * 100 : 0;
 }
-
 
 function numericAverage(rows, column) {
   if (!rows.length || !column) return 0;
-
-  const values = rows
-    .map(row => numberValue(row[column]))
-    .filter(value => value !== null);
-
-  if (!values.length) return 0;
-  return values.reduce((a,b) => a + b, 0) / values.length;
+  const values = rows.map(row => numberValue(row[column])).filter(v => v !== null);
+  return values.length ? values.reduce((a,b) => a + b, 0) / values.length : 0;
 }
-
-
-/* =========================================================
-   TAB SWITCH & SETUP FILTER
-========================================================= */
 
 document.querySelectorAll(".tab").forEach(button => {
   button.addEventListener("click", () => {
     document.querySelectorAll(".tab").forEach(item => item.classList.remove("active"));
     document.querySelectorAll(".panel").forEach(panel => panel.classList.remove("active"));
-
     button.classList.add("active");
-    const panel = document.getElementById(button.dataset.tab);
-    if (panel) panel.classList.add("active");
+    document.getElementById(button.dataset.tab)?.classList.add("active");
   });
 });
-
 
 function setupFilter(filterId, valueId, renderFunction) {
   const filter = document.getElementById(filterId);
   const value = document.getElementById(valueId);
-
-  filter.addEventListener("change", () => {
-    populateFilter(filter.value, valueId);
-    renderFunction();
-  });
-
+  filter.addEventListener("change", () => { populateFilter(filter.value, valueId); renderFunction(); });
   value.addEventListener("change", renderFunction);
 }
 
-
-/* =========================================================
-   PROFIL
-========================================================= */
-
 function filterMembers(members, filter, value, search) {
   let result = [...members];
-
-  if (filter === "sektor" && value) {
-    result = result.filter(member => member.sektor === value);
-  }
-
-  if (filter === "kelas" && value) {
-    result = result.filter(member => member.kelas === value);
-  }
-
+  if (filter === "sektor" && value) result = result.filter(m => m.sektor === value);
+  if (filter === "kelas" && value) result = result.filter(m => m.kelas === value);
   if (search) {
     const text = search.toLowerCase().trim();
-    result = result.filter(member => member.id.toLowerCase().includes(text));
+    result = result.filter(m => m.id.toLowerCase().includes(text));
   }
-
   return result;
 }
 
-
+/* =========================================================
+   RENDER PROFIL
+========================================================= */
 function renderProfil() {
   const filter = document.getElementById("profilFilter").value;
   const value = document.getElementById("profilValue").value;
@@ -1966,57 +1279,38 @@ function renderProfil() {
 
   renderStats("profilStats", [
     { value: selectedMembers.length, label: "Total Anggota" },
-    { value: new Set(selectedMembers.map(item => item.sektor).filter(Boolean)).size, label: "Daerah", color: "blue" },
-    { value: new Set(selectedMembers.map(item => item.kelas).filter(Boolean)).size, label: "Kelas", color: "orange" },
+    { value: new Set(selectedMembers.map(i => i.sektor).filter(Boolean)).size, label: "Daerah", color: "blue" },
+    { value: new Set(selectedMembers.map(i => i.kelas).filter(Boolean)).size, label: "Kelas", color: "orange" },
     { value: rows.length, label: "Data Profil", color: "green" }
   ]);
 
   document.getElementById("profilCount").textContent = selectedMembers.length + " anggota";
 
   if (!selectedMembers.length) {
-    document.getElementById("profilTable").innerHTML = `<div class="empty">Tidak ada anggota yang sesuai.</div>`;
+    document.getElementById("profilTable").innerHTML = `<div class="empty">Tidak ada anggota.</div>`;
     return;
   }
 
-  let html = `
-    <table>
-      <thead>
-        <tr>
-          <th>No</th>
-          <th>ID Anggota</th>
-          <th>Daerah</th>
-          <th>Kelas</th>
-        </tr>
-      </thead>
-      <tbody>
-  `;
-
+  let html = `<table><thead><tr><th>No</th><th>ID Anggota</th><th>Daerah</th><th>Kelas</th></tr></thead><tbody>`;
   selectedMembers.forEach((member, index) => {
-    html += `
-      <tr>
-        <td>${index + 1}</td>
-        <td><strong>${escapeHtml(member.id)}</strong></td>
-        <td>${escapeHtml(member.sektor)}</td>
-        <td>${escapeHtml(member.kelas)}</td>
-      </tr>
-    `;
+    html += `<tr><td>${index + 1}</td><td><strong>${escapeHtml(member.id)}</strong></td><td>${escapeHtml(member.sektor)}</td><td>${escapeHtml(member.kelas)}</td></tr>`;
   });
-
   html += `</tbody></table>`;
   document.getElementById("profilTable").innerHTML = html;
 }
 
-
 /* =========================================================
-   BAROMIJ
+   RENDER BAROMIJ
 ========================================================= */
-
 function renderBaromij() {
   const filter = document.getElementById("baromijFilter").value;
   const value = document.getElementById("baromijValue").value;
   const search = document.getElementById("baromijSearch").value;
+  const startDate = document.getElementById("baromijStartDate").value;
+  const endDate = document.getElementById("baromijEndDate").value;
 
   let rows = filterRows(DATA.baromij, filter, value);
+  rows = filterDateRange(rows, startDate, endDate);
   rows = applySearch(rows, search);
 
   const members = getMasterMembers();
@@ -2033,8 +1327,8 @@ function renderBaromij() {
 
   renderStats("baromijStats", [
     { value: selectedMembers.length, label: "Anggota", color: "blue" },
-    { value: new Set(selectedMembers.map(item => item.sektor).filter(Boolean)).size, label: "Daerah" },
-    { value: new Set(selectedMembers.map(item => item.kelas).filter(Boolean)).size, label: "Kelas", color: "orange" },
+    { value: new Set(selectedMembers.map(i => i.sektor).filter(Boolean)).size, label: "Daerah" },
+    { value: new Set(selectedMembers.map(i => i.kelas).filter(Boolean)).size, label: "Kelas", color: "orange" },
     { value: rows.length, label: "Data Agenda", color: "green" }
   ]);
 
@@ -2047,19 +1341,9 @@ function renderBaromij() {
     { label: "Kelas Offline", value: yesPercentage(rows, barCols.offline) }
   ];
 
-  renderChart(
-    "baromijChart",
-    metrics.map(item => ({
-      label: item.label,
-      value: item.value,
-      display: formatPercent(item.value)
-    })),
-    100
-  );
-
+  renderChart("baromijChart", metrics.map(item => ({ label: item.label, value: item.value, display: formatPercent(item.value) })), 100);
   renderBaromijKeterangan(rows);
 }
-
 
 function renderBaromijKeterangan(rows) {
   const cols = columnInfo(DATA.baromij);
@@ -2081,7 +1365,6 @@ function renderBaromijKeterangan(rows) {
   }
 
   const columns = [cols.idAnggota, cols.idSektor, cols.idKelas, cols.keterangan].filter(Boolean);
-
   renderTable("baromijKetTable", filtered, columns, {
     [cols.idAnggota]: "ID Anggota",
     [cols.idSektor]: "Daerah",
@@ -2090,17 +1373,18 @@ function renderBaromijKeterangan(rows) {
   });
 }
 
-
 /* =========================================================
-   YAUMIYAN
+   RENDER YAUMIYAN
 ========================================================= */
-
 function renderYaumiyan() {
   const filter = document.getElementById("yaumiyanFilter").value;
   const value = document.getElementById("yaumiyanValue").value;
   const search = document.getElementById("yaumiyanSearch").value;
+  const startDate = document.getElementById("yaumiyanStartDate").value;
+  const endDate = document.getElementById("yaumiyanEndDate").value;
 
   let rows = filterRows(DATA.yaumiyan, filter, value);
+  rows = filterDateRange(rows, startDate, endDate);
   rows = applySearch(rows, search);
 
   const members = getMasterMembers();
@@ -2118,8 +1402,8 @@ function renderYaumiyan() {
 
   renderStats("yaumiyanStats", [
     { value: selectedMembers.length, label: "Anggota", color: "blue" },
-    { value: new Set(selectedMembers.map(item => item.sektor).filter(Boolean)).size, label: "Daerah" },
-    { value: new Set(selectedMembers.map(item => item.kelas).filter(Boolean)).size, label: "Kelas", color: "orange" },
+    { value: new Set(selectedMembers.map(i => i.sektor).filter(Boolean)).size, label: "Daerah" },
+    { value: new Set(selectedMembers.map(i => i.kelas).filter(Boolean)).size, label: "Kelas", color: "orange" },
     { value: rows.length, label: "Pengisian", color: "green" }
   ]);
 
@@ -2133,19 +1417,16 @@ function renderYaumiyan() {
     { label: "Al-Matsurot", value: numericAverage(rows, cols.matsurot), display: formatNumber(numericAverage(rows, cols.matsurot)) }
   ];
 
-  const max = Math.max(100, ...metrics.map(item => Number(item.value) || 0));
-
-  renderChart("yaumiyanChart", metrics, max);
+  renderChart("yaumiyanChart", metrics, Math.max(100, ...metrics.map(i => Number(i.value) || 0)));
   renderYaumiyanKeterangan(rows);
 
   if (filter === "kelas" && value) {
     document.getElementById("yaumiyanStatusCard").classList.remove("hidden");
-    renderYaumiyanStatus(value, search);
+    renderYaumiyanStatus(value, search, startDate, endDate);
   } else {
     document.getElementById("yaumiyanStatusCard").classList.add("hidden");
   }
 }
-
 
 function renderYaumiyanKeterangan(rows) {
   const cols = columnInfo(DATA.yaumiyan);
@@ -2167,7 +1448,6 @@ function renderYaumiyanKeterangan(rows) {
   }
 
   const columns = [cols.idAnggota, cols.idSektor, cols.idKelas, cols.keterangan].filter(Boolean);
-
   renderTable("yaumiyanKetTable", filtered, columns, {
     [cols.idAnggota]: "ID Anggota",
     [cols.idSektor]: "Daerah",
@@ -2176,29 +1456,33 @@ function renderYaumiyanKeterangan(rows) {
   });
 }
 
-
-function renderYaumiyanStatus(kelas, search) {
-  const members = getMasterMembers().filter(member => member.kelas === kelas);
+function renderYaumiyanStatus(kelas, search, startDate, endDate) {
+  const members = getMasterMembers().filter(m => m.kelas === kelas);
   let filteredMembers = [...members];
 
   if (search) {
     const text = search.toLowerCase().trim();
-    filteredMembers = filteredMembers.filter(member => member.id.toLowerCase().includes(text));
+    filteredMembers = filteredMembers.filter(m => m.id.toLowerCase().includes(text));
   }
 
   const yaCols = columnInfo(DATA.yaumiyan);
-  const filledIds = new Set();
+  let yaumiyanRows = DATA.yaumiyan.filter(row => !yaCols.idKelas || clean(row[yaCols.idKelas]) === clean(kelas));
+  
+  yaumiyanRows = filterDateRange(yaumiyanRows, startDate, endDate);
+
+  const latestTimestampMap = new Map();
 
   if (yaCols.idAnggota) {
-    DATA.yaumiyan
-      .filter(row => !yaCols.idKelas || clean(row[yaCols.idKelas]) === clean(kelas))
-      .forEach(row => {
-        const id = clean(row[yaCols.idAnggota]);
-        if (id) filledIds.add(id);
-      });
+    yaumiyanRows.forEach(row => {
+      const id = clean(row[yaCols.idAnggota]);
+      const ts = yaCols.timestamp ? clean(row[yaCols.timestamp]) : "";
+      if (id) {
+        latestTimestampMap.set(id, ts);
+      }
+    });
   }
 
-  const sudah = filteredMembers.filter(member => filledIds.has(member.id)).length;
+  const sudah = filteredMembers.filter(member => latestTimestampMap.has(member.id)).length;
   const belum = filteredMembers.length - sudah;
 
   document.getElementById("yaumiyanStatusCount").textContent = "Sudah " + sudah + " · Belum " + belum;
@@ -2217,13 +1501,17 @@ function renderYaumiyanStatus(kelas, search) {
           <th>ID Anggota</th>
           <th>Daerah</th>
           <th>Status</th>
+          <th>Timestamp</th>
         </tr>
       </thead>
       <tbody>
   `;
 
   filteredMembers.forEach((member, index) => {
-    const filled = filledIds.has(member.id);
+    const filled = latestTimestampMap.has(member.id);
+    const rawTimestamp = latestTimestampMap.get(member.id) || "";
+    const formattedTimestamp = filled ? formatDateFormatted(rawTimestamp) : "-";
+
     html += `
       <tr>
         <td>${index + 1}</td>
@@ -2235,6 +1523,7 @@ function renderYaumiyanStatus(kelas, search) {
             : `<span class="badge badge-danger">✕ Belum Isi</span>`
           }
         </td>
+        <td>${formattedTimestamp}</td>
       </tr>
     `;
   });
@@ -2243,112 +1532,56 @@ function renderYaumiyanStatus(kelas, search) {
   element.innerHTML = html;
 }
 
-
 /* =========================================================
-   IB - BULAN & NORMALISASI TAHUN
+   RENDER IB
 ========================================================= */
-
 const MONTHS = [
-  { value: 1, label: "Januari" },
-  { value: 2, label: "Februari" },
-  { value: 3, label: "Maret" },
-  { value: 4, label: "April" },
-  { value: 5, label: "Mei" },
-  { value: 6, label: "Juni" },
-  { value: 7, label: "Juli" },
-  { value: 8, label: "Agustus" },
-  { value: 9, label: "September" },
-  { value: 10, label: "Oktober" },
-  { value: 11, label: "November" },
-  { value: 12, label: "Desember" }
+  { value: 1, label: "Januari" }, { value: 2, label: "Februari" }, { value: 3, label: "Maret" },
+  { value: 4, label: "April" }, { value: 5, label: "Mei" }, { value: 6, label: "Juni" },
+  { value: 7, label: "Juli" }, { value: 8, label: "Agustus" }, { value: 9, label: "September" },
+  { value: 10, label: "Oktober" }, { value: 11, label: "November" }, { value: 12, label: "Desember" }
 ];
-
 
 function normalizeMonth(value) {
   const text = clean(value).toLowerCase();
   if (!text) return null;
-
   const numeric = Number(text);
-  if (numeric >= 1 && numeric <= 12) {
-    return numeric;
-  }
-
-  const found = MONTHS.find(month => month.label.toLowerCase() === text);
-  if (found) return found.value;
-
-  const match = text.match(/^(\d{1,2})/);
-  if (match) {
-    const n = Number(match[1]);
-    if (n >= 1 && n <= 12) return n;
-  }
-
-  return null;
+  if (numeric >= 1 && numeric <= 12) return numeric;
+  const found = MONTHS.find(m => m.label.toLowerCase() === text);
+  return found ? found.value : null;
 }
 
-/*
- * Helper untuk normalisasi tahun (misal: 26 -> 2026, 2026 -> 2026)
- */
 function normalizeYear(value) {
-  const text = clean(value);
-  if (!text) return null;
-
-  const n = Number(text);
+  const n = Number(clean(value));
   if (!Number.isFinite(n)) return null;
-
-  if (n < 100) {
-    return 2000 + n; // Konversi 2 angka (contoh: 26 -> 2026)
-  }
-
-  return n;
+  return n < 100 ? 2000 + n : n;
 }
-
-
-/* =========================================================
-   INITIALIZE IB
-========================================================= */
 
 function initializeIB() {
   const month = document.getElementById("ibMonth");
   const year = document.getElementById("ibYear");
 
-  month.innerHTML = MONTHS.map(item => `
-    <option value="${item.value}">${item.label}</option>
-  `).join("");
+  month.innerHTML = MONTHS.map(item => `<option value="${item.value}">${item.label}</option>`).join("");
 
   const ibYearColumn = findColumn(DATA.ib, ["tahun"]);
   const years = new Set();
-
   if (ibYearColumn) {
     DATA.ib.forEach(row => {
-      const yearNorm = normalizeYear(row[ibYearColumn]);
-      if (yearNorm !== null) {
-        years.add(yearNorm);
-      }
+      const y = normalizeYear(row[ibYearColumn]);
+      if (y !== null) years.add(y);
     });
   }
 
   const currentYear = new Date().getFullYear();
+  for (let y = currentYear - 2; y <= currentYear + 1; y++) years.add(y);
 
-  for (let yearValue = currentYear - 2; yearValue <= currentYear + 1; yearValue++) {
-    years.add(yearValue);
-  }
-
-  year.innerHTML = [...years]
-    .sort((a,b) => b - a)
-    .map(value => `<option value="${value}">${value}</option>`)
-    .join("");
-
+  year.innerHTML = [...years].sort((a,b) => b - a).map(v => `<option value="${v}">${v}</option>`).join("");
   month.value = new Date().getMonth() + 1;
   year.value = currentYear;
 
   month.addEventListener("change", renderIB);
   year.addEventListener("change", renderIB);
 }
-
-
-/* =========================================================
-   FILTER IB
-========================================================= */
 
 function renderIB() {
   const filter = document.getElementById("ibFilter").value;
@@ -2365,18 +1598,11 @@ function renderIB() {
   const yearColumn = findColumn(DATA.ib, ["tahun"]);
 
   let periodRows = [];
-
   if (monthColumn && yearColumn) {
-    periodRows = DATA.ib.filter(row => {
-      const rowMonth = normalizeMonth(row[monthColumn]);
-      const rowYear = normalizeYear(row[yearColumn]);
-
-      return (rowMonth === month && rowYear === year);
-    });
+    periodRows = DATA.ib.filter(row => normalizeMonth(row[monthColumn]) === month && normalizeYear(row[yearColumn]) === year);
   }
 
   const filledIds = new Set();
-
   if (ibCols.idAnggota) {
     periodRows.forEach(row => {
       const id = clean(row[ibCols.idAnggota]);
@@ -2384,7 +1610,7 @@ function renderIB() {
     });
   }
 
-  const sudah = members.filter(member => filledIds.has(member.id)).length;
+  const sudah = members.filter(m => filledIds.has(m.id)).length;
   const belum = members.length - sudah;
 
   renderStats("ibStats", [
@@ -2398,29 +1624,14 @@ function renderIB() {
   renderIBTable(members, filledIds);
 }
 
-
 function renderIBTable(members, filledIds) {
   const element = document.getElementById("ibStatusTable");
-
   if (!members.length) {
-    element.innerHTML = `<div class="empty">Tidak ada anggota yang sesuai filter.</div>`;
+    element.innerHTML = `<div class="empty">Tidak ada anggota yang sesuai.</div>`;
     return;
   }
 
-  let html = `
-    <table>
-      <thead>
-        <tr>
-          <th>No</th>
-          <th>ID Anggota</th>
-          <th>Daerah</th>
-          <th>Kelas</th>
-          <th>Status</th>
-        </tr>
-      </thead>
-      <tbody>
-  `;
-
+  let html = `<table><thead><tr><th>No</th><th>ID Anggota</th><th>Daerah</th><th>Kelas</th><th>Status</th></tr></thead><tbody>`;
   members.forEach((member, index) => {
     const filled = filledIds.has(member.id);
     html += `
@@ -2429,25 +1640,17 @@ function renderIBTable(members, filledIds) {
         <td><strong>${escapeHtml(member.id)}</strong></td>
         <td>${escapeHtml(member.sektor)}</td>
         <td>${escapeHtml(member.kelas)}</td>
-        <td>
-          ${filled
-            ? `<span class="badge badge-success">✓ Sudah Isi</span>`
-            : `<span class="badge badge-danger">✕ Belum Isi</span>`
-          }
-        </td>
+        <td>${filled ? `<span class="badge badge-success">✓ Sudah Isi</span>` : `<span class="badge badge-danger">✕ Belum Isi</span>`}</td>
       </tr>
     `;
   });
-
   html += `</tbody></table>`;
   element.innerHTML = html;
 }
 
-
 /* =========================================================
-   INITIALIZE FILTERS & EVENTS
+   INITIALIZE & EVENT LISTENERS
 ========================================================= */
-
 function initializeFilters() {
   populateFilter("all", "profilValue");
   populateFilter("all", "baromijValue");
@@ -2461,14 +1664,16 @@ setupFilter("yaumiyanFilter", "yaumiyanValue", renderYaumiyan);
 setupFilter("ibFilter", "ibValue", renderIB);
 
 document.getElementById("profilSearch").addEventListener("input", renderProfil);
+
 document.getElementById("baromijSearch").addEventListener("input", renderBaromij);
+document.getElementById("baromijStartDate").addEventListener("change", renderBaromij);
+document.getElementById("baromijEndDate").addEventListener("change", renderBaromij);
+
 document.getElementById("yaumiyanSearch").addEventListener("input", renderYaumiyan);
+document.getElementById("yaumiyanStartDate").addEventListener("change", renderYaumiyan);
+document.getElementById("yaumiyanEndDate").addEventListener("change", renderYaumiyan);
+
 document.getElementById("ibSearch").addEventListener("input", renderIB);
-
-
-/* =========================================================
-   RENDER SEMUA & START
-========================================================= */
 
 function renderAll() {
   renderProfil();
@@ -2478,7 +1683,6 @@ function renderAll() {
 }
 
 loadAllData(false);
-
 </script>
 
 </body>
