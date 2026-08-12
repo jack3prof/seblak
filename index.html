@@ -1,1275 +1,2102 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Seblak KBR</title>
-    
-    <!-- Tailwind CSS CDN -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    
-    <!-- QRCode.js Library -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
-    
-    <style>
-        /* =========================================================
-           RESET & DASAR
-        ========================================================= */
-        * { box-sizing: border-box; }
-        html { scroll-behavior: smooth; }
-        body {
-            margin: 0;
-            background: #f4f6f8;
-            color: #17202a;
-            font-family: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
-            font-size: 14px;
-        }
-        button, input, select, textarea { font: inherit; }
-        button { cursor: pointer; }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-        /* =========================================================
-           HEADER (TEMA HIJAU-TEAL)
-        ========================================================= */
-        .header {
-            background: linear-gradient(135deg, #0f172a 0%, #134e4a 55%, #0d9488 100%);
-            color: white;
-            padding: 16px 20px;
-            position: sticky;
-            top: 0;
-            z-index: 1000;
-            box-shadow: 0 4px 18px rgba(0,0,0,.16);
-        }
-        .header-inner { max-width: 1200px; margin: auto; }
-        .header-row { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
-        .title { margin: 0; font-size: 22px; font-weight: 800; letter-spacing: -.4px; }
-        .subtitle { margin: 2px 0 0; font-size: 11px; opacity: .86; }
-        .refresh-btn {
-            border: 1px solid rgba(255,255,255,.3);
-            background: rgba(255,255,255,.14);
-            color: white;
-            border-radius: 8px;
-            padding: 8px 12px;
-            font-size: 11px;
-            font-weight: 700;
-            transition: all 0.2s;
-        }
-        .refresh-btn:hover { background: rgba(255,255,255,.25); }
-        .refresh-btn:active { transform: scale(.97); }
-        .connection {
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-            margin-top: 8px;
-            padding: 4px 10px;
-            border-radius: 999px;
-            background: rgba(255,255,255,.13);
-            font-size: 10px;
-        }
-        .connection-dot { width: 7px; height: 7px; border-radius: 50%; background: #ffd166; }
-        .connection.success .connection-dot { background: #65e59a; }
-        .connection.error .connection-dot { background: #ff9696; }
+<title>Laporan Seblak KBR KP</title>
 
-        /* =========================================================
-           CONTAINER & TABS
-        ========================================================= */
-        .container { max-width: 1200px; margin: auto; padding: 12px; }
-        .tabs {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 4px;
-            background: white;
-            padding: 4px;
-            border-radius: 12px;
-            box-shadow: 0 3px 15px rgba(0,0,0,.06);
-            position: sticky;
-            top: 75px;
-            z-index: 900;
-            margin-bottom: 16px;
-        }
-        .tab-btn {
-            width: 100%;
-            border: none;
-            background: transparent;
-            color: #64748b;
-            border-radius: 8px;
-            padding: 8px 2px;
-            font-size: 11px;
-            font-weight: 700;
-            text-align: center;
-            white-space: normal;
-            line-height: 1.2;
-            transition: all 0.2s;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-        }
-        .tab-btn.active { color: white; background: #0f766e; }
-        .tab-btn:hover:not(.active) { background: #f1f5f9; color: #334155; }
+<style>
+/* =========================================================
+   RESET & DASAR
+========================================================= */
 
-        /* =========================================================
-           PANEL & CARD COMPONENTS
-        ========================================================= */
-        .panel { display: none; }
-        .panel.active { display: block; }
-        .card {
-            background: white;
-            border-radius: 14px;
-            padding: 16px;
-            margin-bottom: 16px;
-            box-shadow: 0 3px 15px rgba(15,23,42,.055);
-            border: 1px solid #e2e8f0;
-        }
-        .card-title { margin: 0; font-size: 16px; font-weight: 800; color: #0f172a; }
-        .card-subtitle { color: #64748b; font-size: 11px; margin: 4px 0 14px; line-height: 1.45; }
+* {
+  box-sizing: border-box;
+}
 
-        /* =========================================================
-           CHARTS
-        ========================================================= */
-        .chart-area { width: 100%; overflow-x: auto; padding-bottom: 4px; }
-        .chart { min-width: 480px; }
-        .bar-chart { height: 200px; display: flex; align-items: flex-end; gap: 8px; padding: 20px 10px 5px; border-bottom: 1px solid #e2e8f0; }
-        .bar-item { flex: 1; height: 100%; min-width: 50px; max-width: 105px; display: flex; flex-direction: column; align-items: center; justify-content: flex-end; }
-        .bar-value { font-size: 10px; font-weight: 850; color: #334155; margin-bottom: 5px; }
-        .bar { width: min(54px, 78%); min-height: 3px; border-radius: 8px 8px 2px 2px; background: linear-gradient(180deg, #14b8a6, #0f766e); transition: height .4s ease; }
-        .bar-label { margin-top: 7px; text-align: center; font-size: 10px; line-height: 1.2; color: #64748b; }
+html {
+  scroll-behavior: smooth;
+}
 
-        /* =========================================================
-           TABLES & BADGES (3-ROW SCROLL LIMIT)
-        ========================================================= */
-        .table-head { display: flex; align-items: center; justify-content: space-between; gap: 8px; margin-bottom: 12px; }
-        .table-title { margin: 0; font-size: 15px; font-weight: 800; }
-        .table-count { color: #64748b; font-size: 11px; }
-        .table-scroll-limit {
-            max-height: 165px;
-            overflow-y: auto;
-            overflow-x: auto;
-            border: 1px solid #e2e8f0;
-            border-radius: 10px;
-        }
+body {
+  margin: 0;
+  background: #f4f6f8;
+  color: #17202a;
+  font-family:
+    Inter,
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    Roboto,
+    Arial,
+    sans-serif;
+  font-size: 14px;
+}
 
-        table { width: 100%; border-collapse: collapse; min-width: 100%; white-space: nowrap; }
-        th { background: #f8fafc; color: #475569; padding: 10px 12px; font-size: 11px; font-weight: 800; text-align: left; border-bottom: 1px solid #e2e8f0; position: sticky; top: 0; z-index: 10; }
-        td { padding: 10px 12px; font-size: 12px; border-bottom: 1px solid #f1f5f9; vertical-align: middle; }
-        tr:last-child td { border-bottom: none; }
-        tr:hover td { background: #f8fafc; }
+button,
+input,
+select {
+  font: inherit;
+}
 
-        .badge { display: inline-flex; align-items: center; justify-content: center; border-radius: 999px; padding: 4px 10px; font-size: 10px; font-weight: 800; }
-        .badge-success { background: #e9f8ef; color: #16803c; }
+button {
+  cursor: pointer;
+}
 
-        /* =========================================================
-           NUMBER SELECTION BUTTONS (EVALUASI YAUMIYAN)
-        ========================================================= */
-        .num-btn-group { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 4px; }
-        .num-btn {
-            min-width: 32px;
-            height: 32px;
-            padding: 0 8px;
-            border: 1px solid #cbd5e1;
-            background: #ffffff;
-            color: #334155;
-            border-radius: 6px;
-            font-size: 12px;
-            font-weight: 700;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: all 0.15s ease;
-        }
-        .num-btn:hover { background: #f1f5f9; border-color: #94a3b8; }
-        .num-btn.active { background: #0f766e; color: #ffffff; border-color: #0f766e; box-shadow: 0 2px 4px rgba(15, 118, 110, 0.2); }
+.hidden {
+  display: none !important;
+}
 
-        /* =========================================================
-           STATES & UTILITIES
-        ========================================================= */
-        .loading { text-align: center; padding: 30px 15px; color: #64748b; font-size: 13px; }
-        .spinner { width: 24px; height: 24px; border-radius: 50%; border: 3px solid #e2e8f0; border-top-color: #0f766e; margin: 0 auto 10px; animation: spin .8s linear infinite; }
-        @keyframes spin { to { transform: rotate(360deg); } }
-        .empty { padding: 25px 15px; text-align: center; color: #64748b; font-size: 12px; }
-        .error-box { padding: 12px; border-radius: 10px; background: #fff0ee; color: #8f1c13; border: 1px solid #ffd2cd; font-size: 12px; line-height: 1.5; }
-        .keterangan { white-space: normal; min-width: 160px; max-width: 250px; line-height: 1.3; }
-        .footer { text-align: center; color: #94a3b8; font-size: 11px; padding: 20px 0 30px; }
+/* =========================================================
+   HEADER (TEMA HIJAU)
+========================================================= */
 
-        @media (max-width: 640px) {
-            .tab-btn { font-size: 10px; padding: 6px 1px; }
-            .tabs { top: 65px; }
-            .title { font-size: 18px; }
-        }
-    </style>
+.header {
+  background:
+    linear-gradient(
+      135deg,
+      #134e4a 0%,
+      #0d9488 55%,
+      #14b8a6 100%
+    );
+  color: white;
+  padding: 18px 15px 20px;
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  box-shadow: 0 4px 18px rgba(0,0,0,.16);
+}
+
+.header-inner {
+  max-width: 1150px;
+  margin: auto;
+}
+
+.header-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.title {
+  margin: 0;
+  font-size: 22px;
+  font-weight: 800;
+  letter-spacing: -.4px;
+}
+
+.subtitle {
+  margin: 4px 0 0;
+  font-size: 11px;
+  opacity: .86;
+}
+
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+}
+
+.refresh-btn {
+  border: 1px solid rgba(255,255,255,.3);
+  background: rgba(255,255,255,.14);
+  color: white;
+  border-radius: 10px;
+  padding: 8px 11px;
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.refresh-btn:active {
+  transform: scale(.97);
+}
+
+.connection {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 10px;
+  padding: 5px 9px;
+  border-radius: 999px;
+  background: rgba(255,255,255,.13);
+  font-size: 10px;
+}
+
+.connection-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #ffd166;
+}
+
+.connection.success .connection-dot {
+  background: #65e59a;
+}
+
+.connection.error .connection-dot {
+  background: #ff9696;
+}
+
+/* =========================================================
+   CONTAINER
+========================================================= */
+
+.container {
+  max-width: 1150px;
+  margin: auto;
+  padding: 12px;
+}
+
+/* =========================================================
+   TAB (TEMA HIJAU)
+========================================================= */
+
+.tabs {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 5px;
+  background: white;
+  padding: 5px;
+  border-radius: 14px;
+  box-shadow: 0 3px 15px rgba(0,0,0,.06);
+  position: sticky;
+  top: 94px;
+  z-index: 900;
+  margin-bottom: 12px;
+}
+
+.tab {
+  border: none;
+  background: transparent;
+  color: #64748b;
+  border-radius: 10px;
+  padding: 10px 5px;
+  font-size: 11px;
+  font-weight: 800;
+  line-height: 1.2;
+}
+
+.tab.active {
+  color: white;
+  background: #0f766e;
+}
+
+.tab:active {
+  transform: scale(.98);
+}
+
+/* =========================================================
+   PANEL & CARD
+========================================================= */
+
+.panel {
+  display: none;
+}
+
+.panel.active {
+  display: block;
+}
+
+.card {
+  background: white;
+  border-radius: 14px;
+  padding: 15px;
+  margin-bottom: 12px;
+  box-shadow: 0 3px 15px rgba(15,23,42,.055);
+}
+
+.card-title {
+  margin: 0;
+  font-size: 17px;
+  font-weight: 800;
+}
+
+.card-subtitle {
+  color: #64748b;
+  font-size: 11px;
+  margin: 4px 0 14px;
+  line-height: 1.45;
+}
+
+/* =========================================================
+   FILTER
+========================================================= */
+
+.filter-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 9px;
+}
+
+.filter-grid.profil-grid {
+  grid-template-columns: 1fr 2fr 1fr;
+}
+
+.filter-grid.four {
+  grid-template-columns: repeat(4, 1fr);
+}
+
+.kelas-group {
+  display: flex;
+  gap: 5px;
+}
+
+.field label {
+  display: block;
+  font-size: 10px;
+  color: #64748b;
+  font-weight: 800;
+  margin-bottom: 5px;
+}
+
+.field select,
+.search-input {
+  width: 100%;
+  height: 41px;
+  border: 1px solid #dfe4ea;
+  background: white;
+  border-radius: 10px;
+  padding: 8px 10px;
+  color: #17202a;
+  outline: none;
+}
+
+.field select:focus,
+.search-input:focus {
+  border-color: #0f766e;
+  box-shadow: 0 0 0 3px rgba(15,118,110,.12);
+}
+
+.search-box {
+  position: relative;
+}
+
+.search-input {
+  padding-left: 34px;
+}
+
+.search-icon {
+  position: absolute;
+  left: 11px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #94a3b8;
+  pointer-events: none;
+}
+
+/* =========================================================
+   STATISTIK (TEMA HIJAU)
+========================================================= */
+
+.stats {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 9px;
+  margin-bottom: 12px;
+}
+
+.stat {
+  background: white;
+  border-radius: 13px;
+  padding: 12px;
+  box-shadow: 0 3px 15px rgba(15,23,42,.05);
+  border-left: 4px solid #0f766e;
+}
+
+.stat.green {
+  border-left-color: #16803c;
+}
+
+.stat.orange {
+  border-left-color: #d97706;
+}
+
+.stat.blue {
+  border-left-color: #1769aa;
+}
+
+.stat-number {
+  font-size: 21px;
+  font-weight: 850;
+  color: #17202a;
+}
+
+.stat-label {
+  font-size: 10px;
+  color: #64748b;
+  margin-top: 2px;
+}
+
+/* =========================================================
+   GRAFIK (TEMA HIJAU)
+========================================================= */
+
+.chart-area {
+  width: 100%;
+  overflow-x: auto;
+  padding-bottom: 4px;
+}
+
+.chart {
+  min-width: 520px;
+}
+
+.bar-chart {
+  height: 270px;
+  display: flex;
+  align-items: flex-end;
+  gap: 8px;
+  padding: 20px 10px 5px;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.bar-item {
+  flex: 1;
+  height: 100%;
+  min-width: 58px;
+  max-width: 105px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-end;
+}
+
+.bar-value {
+  font-size: 10px;
+  font-weight: 850;
+  color: #334155;
+  margin-bottom: 5px;
+}
+
+.bar {
+  width: min(54px, 78%);
+  min-height: 3px;
+  border-radius: 8px 8px 2px 2px;
+  background:
+    linear-gradient(
+      180deg,
+      #14b8a6,
+      #0f766e
+    );
+  transition: height .4s ease;
+}
+
+.bar-label {
+  margin-top: 7px;
+  text-align: center;
+  font-size: 9px;
+  line-height: 1.2;
+  color: #64748b;
+  max-width: 75px;
+}
+
+.chart-note {
+  margin-top: 9px;
+  font-size: 10px;
+  color: #64748b;
+}
+
+/* =========================================================
+   TABLE
+========================================================= */
+
+.table-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  margin-bottom: 9px;
+}
+
+.table-title {
+  margin: 0;
+  font-size: 15px;
+  font-weight: 800;
+}
+
+.table-count {
+  color: #64748b;
+  font-size: 10px;
+  white-space: nowrap;
+}
+
+.table-scroll {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  border: 1px solid #e5e7eb;
+  border-radius: 10px;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  min-width: 600px;
+}
+
+th {
+  background: #f8fafc;
+  color: #475569;
+  padding: 9px 10px;
+  font-size: 10px;
+  font-weight: 800;
+  text-align: left;
+  white-space: nowrap;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+td {
+  padding: 9px 10px;
+  font-size: 11px;
+  border-bottom: 1px solid #f1f5f9;
+  vertical-align: top;
+}
+
+tr:last-child td {
+  border-bottom: none;
+}
+
+tr:hover td {
+  background: #fafafa;
+}
+
+/* =========================================================
+   BADGE
+========================================================= */
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 999px;
+  padding: 4px 8px;
+  font-size: 9px;
+  font-weight: 800;
+  white-space: nowrap;
+}
+
+.badge-success {
+  background: #e9f8ef;
+  color: #16803c;
+}
+
+.badge-danger {
+  background: #fff0ee;
+  color: #b42318;
+}
+
+.badge-warning {
+  background: #fff5e6;
+  color: #b45309;
+}
+
+.badge-info {
+  background: #edf6ff;
+  color: #1769aa;
+}
+
+/* =========================================================
+   LOADING
+========================================================= */
+
+.loading {
+  text-align: center;
+  padding: 45px 15px;
+  color: #64748b;
+  font-size: 12px;
+}
+
+.spinner {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  border: 3px solid #e2e8f0;
+  border-top-color: #0f766e;
+  margin: 0 auto 10px;
+  animation: spin .8s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.empty {
+  padding: 30px 15px;
+  text-align: center;
+  color: #64748b;
+  font-size: 12px;
+}
+
+.error-box {
+  padding: 14px;
+  border-radius: 10px;
+  background: #fff0ee;
+  color: #8f1c13;
+  border: 1px solid #ffd2cd;
+  font-size: 11px;
+  line-height: 1.55;
+}
+
+/* =========================================================
+   KETERANGAN
+========================================================= */
+
+.keterangan {
+  white-space: pre-wrap;
+  line-height: 1.4;
+  min-width: 230px;
+}
+
+/* =========================================================
+   STATUS PROGRESS
+========================================================= */
+
+.progress {
+  height: 7px;
+  background: #edf0f2;
+  border-radius: 999px;
+  overflow: hidden;
+  min-width: 100px;
+}
+
+.progress-fill {
+  height: 100%;
+  border-radius: 999px;
+  background: #16803c;
+}
+
+/* =========================================================
+   FOOTER
+========================================================= */
+
+.footer {
+  text-align: center;
+  color: #94a3b8;
+  font-size: 9px;
+  padding: 12px 0 28px;
+}
+
+/* =========================================================
+   RESPONSIVE
+========================================================= */
+
+@media (max-width: 760px) {
+
+  .header {
+    padding: 15px 12px 17px;
+  }
+
+  .title {
+    font-size: 19px;
+  }
+
+  .subtitle {
+    font-size: 10px;
+  }
+
+  .container {
+    padding: 9px;
+  }
+
+  .tabs {
+    top: 84px;
+  }
+
+  .tab {
+    font-size: 9px;
+    padding: 9px 3px;
+  }
+
+  .filter-grid,
+  .filter-grid.profil-grid,
+  .filter-grid.four {
+    grid-template-columns: 1fr;
+  }
+
+  .stats {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .card {
+    padding: 13px;
+  }
+
+  .card-title {
+    font-size: 15px;
+  }
+}
+
+@media (max-width: 440px) {
+
+  .header-row {
+    align-items: flex-start;
+  }
+
+  .header-actions {
+    flex-shrink: 0;
+  }
+
+  .refresh-btn {
+    padding: 7px 8px;
+    font-size: 10px;
+  }
+
+  .stats {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .stat-number {
+    font-size: 18px;
+  }
+
+  .stat-label {
+    font-size: 9px;
+  }
+
+  .chart {
+    min-width: 500px;
+  }
+}
+</style>
 </head>
+
+
 <body>
 
-    <!-- HEADER / NAVIGATION -->
-    <header class="header">
-        <div class="header-inner">
-            <div class="header-row">
-                <div>
-                    <h1 class="title">Seblak KBR</h1>
-                    <p class="subtitle">Sistem Input & Laporan Mutaba'ah Integrated</p>
-                </div>
-                <div class="flex items-center gap-2">
-                    <button class="refresh-btn" onclick="loadAllData(true)">↻ Refresh</button>
-                </div>
-            </div>
-            <div id="connection" class="connection">
-                <span class="connection-dot"></span>
-                <span id="connectionText">Memuat koneksi database...</span>
-            </div>
+<!-- =========================================================
+     HEADER
+========================================================= -->
+
+<header class="header">
+
+  <div class="header-inner">
+
+    <div class="header-row">
+
+      <div>
+        <h1 class="title">
+          Laporan Seblak KBR KP
+        </h1>
+
+        <div class="subtitle">
+          Dashboard laporan anggota
         </div>
-    </header>
-
-    <!-- MAIN CONTAINER -->
-    <main class="container">
-
-        <!-- ALERT BOX FOR FORM SUBMISSION -->
-        <div id="alertBox" class="hidden mb-4 p-3 rounded-lg flex items-center justify-between text-xs font-medium"></div>
-
-        <!-- TAB NAVIGATION -->
-        <nav class="tabs">
-            <button class="tab-btn active" onclick="switchMainTab('profile')">
-                <span>🆔</span> <span>Profil</span>
-            </button>
-            <button class="tab-btn" onclick="switchMainTab('baromij')">
-                <span>📋</span> <span>Agenda</span>
-            </button>
-            <button class="tab-btn" onclick="switchMainTab('yaumiyan')">
-                <span>📊</span> <span>Yaumiyan</span>
-            </button>
-            <button class="tab-btn" onclick="switchMainTab('ib')">
-                <span>💰</span> <span>Lapor IB</span>
-            </button>
-        </nav>
-
-        <!-- =========================================================
-             TAB 1: PROFIL & MYID
-        ========================================================= -->
-        <section id="sec-profile" class="panel active">
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <!-- FORM EDIT PROFIL -->
-                <div class="card mb-0">
-                    <h2 class="card-title mb-1">📝 Edit Profil Anggota</h2>
-                    <p class="card-subtitle">Isi atau perbarui data identitas diri Anda</p>
-                    <form id="formProfile" onsubmit="handleProfileSubmit(event)" class="space-y-4">
-                        <div>
-                            <label class="block text-xs font-bold text-slate-600 mb-1">Proda *</label>
-                            <select id="regSektor" required class="w-full p-2.5 border rounded-lg focus:ring-2 focus:ring-teal-600 text-sm">
-                                <option value="BK">BK</option><option value="KB">KB</option>
-                                <option value="KH">KH</option><option value="KM">KM</option>
-                                <option value="KP" selected>KP</option><option value="KS">KS</option>
-                                <option value="KT">KT</option><option value="KU">KU</option>
-                                <option value="LD">LD</option><option value="MP">MP</option>
-                                <option value="MW">MW</option><option value="SB">SB</option>
-                                <option value="SG">SG</option><option value="SK">SK</option>
-                                <option value="ST">ST</option>
-                            </select>
-                        </div>
-
-                        <!-- GENERATOR KODE KELAS -->
-                        <div class="p-3 bg-slate-50 border rounded-lg space-y-3">
-                            <label class="block text-xs font-bold uppercase text-slate-500">Kode Kelas</label>
-                            <div class="grid grid-cols-3 gap-2">
-                                <select id="regK1" class="p-2 border rounded text-sm">
-                                    <option value="AA">AA</option><option value="AK">AK</option>
-                                    <option value="AS">AS</option><option value="AX">AX</option>
-                                    <option value="IA">IA</option><option value="IK">IK</option>
-                                    <option value="IS">IS</option><option value="IX">IX</option>
-                                </select>
-                                <select id="regK2" class="p-2 border rounded text-sm">
-                                    <option value="1">1</option><option value="2">2</option>
-                                    <option value="3">3</option><option value="4">4</option>
-                                    <option value="5">5</option>
-                                </select>
-                                <select id="regK3" class="p-2 border rounded text-sm">
-                                    <option value="01">01</option><option value="02">02</option>
-                                    <option value="03">03</option><option value="04">04</option>
-                                    <option value="05">05</option>
-                                </select>
-                            </div>
-                            <div>
-                                <label class="block text-xs text-slate-500 mb-1">ID Kelas Final:</label>
-                                <input type="text" id="regIdKelas" readonly class="w-full p-2 bg-slate-200 rounded font-mono text-sm font-bold text-slate-700">
-                            </div>
-                        </div>
-
-                        <div>
-                            <label class="block text-xs font-bold text-slate-600 mb-1">ID Anggota (Contoh: WAC01) *</label>
-                            <input type="text" id="regIdAnggota" required pattern="^[A-Za-z]{3}\d{2}$" title="Format harus 3 huruf diikuti 2 angka (contoh: WAC01)" placeholder="WAC01" oninput="this.value = this.value.toUpperCase()" class="w-full p-2.5 border rounded-lg uppercase focus:ring-2 focus:ring-teal-600 text-sm font-mono font-bold">
-                        </div>
-
-                        <button type="submit" class="w-full bg-teal-700 hover:bg-teal-800 text-white font-medium py-2.5 rounded-lg transition shadow-sm">
-                            Simpan Profil
-                        </button>
-                    </form>
-                </div>
-
-                <!-- MYID / QR CODE -->
-                <div class="card mb-0 flex flex-col items-center justify-center text-center">
-                    <h2 class="card-title mb-1">🆔 Kartu Digital (MyID)</h2>
-                    <p class="card-subtitle">Perlihatkan QR Code ini bila diminta pada acara offline</p>
-
-                    <div id="qrcode" class="p-4 bg-white border-2 border-dashed border-slate-300 rounded-xl mb-3 min-h-[180px] min-w-[180px] flex items-center justify-center">
-                        <span class="text-slate-400 text-sm">Data profil belum diisi</span>
-                    </div>
-
-                    <!-- KETERANGAN DI BAWAH KOTAK BERGARIS PUTUS-PUTUS -->
-                    <div id="qrTextDetail" class="font-mono font-bold text-slate-800 text-base tracking-wide bg-slate-100 py-1.5 px-4 rounded-md border border-slate-200">
-                        -
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- =========================================================
-             TAB 2: AGENDA KELAS
-        ========================================================= -->
-        <section id="sec-baromij" class="panel space-y-6">
-            <div class="card">
-                <div class="table-head">
-                    <h3 class="table-title">📌 Status & Riwayat Pengisian Agenda Kelas</h3>
-                    <span id="baromijStatusCount" class="table-count"></span>
-                </div>
-                <div id="baromijStatusTable" class="table-scroll-limit"></div>
-            </div>
-
-            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                <div class="card mb-0">
-                    <h2 class="card-title">📋 Input Agenda Kelas</h2>
-                    <p class="card-subtitle">Khusus Walas / Penanggung Jawab Kelas Pekanan</p>
-
-                    <form id="formBaromij" onsubmit="handleBaromijSubmit(event)" class="space-y-4">
-                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-sm">
-                            <label class="flex items-center justify-between p-3 bg-slate-50 rounded-lg border hover:bg-slate-100 cursor-pointer">
-                                <span>Walas Hadir</span>
-                                <input type="checkbox" name="walashadir" class="w-5 h-5 accent-teal-700">
-                            </label>
-                            <label class="flex items-center justify-between p-3 bg-slate-50 rounded-lg border hover:bg-slate-100 cursor-pointer">
-                                <span>Tilawah / Hafalan</span>
-                                <input type="checkbox" name="tilawah_hafalan" class="w-5 h-5 accent-teal-700">
-                            </label>
-                            <label class="flex items-center justify-between p-3 bg-slate-50 rounded-lg border hover:bg-slate-100 cursor-pointer">
-                                <span>Taujih Walas</span>
-                                <input type="checkbox" name="kalam_naqib" class="w-5 h-5 accent-teal-700">
-                            </label>
-                            <label class="flex items-center justify-between p-3 bg-slate-50 rounded-lg border hover:bg-slate-100 cursor-pointer">
-                                <span>Kultum Siswa</span>
-                                <input type="checkbox" name="tatsqif_usroh" class="w-5 h-5 accent-teal-700">
-                            </label>
-                            <label class="flex items-center justify-between p-3 bg-slate-50 rounded-lg border hover:bg-slate-100 cursor-pointer">
-                                <span>Pengumuman</span>
-                                <input type="checkbox" name="talimat" class="w-5 h-5 accent-teal-700">
-                            </label>
-                        </div>
-
-                        <label class="flex items-center justify-between p-3 bg-teal-50 rounded-lg border border-teal-200 cursor-pointer text-sm">
-                            <span class="font-semibold text-teal-900">Kelas Belajar Offline?</span>
-                            <input type="checkbox" name="kelasoffline" class="w-5 h-5 accent-teal-700">
-                        </label>
-
-                        <div>
-                            <label class="block text-xs font-bold text-slate-600 mb-1">Keterangan</label>
-                            <textarea name="keterangan" rows="3" placeholder="Isikan keterangan kegiatan..." class="w-full p-2.5 border rounded-lg text-sm focus:ring-2 focus:ring-teal-600 outline-none"></textarea>
-                        </div>
-
-                        <button type="submit" class="w-full bg-teal-700 hover:bg-teal-800 text-white font-medium py-3 rounded-lg shadow-sm transition">
-                            Kirim Laporan Agenda Kelas
-                        </button>
-                    </form>
-                </div>
-
-                <div class="card mb-0">
-                    <div class="table-head">
-                        <h3 class="table-title">📈 Rata-rata Agenda Saya</h3>
-                        <span class="table-count">Persentase Capaian</span>
-                    </div>
-                    <div class="chart-area">
-                        <div id="baromijChart" class="chart"></div>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- =========================================================
-             TAB 3: YAUMIYAN
-        ========================================================= -->
-        <section id="sec-yaumiyan" class="panel space-y-6">
-            <div class="card">
-                <div class="table-head">
-                    <h3 class="table-title">📌 Status & Riwayat Pengisian Yaumiyan</h3>
-                    <span id="yaumiyanStatusCount" class="table-count"></span>
-                </div>
-                <div id="yaumiyanStatusTable" class="table-scroll-limit"></div>
-            </div>
-
-            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                <div class="card mb-0">
-                    <h2 class="card-title">📊 Input Evaluasi Yaumiyan</h2>
-                    <p class="card-subtitle">Laporan Isian Amalan Yaumiyan Anggota</p>
-
-                    <form id="formYaumiyan" onsubmit="handleYaumiyanSubmit(event)" class="space-y-4">
-                        <label class="flex items-center justify-between p-3 bg-slate-50 rounded-lg border cursor-pointer text-sm">
-                            <span class="font-medium">Hadir Kelas Pekan Ini?</span>
-                            <input type="checkbox" name="kehadiran_kelas" class="w-5 h-5 accent-teal-700">
-                        </label>
-
-                        <!-- TOMBOL ANGKA SIAP KLIK UTK EVALUASI YAUMIYAN -->
-                        <div class="space-y-3 p-3 bg-slate-50 border rounded-lg">
-                            <div>
-                                <label class="block text-xs font-bold text-slate-600 mb-1">Sholat Jamaah (0 - 35)</label>
-                                <input type="hidden" id="sholat_jamaah" name="sholat_jamaah" value="0">
-                                <div id="btnGroup_sholat_jamaah" class="num-btn-group"></div>
-                            </div>
-                            
-                            <div>
-                                <label class="block text-xs font-bold text-slate-600 mb-1">Qiyamul Lail (0 - 7 Malam)</label>
-                                <input type="hidden" id="qiyamul_lail" name="qiyamul_lail" value="0">
-                                <div id="btnGroup_qiyamul_lail" class="num-btn-group"></div>
-                            </div>
-
-                            <div>
-                                <label class="block text-xs font-bold text-slate-600 mb-1">Tilawah Al-Qur'an (0 - 30 Juz)</label>
-                                <input type="hidden" id="tilawah" name="tilawah" value="0">
-                                <div id="btnGroup_tilawah" class="num-btn-group"></div>
-                            </div>
-
-                            <div>
-                                <label class="block text-xs font-bold text-slate-600 mb-1">Shoum Sunnah (0 - 7 Hari)</label>
-                                <input type="hidden" id="shoum_sunnah" name="shoum_sunnah" value="0">
-                                <div id="btnGroup_shoum_sunnah" class="num-btn-group"></div>
-                            </div>
-
-                            <div>
-                                <label class="block text-xs font-bold text-slate-600 mb-1">Olahraga (0 - 7 Kali)</label>
-                                <input type="hidden" id="olah_raga" name="olah_raga" value="0">
-                                <div id="btnGroup_olah_raga" class="num-btn-group"></div>
-                            </div>
-
-                            <div>
-                                <label class="block text-xs font-bold text-slate-600 mb-1">Al-Ma'tsurat (0 - 14 Kali)</label>
-                                <input type="hidden" id="al_matsurot" name="al_matsurot" value="0">
-                                <div id="btnGroup_al_matsurot" class="num-btn-group"></div>
-                            </div>
-                        </div>
-
-                        <div>
-                            <label class="block text-xs font-bold text-slate-600 mb-1">Keterangan</label>
-                            <input type="text" name="keterangan" value="-" class="w-full p-2.5 border rounded-lg text-sm focus:ring-2 focus:ring-teal-600 outline-none">
-                        </div>
-
-                        <button type="submit" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-medium py-3 rounded-lg shadow-sm transition">
-                            Kirim Laporan Yaumiyan
-                        </button>
-                    </form>
-                </div>
-
-                <div class="card mb-0">
-                    <div class="table-head">
-                        <h3 class="table-title">📈 Capaian Rata-rata Yaumiyan</h3>
-                        <span class="table-count">Rata-rata Pekanan</span>
-                    </div>
-                    <div class="chart-area">
-                        <div id="yaumiyanChart" class="chart"></div>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- =========================================================
-             TAB 4: LAPOR IB
-        ========================================================= -->
-        <section id="sec-ib" class="panel space-y-6">
-            <div class="card">
-                <div class="table-head">
-                    <h3 class="table-title">📌 Status & Riwayat Setoran IB</h3>
-                    <span id="ibStatusCount" class="table-count"></span>
-                </div>
-                <div id="ibStatusTable" class="table-scroll-limit"></div>
-            </div>
-
-            <div class="card max-w-xl mx-auto">
-                <h2 class="card-title">💳 Form Laporan Setoran IB</h2>
-                <p class="card-subtitle">Konfirmasi Setoran Infaq/IB Bulanan Anda</p>
-
-                <form id="formIb" onsubmit="handleIbSubmit(event)" class="space-y-4">
-                    <div>
-                        <label class="block text-xs font-bold text-slate-600 mb-1">Bulan Pelaporan *</label>
-                        <select id="ibBulan" required class="w-full p-2.5 border rounded-lg text-sm focus:ring-2 focus:ring-teal-600 outline-none">
-                            <option value="01">01 - Januari</option><option value="02">02 - Februari</option>
-                            <option value="03">03 - Maret</option><option value="04">04 - April</option>
-                            <option value="05">05 - Mei</option><option value="06">06 - Juni</option>
-                            <option value="07">07 - Juli</option><option value="08">08 - Agustus</option>
-                            <option value="09">09 - September</option><option value="10">10 - Oktober</option>
-                            <option value="11">11 - November</option><option value="12">12 - Desember</option>
-                        </select>
-                    </div>
-
-                    <div>
-                        <label class="block text-xs font-bold text-slate-600 mb-1">Tahun Pelaporan *</label>
-                        <select id="ibTahun" required class="w-full p-2.5 border rounded-lg text-sm focus:ring-2 focus:ring-teal-600 outline-none"></select>
-                    </div>
-
-                    <button type="submit" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-medium py-3 rounded-lg shadow-sm transition">
-                        Laporkan Setoran IB
-                    </button>
-                </form>
-            </div>
-        </section>
-
-    </main>
-
-    <footer class="footer">
-        Seblak KBR & Reporting System · Integrated System
-    </footer>
-
-    <!-- =========================================================
-         SCRIPT LOGIC (VANILLA JS)
-    ========================================================= -->
-    <script>
-        const CONFIG_API_URL = "https://script.google.com/macros/s/AKfycbzjHM6Gvv8Z_iMWcv4Yf84SmEOSIvgj3znG2aC7C4VTtQ0ty_yz3jiXJaAdVfbicLk/exec";
-        const GOOGLE_SHEET_ID = "1rEycScG3ByhgymdLW9J8rMkjz5cBxPgYNlHMah86HXA";
-
-        const SHEETS = { profil: "Profil", baromij: "Baromij", yaumiyan: "Yaumiyan", ib: "IB" };
-        const DATA = { profil: [], baromij: [], yaumiyan: [], ib: [] };
-
-        let currentUser = JSON.parse(localStorage.getItem('ISIM_USER_PROFILE')) || null;
-        let qrCodeObj = null;
-
-        const lastSubmitTimes = { baromij: 0, yaumiyan: 0, ib: 0 };
-
-        document.addEventListener('DOMContentLoaded', () => {
-            initYearOptions();
-            initYaumiyanNumberButtons();
-            loadProfileToUI();
-            updateKodeKelasListener();
-            loadAllData(false);
-        });
-
-        /* =========================================================
-           FORMAT TIMESTAMP ENGINE (dd MMM yy HH:mm)
-        ========================================================= */
-        function formatTimestamp(val) {
-            if (!val) return '-';
-            let str = String(val).trim();
-            let dateObj = null;
-
-            // Memproses string format Google Apps Script: Date(YYYY,M,D,H,m,s)
-            const match = str.match(/^Date\((\d+),\s*(\d+),\s*(\d+)(?:,\s*(\d+))?(?:,\s*(\d+))?(?:,\s*(\d+))?\)$/i);
-            if (match) {
-                const year = parseInt(match[1]);
-                const month = parseInt(match[2]); // 0-indexed dari Apps Script
-                const day = parseInt(match[3]);
-                const hour = parseInt(match[4] || 0);
-                const minute = parseInt(match[5] || 0);
-                const second = parseInt(match[6] || 0);
-                dateObj = new Date(year, month, day, hour, minute, second);
-            } else {
-                dateObj = new Date(str);
-            }
-
-            if (!dateObj || isNaN(dateObj.getTime())) return escapeHtml(str);
-
-            const months = ["Jan", "Feb", "Mar", "Apr", "Mei", "Jun", "Jul", "Agu", "Sep", "Okt", "Nov", "Des"];
-            
-            const dd = String(dateObj.getDate()).padStart(2, '0');
-            const mmm = months[dateObj.getMonth()];
-            const yy = String(dateObj.getFullYear()).slice(-2);
-            const hh = String(dateObj.getHours()).padStart(2, '0');
-            const mm = String(dateObj.getMinutes()).padStart(2, '0');
-
-            return `${dd} ${mmm} ${yy} ${hh}:${mm}`;
-        }
-
-        /* =========================================================
-           INIT BUTTON CLUSTERS UNTUK INPUT YAUMIYAN
-        ========================================================= */
-        const yaumiyanRanges = {
-            sholat_jamaah: 35,
-            qiyamul_lail: 7,
-            tilawah: 30,
-            shoum_sunnah: 7,
-            olah_raga: 7,
-            al_matsurot: 14
-        };
-
-        function initYaumiyanNumberButtons() {
-            Object.keys(yaumiyanRanges).forEach(fieldId => {
-                const max = yaumiyanRanges[fieldId];
-                const groupContainer = document.getElementById(`btnGroup_${fieldId}`);
-                if (!groupContainer) return;
-
-                groupContainer.innerHTML = '';
-                for (let i = 0; i <= max; i++) {
-                    const btn = document.createElement('button');
-                    btn.type = 'button';
-                    btn.className = `num-btn ${i === 0 ? 'active' : ''}`;
-                    btn.textContent = i;
-                    btn.onclick = () => selectNumberValue(fieldId, i, btn);
-                    groupContainer.appendChild(btn);
-                }
-            });
-        }
-
-        function selectNumberValue(fieldId, val, btnEl) {
-            document.getElementById(fieldId).value = val;
-            const parent = btnEl.parentElement;
-            parent.querySelectorAll('.num-btn').forEach(b => b.classList.remove('active'));
-            btnEl.classList.add('active');
-        }
-
-        function resetYaumiyanNumberButtons() {
-            Object.keys(yaumiyanRanges).forEach(fieldId => {
-                document.getElementById(fieldId).value = 0;
-                const groupContainer = document.getElementById(`btnGroup_${fieldId}`);
-                if (groupContainer) {
-                    const btns = groupContainer.querySelectorAll('.num-btn');
-                    btns.forEach((b, idx) => {
-                        if (idx === 0) b.classList.add('active');
-                        else b.classList.remove('active');
-                    });
-                }
-            });
-        }
-
-        function switchMainTab(tabName) {
-            document.querySelectorAll('.panel').forEach(el => el.classList.remove('active'));
-            document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
-
-            document.getElementById(`sec-${tabName}`).classList.add('active');
-            
-            const activeBtn = Array.from(document.querySelectorAll('.tab-btn')).find(btn => btn.getAttribute('onclick').includes(tabName));
-            if (activeBtn) activeBtn.classList.add('active');
-        }
-
-        function showAlert(msg, colorClass) {
-            const box = document.getElementById('alertBox');
-            box.className = `mb-4 p-3 rounded-lg flex items-center justify-between text-xs font-medium border ${colorClass}`;
-            box.innerHTML = `<span>${msg}</span><button onclick="this.parentElement.classList.add('hidden')" class="font-bold ml-4">✕</button>`;
-            box.classList.remove('hidden');
-        }
-
-        function updateKodeKelasListener() {
-            const k1 = document.getElementById('regK1');
-            const k2 = document.getElementById('regK2');
-            const k3 = document.getElementById('regK3');
-            const target = document.getElementById('regIdKelas');
-
-            function update() { target.value = `${k1.value}${k2.value}${k3.value}`; }
-            k1.addEventListener('change', update);
-            k2.addEventListener('change', update);
-            k3.addEventListener('change', update);
-            update();
-        }
-
-        function initYearOptions() {
-            const sel = document.getElementById('ibTahun');
-            const curr = new Date().getFullYear();
-            for (let y = curr; y <= curr + 3; y++) {
-                const opt = document.createElement('option');
-                opt.value = String(y).slice(-2);
-                opt.textContent = y;
-                sel.appendChild(opt);
-            }
-        }
-
-        function checkSubmitCooldown(type) {
-            const now = Date.now();
-            const lastTime = lastSubmitTimes[type] || 0;
-            const diffInSeconds = (now - lastTime) / 1000;
-
-            if (diffInSeconds < 30) {
-                showAlert('Data telah diterima, untuk submit data baru, tunggu 30 detik', 'bg-amber-100 text-amber-800 border-amber-300');
-                return false;
-            }
-            
-            lastSubmitTimes[type] = now;
-            return true;
-        }
-
-        /* =========================================================
-           SIMPAN PROFIL KE MEMORY LOKAL (LOCAL STORAGE) & FORM HANDLER
-        ========================================================= */
-        function handleProfileSubmit(e) {
-            e.preventDefault();
-            const idSektor = document.getElementById('regSektor').value;
-            const idKelas = document.getElementById('regIdKelas').value;
-            const idAnggota = document.getElementById('regIdAnggota').value.trim().toUpperCase();
-
-            // Regex validasi 3 huruf + 2 angka
-            const regexAnggota = /^[A-Z]{3}\d{2}$/;
-            if (!regexAnggota.test(idAnggota)) {
-                showAlert('ID Anggota harus berisi 3 huruf kapital dan 2 angka (misal: WAC01)', 'bg-red-100 text-red-800 border-red-300');
-                return;
-            }
-
-            const profileData = {
-                id_sektor: idSektor,
-                id_kelas: idKelas,
-                id_anggota: idAnggota
-            };
-
-            // Menimpa data profil lama di memory lokal browser (localStorage)
-            currentUser = profileData;
-            localStorage.setItem('ISIM_USER_PROFILE', JSON.stringify(profileData));
-            loadProfileToUI();
-
-            sendToGoogleSheet('saveProfile', profileData, (res) => {
-                showAlert('Profil berhasil disimpan & diperbarui di memory lokal!', 'bg-emerald-100 text-emerald-800 border-emerald-300');
-                loadAllData(true);
-            });
-        }
-
-        function loadProfileToUI() {
-            if (!currentUser) return;
-            document.getElementById('regSektor').value = currentUser.id_sektor || 'KP';
-            document.getElementById('regIdAnggota').value = currentUser.id_anggota || '';
-
-            // Tampilkan id kelas tersimpan jika ada di form generator
-            if (currentUser.id_kelas && currentUser.id_kelas.length === 5) {
-                document.getElementById('regK1').value = currentUser.id_kelas.substring(0, 2);
-                document.getElementById('regK2').value = currentUser.id_kelas.substring(2, 3);
-                document.getElementById('regK3').value = currentUser.id_kelas.substring(3, 5);
-                document.getElementById('regIdKelas').value = currentUser.id_kelas;
-            }
-
-            // TAMPILAN PADA TEPAT DI BAWAH QR CODE (FORMAT: SEKTOR Kelas id_anggota)
-            const qrText = `${currentUser.id_sektor} ${currentUser.id_kelas} ${currentUser.id_anggota}`;
-            document.getElementById('qrTextDetail').textContent = qrText;
-
-            const qrContainer = document.getElementById('qrcode');
-            qrContainer.innerHTML = '';
-            qrCodeObj = new QRCode(qrContainer, {
-                text: qrText, width: 160, height: 160,
-                colorDark : "#0f172a", colorLight : "#ffffff",
-                correctLevel : QRCode.CorrectLevel.M
-            });
-        }
-
-        function handleBaromijSubmit(e) {
-            e.preventDefault();
-            if (!checkUserRegistered()) return;
-            if (!checkSubmitCooldown('baromij')) return;
-
-            const form = document.getElementById('formBaromij');
-            const data = {
-                id_sektor: currentUser.id_sektor, id_kelas: currentUser.id_kelas, id_anggota: currentUser.id_anggota,
-                walashadir: form.walashadir.checked ? 'ya' : 'tidak', tilawah_hafalan: form.tilawah_hafalan.checked ? 'ya' : 'tidak',
-                kalam_naqib: form.kalam_naqib.checked ? 'ya' : 'tidak', tatsqif_usroh: form.tatsqif_usroh.checked ? 'ya' : 'tidak',
-                talimat: form.talimat.checked ? 'ya' : 'tidak', kelasoffline: form.kelasoffline.checked ? 'ya' : 'tidak',
-                keterangan: form.keterangan.value || '-'
-            };
-
-            sendToGoogleSheet('saveBaromij', data, (res) => {
-                showAlert('Laporan Agenda Kelas berhasil dikirim!', 'bg-emerald-100 text-emerald-800 border-emerald-300');
-                form.reset();
-                loadAllData(true);
-            });
-        }
-
-        function handleYaumiyanSubmit(e) {
-            e.preventDefault();
-            if (!checkUserRegistered()) return;
-            if (!checkSubmitCooldown('yaumiyan')) return;
-
-            const form = document.getElementById('formYaumiyan');
-            const data = {
-                id_sektor: currentUser.id_sektor, id_kelas: currentUser.id_kelas, id_anggota: currentUser.id_anggota,
-                kehadiran_kelas: form.kehadiran_kelas.checked ? 'ya' : 'tidak',
-                sholat_jamaah: form.sholat_jamaah.value || 0, qiyamul_lail: form.qiyamul_lail.value || 0,
-                tilawah: form.tilawah.value || 0, shoum_sunnah: form.shoum_sunnah.value || 0,
-                olah_raga: form.olah_raga.value || 0, al_matsurot: form.al_matsurot.value || 0,
-                keterangan: form.keterangan.value || '-'
-            };
-
-            sendToGoogleSheet('saveYaumiyan', data, (res) => {
-                showAlert('Laporan Yaumiyan berhasil dikirim!', 'bg-emerald-100 text-emerald-800 border-emerald-300');
-                form.reset();
-                resetYaumiyanNumberButtons();
-                loadAllData(true);
-            });
-        }
-
-        function handleIbSubmit(e) {
-            e.preventDefault();
-            if (!checkUserRegistered()) return;
-            if (!checkSubmitCooldown('ib')) return;
-
-            const data = {
-                id_sektor: currentUser.id_sektor, id_kelas: currentUser.id_kelas, id_anggota: currentUser.id_anggota,
-                bulan: document.getElementById('ibBulan').value, tahun: document.getElementById('ibTahun').value
-            };
-
-            sendToGoogleSheet('saveIb', data, (res) => {
-                showAlert(`Lapor IB Bulan ${data.bulan}/20${data.tahun} Berhasil Disimpan!`, 'bg-emerald-100 text-emerald-800 border-emerald-300');
-                loadAllData(true);
-            });
-        }
-
-        function checkUserRegistered() {
-            if (!currentUser || !currentUser.id_anggota || !currentUser.id_sektor || !currentUser.id_kelas) {
-                showAlert('Silakan mendaftarkan ID Profil Anda secara lengkap terlebih dahulu!', 'bg-amber-100 text-amber-800 border-amber-300');
-                switchMainTab('profile');
-                return false;
-            }
-            return true;
-        }
-
-        function sendToGoogleSheet(action, payload, callback) {
-            if (!CONFIG_API_URL || CONFIG_API_URL.includes("YOUR_EXEC_URL_HERE")) {
-                showAlert('URL Apps Script belum dikonfigurasi!', 'bg-red-100 text-red-800 border-red-300');
-                return;
-            }
-
-            fetch(CONFIG_API_URL, {
-                method: 'POST', mode: 'no-cors',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ action, ...payload })
-            })
-            .then(() => callback({ success: true }))
-            .catch(err => showAlert('Gagal mengirim data: ' + err, 'bg-red-100 text-red-800 border-red-300'));
-        }
-
-        /* =========================================================
-           DATA FETCHING & ENGINE
-        ========================================================= */
-        function clean(v) { return (v === null || v === undefined) ? "" : String(v).trim(); }
-        function key(v) { return clean(v).toLowerCase().replace(/\s+/g, "_"); }
-        function escapeHtml(v) { return clean(v).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#039;"); }
-        function numberValue(v) {
-            if (v === null || v === undefined || v === "") return null;
-            if (typeof v === "number") return Number.isFinite(v) ? v : null;
-            let text = String(v).trim().replace("%", "").replace(",", ".");
-            const n = Number(text);
-            return Number.isFinite(n) ? n : null;
-        }
-        function formatNumber(v) { return Number(v || 0).toLocaleString("id-ID", { maximumFractionDigits: 1 }); }
-        function formatPercent(v) { return Number(v || 0).toLocaleString("id-ID", { minimumFractionDigits: 0, maximumFractionDigits: 1 }) + "%"; }
-
-        function findColumn(rows, candidates) {
-            if (!rows || !rows.length) return null;
-            const columns = Object.keys(rows[0]);
-            for (const candidate of candidates) {
-                const wanted = key(candidate);
-                const found = columns.find(column => key(column) === wanted);
-                if (found) return found;
-            }
-            return null;
-        }
-
-        function columnInfo(data) {
-            return {
-                idAnggota: findColumn(data, ["id_anggota", "kode_anggota", "id", "anggota"]),
-                idSektor: findColumn(data, ["id_sektor", "proda", "sektor", "daerah"]),
-                idKelas: findColumn(data, ["id_kelas", "kode_kelas", "kelas"]),
-                timestamp: findColumn(data, ["Timestamp", "timestamp", "waktu", "tanggal"]),
-                keterangan: findColumn(data, ["keterangan"])
-            };
-        }
-
-        async function fetchSheet(sheetName) {
-            const url = `https://docs.google.com/spreadsheets/d/${GOOGLE_SHEET_ID}/gviz/tq?tqx=out:json&sheet=${encodeURIComponent(sheetName)}`;
-            const response = await fetch(url, { cache: "no-store" });
-            if (!response.ok) throw new Error("HTTP " + response.status + " sheet " + sheetName);
-            const text = await response.text();
-            const start = text.indexOf("{");
-            const end = text.lastIndexOf("}");
-            if (start === -1 || end === -1) throw new Error("JSON invalid sheet " + sheetName);
-
-            const json = JSON.parse(text.substring(start, end + 1));
-            if (!json.table || !json.table.cols) throw new Error("Sheet error " + sheetName);
-
-            const headers = json.table.cols.map((col, index) => clean(col.label) || "kolom_" + (index + 1));
-            return (json.table.rows || []).map(row => {
-                const obj = {};
-                headers.forEach((header, index) => {
-                    const cell = row.c?.[index];
-                    obj[header] = cell ? (cell.v !== null && cell.v !== undefined ? cell.v : cell.f || "") : "";
-                });
-                return obj;
-            });
-        }
-
-        async function loadAllData(isRefresh = false) {
-            setConnection(isRefresh ? "Memperbarui..." : "Memuat...", "loading");
-            showLoading();
-
-            try {
-                const results = await Promise.all([
-                    fetchSheet(SHEETS.profil), fetchSheet(SHEETS.baromij),
-                    fetchSheet(SHEETS.yaumiyan), fetchSheet(SHEETS.ib)
-                ]);
-
-                DATA.profil = results[0].filter(row => Object.values(row).some(v => clean(v)));
-                DATA.baromij = results[1].filter(row => Object.values(row).some(v => clean(v)));
-                DATA.yaumiyan = results[2].filter(row => Object.values(row).some(v => clean(v)));
-                DATA.ib = results[3].filter(row => Object.values(row).some(v => clean(v)));
-
-                setConnection("Terhubung · System Active", "success");
-                renderAll();
-            } catch (error) {
-                console.error("ERROR LOAD DATA:", error);
-                setConnection("Gagal memuat data", "error");
-                showGlobalError(error);
-            }
-        }
-
-        function setConnection(text, status) {
-            const wrapper = document.getElementById("connection");
-            wrapper.className = "connection " + status;
-            document.getElementById("connectionText").textContent = text;
-        }
-
-        function showGlobalError(error) {
-            const msg = `<div class="error-box"><strong>Gagal memuat data.</strong><br>Detail: ${escapeHtml(error.message)}</div>`;
-            ["baromijStatusTable", "yaumiyanStatusTable", "ibStatusTable"].forEach(id => {
-                const el = document.getElementById(id); if (el) el.innerHTML = msg;
-            });
-        }
-
-        function showLoading() {
-            const html = `<div class="loading"><div class="spinner"></div>Memuat data...</div>`;
-            ["baromijStatusTable", "yaumiyanStatusTable", "ibStatusTable"].forEach(id => {
-                const el = document.getElementById(id); if (el) el.innerHTML = html;
-            });
-        }
-
-        /* =========================================================
-           FILTER ENGINE (TRIPLE KEY MATCH: SEKTOR + KELAS + ANGGOTA)
-        ========================================================= */
-        function getFilteredRowsByValidMembers(sheetData) {
-            if (!currentUser || !currentUser.id_anggota) return [];
-
-            const activeSektor = clean(currentUser.id_sektor).toUpperCase();
-            const activeKelas = clean(currentUser.id_kelas).toUpperCase();
-            const activeAnggota = clean(currentUser.id_anggota).toUpperCase();
-
-            const cols = columnInfo(sheetData);
-            if (!cols.idAnggota) return [];
-
-            return sheetData.filter(row => {
-                const rowAnggota = clean(row[cols.idAnggota]).toUpperCase();
-                const rowSektor = cols.idSektor ? clean(row[cols.idSektor]).toUpperCase() : "";
-                const rowKelas = cols.idKelas ? clean(row[cols.idKelas]).toUpperCase() : "";
-
-                const matchSektor = rowSektor ? (rowSektor === activeSektor) : true;
-                const matchKelas = rowKelas ? (rowKelas === activeKelas) : true;
-                const matchAnggota = (rowAnggota === activeAnggota);
-
-                return matchSektor && matchKelas && matchAnggota;
-            });
-        }
-
-        function parseTimestampToMs(val) {
-            if (!val) return 0;
-            let str = String(val).trim();
-            const match = str.match(/^Date\((\d+),\s*(\d+),\s*(\d+)(?:,\s*(\d+))?(?:,\s*(\d+))?(?:,\s*(\d+))?\)$/i);
-            if (match) {
-                return new Date(parseInt(match[1]), parseInt(match[2]), parseInt(match[3]), parseInt(match[4]||0), parseInt(match[5]||0), parseInt(match[6]||0)).getTime();
-            }
-            return new Date(str).getTime() || 0;
-        }
-
-        function sortByTimestampDesc(rows, sheetData) {
-            const tsCol = columnInfo(sheetData).timestamp;
-            return [...rows].sort((a, b) => {
-                const tsA = tsCol ? parseTimestampToMs(a[tsCol]) : 0;
-                const tsB = tsCol ? parseTimestampToMs(b[tsCol]) : 0;
-                return tsB - tsA;
-            });
-        }
-
-        function renderChart(elementId, items, maxValue = 100) {
-            const el = document.getElementById(elementId);
-            if (!items.length) { el.innerHTML = `<div class="empty">Tidak ada data grafik.</div>`; return; }
-
-            const max = maxValue || Math.max(...items.map(i => Number(i.value) || 0));
-            let html = `<div class="bar-chart">`;
-            items.forEach(item => {
-                const val = Number(item.value) || 0;
-                const safeVal = Math.max(0, Math.min(val, max));
-                const height = Math.max(3, (safeVal / max) * 150);
-                html += `
-                    <div class="bar-item">
-                        <div class="bar-value">${escapeHtml(item.display ?? formatPercent(val))}</div>
-                        <div class="bar" style="height:${height}px"></div>
-                        <div class="bar-label">${escapeHtml(item.label)}</div>
-                    </div>`;
-            });
-            el.innerHTML = html + `</div>`;
-        }
-
-        function yesPercentage(rows, column) {
-            if (!rows.length || !column) return 0;
-            let yes = 0, total = 0;
-            rows.forEach(r => {
-                const v = clean(r[column]).toLowerCase();
-                if (["ya", "yes", "1", "true"].includes(v)) { yes++; total++; }
-                else if (["tidak", "no", "0", "false"].includes(v)) { total++; }
-            });
-            return total ? (yes / total) * 100 : 0;
-        }
-
-        function numericAverage(rows, column) {
-            if (!rows.length || !column) return 0;
-            const vals = rows.map(r => numberValue(r[column])).filter(v => v !== null);
-            return vals.length ? vals.reduce((a,b) => a + b, 0) / vals.length : 0;
-        }
-
-        /* =========================================================
-           RENDER ENGINES (AGENDA, YAUMIYAN, & IB)
-        ========================================================= */
-
-        /* 1. AGENDA KELAS RENDER */
-        function renderBaromij() {
-            const rows = getFilteredRowsByValidMembers(DATA.baromij);
-            const statusCountEl = document.getElementById("baromijStatusCount");
-            const statusTableEl = document.getElementById("baromijStatusTable");
-
-            if (!currentUser || !currentUser.id_anggota) {
-                statusCountEl.textContent = "Profil Belum Diisi";
-                statusTableEl.innerHTML = `<div class="empty">Silakan isi Profil & ID Card terlebih dahulu.</div>`;
-            } else if (!rows.length) {
-                statusCountEl.textContent = "0 Laporan Agenda";
-                statusTableEl.innerHTML = `<div class="empty">Belum ada riwayat isian Agenda Kelas untuk ID Profil ini.</div>`;
-            } else {
-                const sortedRows = sortByTimestampDesc(rows, DATA.baromij);
-                statusCountEl.textContent = `${sortedRows.length} Total Isian`;
-
-                const cols = {
-                    ts: columnInfo(DATA.baromij).timestamp,
-                    sektor: columnInfo(DATA.baromij).idSektor,
-                    kelas: columnInfo(DATA.baromij).idKelas,
-                    anggota: columnInfo(DATA.baromij).idAnggota,
-                    walas: findColumn(DATA.baromij, ["walashadir"]),
-                    tilawah: findColumn(DATA.baromij, ["tilawah_hafalan"]),
-                    kalam: findColumn(DATA.baromij, ["kalam_naqib"]),
-                    tatsqif: findColumn(DATA.baromij, ["tatsqif_usroh"]),
-                    talimat: findColumn(DATA.baromij, ["talimat"]),
-                    offline: findColumn(DATA.baromij, ["kelasoffline"]),
-                    ket: columnInfo(DATA.baromij).keterangan
-                };
-
-                let html = `<table><thead><tr>
-                    <th>Waktu (Timestamp)</th>
-                    <th>Proda</th>
-                    <th>Kelas</th>
-                    <th>ID Anggota</th>
-                    <th>Walas Hadir</th>
-                    <th>Tilawah</th>
-                    <th>Taujih</th>
-                    <th>Kultum</th>
-                    <th>Pengumuman</th>
-                    <th>Offline</th>
-                    <th>Keterangan</th>
-                </tr></thead><tbody>`;
-
-                sortedRows.forEach(r => {
-                    const rSektor = cols.sektor ? clean(r[cols.sektor]) : currentUser.id_sektor;
-                    const rKelas = cols.kelas ? clean(r[cols.kelas]) : currentUser.id_kelas;
-                    const rAnggota = cols.anggota ? clean(r[cols.anggota]) : currentUser.id_anggota;
-
-                    html += `<tr>
-                        <td>${formatTimestamp(r[cols.ts])}</td>
-                        <td>${escapeHtml(rSektor || '-')}</td>
-                        <td>${escapeHtml(rKelas || '-')}</td>
-                        <td><strong>${escapeHtml(rAnggota || '-')}</strong></td>
-                        <td>${escapeHtml(r[cols.walas] || '-')}</td>
-                        <td>${escapeHtml(r[cols.tilawah] || '-')}</td>
-                        <td>${escapeHtml(r[cols.kalam] || '-')}</td>
-                        <td>${escapeHtml(r[cols.tatsqif] || '-')}</td>
-                        <td>${escapeHtml(r[cols.talimat] || '-')}</td>
-                        <td>${escapeHtml(r[cols.offline] || '-')}</td>
-                        <td class="keterangan">${escapeHtml(r[cols.ket] || '-')}</td>
-                    </tr>`;
-                });
-
-                statusTableEl.innerHTML = html + `</tbody></table>`;
-            }
-
-            const colsChart = {
-                walas: findColumn(DATA.baromij, ["walashadir"]), tilawah: findColumn(DATA.baromij, ["tilawah_hafalan"]),
-                kalam: findColumn(DATA.baromij, ["kalam_naqib"]), tatsqif: findColumn(DATA.baromij, ["tatsqif_usroh"]),
-                talimat: findColumn(DATA.baromij, ["talimat"]), offline: findColumn(DATA.baromij, ["kelasoffline"])
-            };
-
-            renderChart("baromijChart", [
-                { label: "Walas Hadir", value: yesPercentage(rows, colsChart.walas), display: formatPercent(yesPercentage(rows, colsChart.walas)) },
-                { label: "Tilawah/Hafalan", value: yesPercentage(rows, colsChart.tilawah), display: formatPercent(yesPercentage(rows, colsChart.tilawah)) },
-                { label: "Kalam Naqib", value: yesPercentage(rows, colsChart.kalam), display: formatPercent(yesPercentage(rows, colsChart.kalam)) },
-                { label: "Tatsqif Usroh", value: yesPercentage(rows, colsChart.tatsqif), display: formatPercent(yesPercentage(rows, colsChart.tatsqif)) },
-                { label: "Ta'limat", value: yesPercentage(rows, colsChart.talimat), display: formatPercent(yesPercentage(rows, colsChart.talimat)) },
-                { label: "Kelas Offline", value: yesPercentage(rows, colsChart.offline), display: formatPercent(yesPercentage(rows, colsChart.offline)) }
-            ], 100);
-        }
-
-        /* 2. YAUMIYAN RENDER */
-        function renderYaumiyan() {
-            const rows = getFilteredRowsByValidMembers(DATA.yaumiyan);
-            const statusCountEl = document.getElementById("yaumiyanStatusCount");
-            const statusTableEl = document.getElementById("yaumiyanStatusTable");
-
-            if (!currentUser || !currentUser.id_anggota) {
-                statusCountEl.textContent = "Profil Belum Diisi";
-                statusTableEl.innerHTML = `<div class="empty">Silakan isi Profil & ID Card terlebih dahulu.</div>`;
-            } else if (!rows.length) {
-                statusCountEl.textContent = "0 Laporan Yaumiyan";
-                statusTableEl.innerHTML = `<div class="empty">Belum ada riwayat isian Yaumiyan untuk ID Profil ini.</div>`;
-            } else {
-                const sortedRows = sortByTimestampDesc(rows, DATA.yaumiyan);
-                statusCountEl.textContent = `${sortedRows.length} Total Isian`;
-
-                const cols = {
-                    ts: columnInfo(DATA.yaumiyan).timestamp,
-                    sektor: columnInfo(DATA.yaumiyan).idSektor,
-                    kelas: columnInfo(DATA.yaumiyan).idKelas,
-                    anggota: columnInfo(DATA.yaumiyan).idAnggota,
-                    kehadiran: findColumn(DATA.yaumiyan, ["kehadiran_kelas"]),
-                    sholat: findColumn(DATA.yaumiyan, ["sholat_jamaah"]),
-                    qiyam: findColumn(DATA.yaumiyan, ["qiyamul_lail"]),
-                    tilawah: findColumn(DATA.yaumiyan, ["tilawah"]),
-                    shoum: findColumn(DATA.yaumiyan, ["shoum_sunnah"]),
-                    olahraga: findColumn(DATA.yaumiyan, ["olah_raga"]),
-                    matsurot: findColumn(DATA.yaumiyan, ["al_matsurot"]),
-                    ket: columnInfo(DATA.yaumiyan).keterangan
-                };
-
-                let html = `<table><thead><tr>
-                    <th>Waktu (Timestamp)</th>
-                    <th>Proda</th>
-                    <th>Kelas</th>
-                    <th>ID Anggota</th>
-                    <th>Hadir Kelas</th>
-                    <th>Sholat Jamaah</th>
-                    <th>Qiyamul Lail</th>
-                    <th>Tilawah</th>
-                    <th>Shoum Sunnah</th>
-                    <th>Olahraga</th>
-                    <th>Al-Ma'tsurat</th>
-                    <th>Keterangan</th>
-                </tr></thead><tbody>`;
-
-                sortedRows.forEach(r => {
-                    const rSektor = cols.sektor ? clean(r[cols.sektor]) : currentUser.id_sektor;
-                    const rKelas = cols.kelas ? clean(r[cols.kelas]) : currentUser.id_kelas;
-                    const rAnggota = cols.anggota ? clean(r[cols.anggota]) : currentUser.id_anggota;
-
-                    html += `<tr>
-                        <td>${formatTimestamp(r[cols.ts])}</td>
-                        <td>${escapeHtml(rSektor || '-')}</td>
-                        <td>${escapeHtml(rKelas || '-')}</td>
-                        <td><strong>${escapeHtml(rAnggota || '-')}</strong></td>
-                        <td>${escapeHtml(r[cols.kehadiran] || '-')}</td>
-                        <td>${escapeHtml(r[cols.sholat] ?? '-')}</td>
-                        <td>${escapeHtml(r[cols.qiyam] ?? '-')}</td>
-                        <td>${escapeHtml(r[cols.tilawah] ?? '-')}</td>
-                        <td>${escapeHtml(r[cols.shoum] ?? '-')}</td>
-                        <td>${escapeHtml(r[cols.olahraga] ?? '-')}</td>
-                        <td>${escapeHtml(r[cols.matsurot] ?? '-')}</td>
-                        <td class="keterangan">${escapeHtml(r[cols.ket] || '-')}</td>
-                    </tr>`;
-                });
-
-                statusTableEl.innerHTML = html + `</tbody></table>`;
-            }
-
-            const colsChart = {
-                kehadiran: findColumn(DATA.yaumiyan, ["kehadiran_kelas"]), sholat: findColumn(DATA.yaumiyan, ["sholat_jamaah"]),
-                qiyam: findColumn(DATA.yaumiyan, ["qiyamul_lail"]), tilawah: findColumn(DATA.yaumiyan, ["tilawah"]),
-                shoum: findColumn(DATA.yaumiyan, ["shoum_sunnah"]), olahraga: findColumn(DATA.yaumiyan, ["olah_raga"]),
-                matsurot: findColumn(DATA.yaumiyan, ["al_matsurot"])
-            };
-
-            const metrics = [
-                { label: "Hadir Kelas", value: yesPercentage(rows, colsChart.kehadiran), display: formatPercent(yesPercentage(rows, colsChart.kehadiran)) },
-                { label: "Sholat Jamaah", value: numericAverage(rows, colsChart.sholat), display: formatNumber(numericAverage(rows, colsChart.sholat)) },
-                { label: "Qiyamul Lail", value: numericAverage(rows, colsChart.qiyam), display: formatNumber(numericAverage(rows, colsChart.qiyam)) },
-                { label: "Tilawah", value: numericAverage(rows, colsChart.tilawah), display: formatNumber(numericAverage(rows, colsChart.tilawah)) },
-                { label: "Shoum Sunnah", value: numericAverage(rows, colsChart.shoum), display: formatNumber(numericAverage(rows, colsChart.shoum)) },
-                { label: "Olahraga", value: numericAverage(rows, colsChart.olahraga), display: formatNumber(numericAverage(rows, colsChart.olahraga)) },
-                { label: "Al-Matsurot", value: numericAverage(rows, colsChart.matsurot), display: formatNumber(numericAverage(rows, colsChart.matsurot)) }
-            ];
-
-            renderChart("yaumiyanChart", metrics, Math.max(100, ...metrics.map(i => Number(i.value) || 0)));
-        }
-
-        /* 3. LAPOR IB RENDER */
-        const MONTHS = [{v:1,l:"Januari"},{v:2,l:"Februari"},{v:3,l:"Maret"},{v:4,l:"April"},{v:5,l:"Mei"},{v:6,l:"Juni"},{v:7,l:"Juli"},{v:8,l:"Agustus"},{v:9,l:"September"},{v:10,l:"Oktober"},{v:11,l:"November"},{v:12,l:"Desember"}];
-        function normMonth(v) {
-            const t = clean(v).toLowerCase();
-            if (!t) return 0;
-            const n = Number(t);
-            if (n >= 1 && n <= 12) return n;
-            const f = MONTHS.find(m => m.l.toLowerCase() === t);
-            return f ? f.v : 0;
-        }
-        function normYear(v) {
-            const n = Number(clean(v));
-            return !Number.isFinite(n) ? 0 : (n < 100 ? 2000 + n : n);
-        }
-
-        function renderIB() {
-            const rows = getFilteredRowsByValidMembers(DATA.ib);
-            const statusTableEl = document.getElementById("ibStatusTable");
-            const statusCountEl = document.getElementById("ibStatusCount");
-
-            if (!currentUser || !currentUser.id_anggota) {
-                statusCountEl.textContent = "Profil Belum Diisi";
-                statusTableEl.innerHTML = `<div class="empty">Silakan isi Profil & ID Card terlebih dahulu.</div>`;
-                return;
-            }
-
-            if (!rows.length) {
-                statusCountEl.textContent = "0 Laporan IB";
-                statusTableEl.innerHTML = `<div class="empty">Belum ada riwayat setoran IB untuk ID Profil ini.</div>`;
-                return;
-            }
-
-            const cols = columnInfo(DATA.ib);
-            const mCol = findColumn(DATA.ib, ["bulan"]);
-            const yCol = findColumn(DATA.ib, ["tahun"]);
-
-            const sortedRows = [...rows].sort((a, b) => {
-                const yA = normYear(a[yCol]); const yB = normYear(b[yCol]);
-                if (yA !== yB) return yB - yA;
-
-                const mA = normMonth(a[mCol]); const mB = normMonth(b[mCol]);
-                if (mA !== mB) return mB - mA;
-
-                const tsA = cols.timestamp ? parseTimestampToMs(a[cols.timestamp]) : 0;
-                const tsB = cols.timestamp ? parseTimestampToMs(b[cols.timestamp]) : 0;
-                return tsB - tsA;
-            });
-
-            statusCountEl.textContent = `${sortedRows.length} Total Laporan`;
-
-            let html = `<table><thead><tr><th>Waktu (Timestamp)</th><th>Proda</th><th>Kelas</th><th>ID Anggota</th><th>Bulan/Tahun</th><th>Status IB</th></tr></thead><tbody>`;
-            
-            sortedRows.forEach(row => {
-                const blnVal = normMonth(row[mCol]);
-                const thnVal = normYear(row[yCol]);
-                const displayPeriode = (blnVal && thnVal) ? `${String(blnVal).padStart(2, '0')}/${thnVal}` : `${clean(row[mCol])}/${clean(row[yCol])}`;
-
-                const rowSektor = cols.idSektor ? clean(row[cols.idSektor]) : currentUser.id_sektor;
-                const rowKelas = cols.idKelas ? clean(row[cols.idKelas]) : currentUser.id_kelas;
-                const rowAnggota = cols.idAnggota ? clean(row[cols.idAnggota]) : currentUser.id_anggota;
-
-                html += `<tr>
-                    <td>${formatTimestamp(row[cols.timestamp])}</td>
-                    <td>${escapeHtml(rowSektor || '-')}</td>
-                    <td>${escapeHtml(rowKelas || '-')}</td>
-                    <td><strong>${escapeHtml(rowAnggota || '-')}</strong></td>
-                    <td><strong>${escapeHtml(displayPeriode)}</strong></td>
-                    <td><span class="badge badge-success">✓ Lunas / Setor</span></td>
-                </tr>`;
-            });
-
-            statusTableEl.innerHTML = html + `</tbody></table>`;
-        }
-
-        /* MASTER RENDER */
-        function renderAll() {
-            renderBaromij();
-            renderYaumiyan();
-            renderIB();
-        }
-    </script>
+      </div>
+
+      <div class="header-actions">
+
+        <button
+          class="refresh-btn"
+          onclick="loadAllData(true)"
+        >
+          ↻ Refresh
+        </button>
+
+      </div>
+
+    </div>
+
+    <div
+      id="connection"
+      class="connection"
+    >
+      <span class="connection-dot"></span>
+      <span id="connectionText">
+        Memuat data...
+      </span>
+    </div>
+
+  </div>
+
+</header>
+
+
+<main class="container">
+
+
+<!-- =========================================================
+     TAB NAVIGASI
+========================================================= -->
+
+<nav class="tabs">
+
+  <button
+    class="tab active"
+    data-tab="profil"
+  >
+    👥<br>
+    Profil
+  </button>
+
+  <button
+    class="tab"
+    data-tab="baromij"
+  >
+    📊<br>
+    Agenda
+  </button>
+
+  <button
+    class="tab"
+    data-tab="yaumiyan"
+  >
+    📋<br>
+    Yaumiyan
+  </button>
+
+  <button
+    class="tab"
+    data-tab="ib"
+  >
+    📅<br>
+    IB
+  </button>
+
+</nav>
+
+
+<!-- =========================================================
+     TAB 1 : PROFIL
+========================================================= -->
+
+<section
+  id="profil"
+  class="panel active"
+>
+
+  <div class="card">
+
+    <h2 class="card-title">
+      Laporan Anggota
+    </h2>
+
+    <p class="card-subtitle">
+      Filter profil berdasarkan proda, kode kelas, dan kode anggota.
+    </p>
+
+    <div class="filter-grid profil-grid">
+
+      <div class="field">
+        <label>Proda</label>
+        <select id="profilProda">
+          <option value="KP">KP</option>
+        </select>
+      </div>
+
+      <div class="field">
+        <label>Kode Kelas</label>
+        <div class="kelas-group">
+          <select id="profilKelas1">
+            <option value="">Semua</option>
+            <option value="IA">IA</option>
+            <option value="AA">AA</option>
+          </select>
+
+          <select id="profilKelas2">
+            <option value="">Semua</option>
+            <option value="1">1</option>
+            <option value="2">2</option>
+            <option value="3">3</option>
+          </select>
+
+          <select id="profilKelas3">
+            <option value="">Semua</option>
+            <option value="01">01</option>
+            <option value="02">02</option>
+            <option value="03">03</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="field">
+        <label>Kode Anggota</label>
+        <div class="search-box">
+          <span class="search-icon">🔎</span>
+          <input
+            id="profilKodeAnggota"
+            class="search-input"
+            type="search"
+            placeholder="Kode anggota..."
+          >
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+
+
+  <div
+    id="profilStats"
+    class="stats"
+  ></div>
+
+
+  <div class="card">
+
+    <div class="table-head">
+
+      <h3 class="table-title">
+        Daftar Anggota
+      </h3>
+
+      <span
+        id="profilCount"
+        class="table-count"
+      ></span>
+
+    </div>
+
+    <div
+      id="profilTable"
+      class="table-scroll"
+    ></div>
+
+  </div>
+
+</section>
+
+
+<!-- =========================================================
+     TAB 2 : BAROMIJ (AGENDA)
+========================================================= -->
+
+<section
+  id="baromij"
+  class="panel"
+>
+
+  <div class="card">
+
+    <h2 class="card-title">
+      Laporan Agenda Kelas
+    </h2>
+
+    <p class="card-subtitle">
+      Menampilkan agenda dari ID anggota yang tersaring di profil.
+    </p>
+
+  </div>
+
+
+  <div
+    id="baromijStats"
+    class="stats"
+  ></div>
+
+
+  <div class="card">
+
+    <div class="table-head">
+
+      <h3 class="table-title">
+        Rata-rata Agenda
+      </h3>
+
+      <span class="table-count">
+        Persentase
+      </span>
+
+    </div>
+
+    <div class="chart-area">
+
+      <div
+        id="baromijChart"
+        class="chart"
+      ></div>
+
+    </div>
+
+    <div class="chart-note">
+      Semakin tinggi batang, semakin tinggi persentase
+      pelaksanaan agenda.
+    </div>
+
+  </div>
+
+
+  <div class="card">
+
+    <div class="table-head">
+
+      <h3 class="table-title">
+        Keterangan
+      </h3>
+
+      <span
+        id="baromijKetCount"
+        class="table-count"
+      ></span>
+
+    </div>
+
+    <div
+      id="baromijKetTable"
+      class="table-scroll"
+    ></div>
+
+  </div>
+
+</section>
+
+
+<!-- =========================================================
+     TAB 3 : YAUMIYAN
+========================================================= -->
+
+<section
+  id="yaumiyan"
+  class="panel"
+>
+
+  <div class="card">
+
+    <h2 class="card-title">
+      Laporan Yaumiyan
+    </h2>
+
+    <p class="card-subtitle">
+      Pantau rata-rata aktivitas yaumiyan dari ID anggota yang tersaring di profil.
+    </p>
+
+  </div>
+
+
+  <div
+    id="yaumiyanStats"
+    class="stats"
+  ></div>
+
+
+  <div class="card">
+
+    <div class="table-head">
+
+      <h3 class="table-title">
+        Rata-rata Yaumiyan
+      </h3>
+
+      <span class="table-count">
+        Persentase / rata-rata
+      </span>
+
+    </div>
+
+    <div class="chart-area">
+
+      <div
+        id="yaumiyanChart"
+        class="chart"
+      ></div>
+
+    </div>
+
+    <div class="chart-note">
+      Kehadiran kelas dihitung dari nilai "ya".
+      Aktivitas lainnya dihitung berdasarkan rata-rata
+      nilai angka yang tersimpan.
+    </div>
+
+  </div>
+
+
+  <div class="card">
+
+    <div class="table-head">
+
+      <h3 class="table-title">
+        Keterangan
+      </h3>
+
+      <span
+        id="yaumiyanKetCount"
+        class="table-count"
+      ></span>
+
+    </div>
+
+    <div
+      id="yaumiyanKetTable"
+      class="table-scroll"
+    ></div>
+
+  </div>
+
+
+  <!-- STATUS KELAS -->
+
+  <div
+    id="yaumiyanStatusCard"
+    class="card"
+  >
+
+    <div class="table-head">
+
+      <h3 class="table-title">
+        Status Pengisian Yaumiyan
+      </h3>
+
+      <span
+        id="yaumiyanStatusCount"
+        class="table-count"
+      ></span>
+
+    </div>
+
+    <div
+      id="yaumiyanStatusTable"
+      class="table-scroll"
+    ></div>
+
+  </div>
+
+</section>
+
+
+<!-- =========================================================
+     TAB 4 : IB
+========================================================= -->
+
+<section
+  id="ib"
+  class="panel"
+>
+
+  <div class="card">
+
+    <h2 class="card-title">
+      Laporan IB
+    </h2>
+
+    <p class="card-subtitle">
+      Pilih bulan dan tahun untuk melihat anggota profil yang sudah dan belum mengisi laporan IB.
+    </p>
+
+
+    <div class="filter-grid">
+
+      <div class="field">
+
+        <label>
+          Bulan
+        </label>
+
+        <select id="ibMonth">
+        </select>
+
+      </div>
+
+
+      <div class="field">
+
+        <label>
+          Tahun
+        </label>
+
+        <select id="ibYear">
+        </select>
+
+      </div>
+
+    </div>
+
+  </div>
+
+
+  <div
+    id="ibStats"
+    class="stats"
+  ></div>
+
+
+  <div class="card">
+
+    <div class="table-head">
+
+      <h3 class="table-title">
+        Status Pengisian IB
+      </h3>
+
+      <span
+        id="ibStatusCount"
+        class="table-count"
+      ></span>
+
+    </div>
+
+    <div
+      id="ibStatusTable"
+      class="table-scroll"
+    ></div>
+
+  </div>
+
+</section>
+
+
+<div class="footer">
+  Laporan Seblak KBR KP · Data dari Google Sheet
+</div>
+
+</main>
+
+
+<script>
+
+/* =========================================================
+   KONFIGURASI UTAMA
+========================================================= */
+
+const GOOGLE_SHEET_ID =
+  "1rEycScG3ByhgymdLW9J8rMkjz5cBxPgYNlHMah86HXA";
+
+const SHEETS = {
+  profil: "Profil",
+  baromij: "Baromij",
+  yaumiyan: "Yaumiyan",
+  ib: "IB"
+};
+
+
+/* =========================================================
+   DATA GLOBAL
+========================================================= */
+
+const DATA = {
+  profil: [],
+  baromij: [],
+  yaumiyan: [],
+  ib: []
+};
+
+
+/* =========================================================
+   HELPER
+========================================================= */
+
+function clean(value) {
+  if (value === null || value === undefined) {
+    return "";
+  }
+  return String(value).trim();
+}
+
+
+function key(value) {
+  return clean(value)
+    .toLowerCase()
+    .replace(/\s+/g, "_");
+}
+
+
+function escapeHtml(value) {
+  return clean(value)
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#039;");
+}
+
+
+function numberValue(value) {
+  if (value === null || value === undefined || value === "") {
+    return null;
+  }
+
+  if (typeof value === "number") {
+    return Number.isFinite(value) ? value : null;
+  }
+
+  let text = String(value)
+    .trim()
+    .replace("%", "")
+    .replace(",", ".");
+
+  const n = Number(text);
+  return Number.isFinite(n) ? n : null;
+}
+
+
+function formatNumber(value) {
+  return Number(value || 0)
+    .toLocaleString("id-ID", {
+      maximumFractionDigits: 1
+    });
+}
+
+
+function formatPercent(value) {
+  return Number(value || 0)
+    .toLocaleString("id-ID", {
+      minimumFractionDigits: 0,
+      maximumFractionDigits: 1
+    }) + "%";
+}
+
+
+/* =========================================================
+   MENCARI KOLOM
+========================================================= */
+
+function findColumn(rows, candidates) {
+  if (!rows || !rows.length) {
+    return null;
+  }
+
+  const columns = Object.keys(rows[0]);
+
+  for (const candidate of candidates) {
+    const wanted = key(candidate);
+    const found = columns.find(column => key(column) === wanted);
+    if (found) {
+      return found;
+    }
+  }
+
+  return null;
+}
+
+
+function columnInfo(data) {
+  return {
+    idAnggota: findColumn(data, ["id_anggota", "kode_anggota", "id", "anggota"]),
+    idSektor: findColumn(data, ["id_sektor", "proda", "sektor", "daerah"]),
+    idKelas: findColumn(data, ["id_kelas", "kode_kelas", "kelas"]),
+    timestamp: findColumn(data, ["Timestamp", "timestamp"]),
+    keterangan: findColumn(data, ["keterangan"])
+  };
+}
+
+
+/* =========================================================
+   GOOGLE SHEET GVIZ
+========================================================= */
+
+async function fetchSheet(sheetName) {
+  const url =
+    "https://docs.google.com/spreadsheets/d/" +
+    GOOGLE_SHEET_ID +
+    "/gviz/tq?tqx=out:json&sheet=" +
+    encodeURIComponent(sheetName);
+
+  const response = await fetch(url, { cache: "no-store" });
+
+  if (!response.ok) {
+    throw new Error("HTTP " + response.status + " saat membaca sheet " + sheetName);
+  }
+
+  const text = await response.text();
+
+  const start = text.indexOf("{");
+  const end = text.lastIndexOf("}");
+
+  if (start === -1 || end === -1) {
+    throw new Error("Response Google Sheet tidak valid untuk sheet " + sheetName);
+  }
+
+  let json;
+  try {
+    json = JSON.parse(text.substring(start, end + 1));
+  } catch (error) {
+    throw new Error("Google Sheet tidak mengembalikan JSON yang valid untuk sheet " + sheetName);
+  }
+
+  if (!json.table || !json.table.cols) {
+    throw new Error("Sheet " + sheetName + " tidak dapat dibaca. Pastikan sheet publik.");
+  }
+
+  const headers = json.table.cols.map((col, index) => clean(col.label) || "kolom_" + (index + 1));
+
+  const rows = (json.table.rows || []).map(row => {
+    const object = {};
+    headers.forEach((header, index) => {
+      const cell = row.c?.[index];
+      if (!cell) {
+        object[header] = "";
+        return;
+      }
+      object[header] = cell.v !== null && cell.v !== undefined
+        ? cell.v
+        : (cell.f !== null && cell.f !== undefined ? cell.f : "");
+    });
+    return object;
+  });
+
+  return rows;
+}
+
+
+/* =========================================================
+   LOAD SEMUA DATA
+========================================================= */
+
+async function loadAllData(isRefresh = false) {
+  setConnection(
+    isRefresh ? "Memperbarui data..." : "Memuat data...",
+    "loading"
+  );
+
+  showLoading();
+
+  try {
+    const results = await Promise.all([
+      fetchSheet(SHEETS.profil),
+      fetchSheet(SHEETS.baromij),
+      fetchSheet(SHEETS.yaumiyan),
+      fetchSheet(SHEETS.ib)
+    ]);
+
+    DATA.profil = results[0].filter(row => Object.values(row).some(value => clean(value)));
+    DATA.baromij = results[1].filter(row => Object.values(row).some(value => clean(value)));
+    DATA.yaumiyan = results[2].filter(row => Object.values(row).some(value => clean(value)));
+    DATA.ib = results[3].filter(row => Object.values(row).some(value => clean(value)));
+
+    setConnection(
+      "Terhubung · " +
+      (DATA.profil.length + DATA.baromij.length + DATA.yaumiyan.length + DATA.ib.length).toLocaleString("id-ID") +
+      " data",
+      "success"
+    );
+
+    initializeIB();
+    renderAll();
+
+  } catch (error) {
+    console.error("ERROR LOAD DATA:", error);
+    setConnection("Gagal memuat data", "error");
+    showGlobalError(error);
+  }
+}
+
+
+/* =========================================================
+   STATUS KONEKSI
+========================================================= */
+
+function setConnection(text, status) {
+  const wrapper = document.getElementById("connection");
+  const textElement = document.getElementById("connectionText");
+
+  wrapper.className = "connection " + status;
+  textElement.textContent = text;
+}
+
+
+/* =========================================================
+   GLOBAL ERROR & LOADING
+========================================================= */
+
+function showGlobalError(error) {
+  const message = `
+    <div class="error-box">
+      <strong>Gagal memuat data Google Sheet.</strong><br><br>
+      Pastikan Google Sheet sudah dibagikan sebagai <strong>Anyone with the link → Viewer</strong>.<br><br>
+      <strong>Detail:</strong> ${escapeHtml(error.message)}<br><br>
+      ID Google Sheet:<br><code>${GOOGLE_SHEET_ID}</code>
+    </div>
+  `;
+
+  ["profilTable", "baromijKetTable", "yaumiyanKetTable", "yaumiyanStatusTable", "ibStatusTable"].forEach(id => {
+    const element = document.getElementById(id);
+    if (element) element.innerHTML = message;
+  });
+}
+
+
+function showLoading() {
+  const html = `
+    <div class="loading">
+      <div class="spinner"></div>
+      Memuat data Google Sheet...
+    </div>
+  `;
+
+  ["profilTable", "baromijKetTable", "yaumiyanKetTable", "yaumiyanStatusTable", "ibStatusTable"].forEach(id => {
+    const element = document.getElementById(id);
+    if (element) element.innerHTML = html;
+  });
+}
+
+
+/* =========================================================
+   MASTER ANGGOTA TERFILTER DI PROFIL
+========================================================= */
+
+function getFilteredProfilMembers() {
+  const cols = columnInfo(DATA.profil);
+
+  const proda = clean(document.getElementById("profilProda").value);
+  const k1 = clean(document.getElementById("profilKelas1").value);
+  const k2 = clean(document.getElementById("profilKelas2").value);
+  const k3 = clean(document.getElementById("profilKelas3").value);
+  const search = clean(document.getElementById("profilKodeAnggota").value).toLowerCase();
+
+  const map = new Map();
+
+  DATA.profil.forEach(row => {
+    const id = cols.idAnggota ? clean(row[cols.idAnggota]) : "";
+    if (!id) return;
+
+    const sektorVal = cols.idSektor ? clean(row[cols.idSektor]) : "";
+    const kelasVal = cols.idKelas ? clean(row[cols.idKelas]) : "";
+
+    // Saring proda
+    if (proda && sektorVal && sektorVal.toLowerCase() !== proda.toLowerCase()) {
+      return;
+    }
+
+    // Saring kode kelas
+    if (k1 && !kelasVal.toUpperCase().includes(k1.toUpperCase())) return;
+    if (k2 && !kelasVal.includes(k2)) return;
+    if (k3 && !kelasVal.includes(k3)) return;
+
+    // Saring kode/id anggota
+    if (search && !id.toLowerCase().includes(search)) return;
+
+    if (!map.has(id)) {
+      map.set(id, {
+        id: id,
+        sektor: sektorVal || "KP",
+        kelas: kelasVal
+      });
+    }
+  });
+
+  return [...map.values()];
+}
+
+
+/* =========================================================
+   FILTER DATA TAB LAIN BERDASARKAN PROFIL SANGGUP
+========================================================= */
+
+function getFilteredRowsByValidMembers(sheetData) {
+  const members = getFilteredProfilMembers();
+  const validIds = new Set(members.map(m => m.id));
+
+  const cols = columnInfo(sheetData);
+  if (!cols.idAnggota) return [];
+
+  return sheetData.filter(row => validIds.has(clean(row[cols.idAnggota])));
+}
+
+
+/* =========================================================
+   STATISTIK & TABLE & CHART
+========================================================= */
+
+function renderStats(elementId, items) {
+  const element = document.getElementById(elementId);
+  element.innerHTML = items.map(item => `
+    <div class="stat ${item.color || ""}">
+      <div class="stat-number">${escapeHtml(item.value)}</div>
+      <div class="stat-label">${escapeHtml(item.label)}</div>
+    </div>
+  `).join("");
+}
+
+
+function renderTable(elementId, rows, columns, labels = {}) {
+  const element = document.getElementById(elementId);
+
+  if (!rows.length) {
+    element.innerHTML = `<div class="empty">Tidak ada data yang sesuai.</div>`;
+    return;
+  }
+
+  let html = `<table><thead><tr>`;
+  columns.forEach(column => {
+    html += `<th>${escapeHtml(labels[column] || column)}</th>`;
+  });
+  html += `</tr></thead><tbody>`;
+
+  rows.forEach(row => {
+    html += "<tr>";
+    columns.forEach(column => {
+      let value = row[column];
+      if (key(column) === "keterangan") {
+        html += `<td class="keterangan">${escapeHtml(value)}</td>`;
+      } else {
+        html += `<td>${escapeHtml(value)}</td>`;
+      }
+    });
+    html += "</tr>";
+  });
+
+  html += `</tbody></table>`;
+  element.innerHTML = html;
+}
+
+
+function renderChart(elementId, items, maxValue = 100) {
+  const element = document.getElementById(elementId);
+
+  if (!items.length) {
+    element.innerHTML = `<div class="empty">Tidak ada data grafik.</div>`;
+    return;
+  }
+
+  const max = maxValue || Math.max(...items.map(item => Number(item.value) || 0));
+  let html = `<div class="bar-chart">`;
+
+  items.forEach(item => {
+    const value = Number(item.value) || 0;
+    const safeValue = Math.max(0, Math.min(value, max));
+    const height = Math.max(3, (safeValue / max) * 180);
+
+    html += `
+      <div class="bar-item">
+        <div class="bar-value">${escapeHtml(item.display ?? formatPercent(value))}</div>
+        <div class="bar" style="height:${height}px"></div>
+        <div class="bar-label">${escapeHtml(item.label)}</div>
+      </div>
+    `;
+  });
+
+  html += `</div>`;
+  element.innerHTML = html;
+}
+
+
+/* =========================================================
+   PERHITUNGAN AGREGASI
+========================================================= */
+
+function yesPercentage(rows, column) {
+  if (!rows.length || !column) return 0;
+
+  let yes = 0;
+  let total = 0;
+
+  rows.forEach(row => {
+    const value = clean(row[column]).toLowerCase();
+    if (!value) return;
+
+    if (value === "ya" || value === "yes" || value === "1" || value === "true") {
+      yes++;
+      total++;
+    } else if (value === "tidak" || value === "no" || value === "0" || value === "false") {
+      total++;
+    }
+  });
+
+  if (!total) return 0;
+  return (yes / total) * 100;
+}
+
+
+function numericAverage(rows, column) {
+  if (!rows.length || !column) return 0;
+
+  const values = rows
+    .map(row => numberValue(row[column]))
+    .filter(value => value !== null);
+
+  if (!values.length) return 0;
+  return values.reduce((a,b) => a + b, 0) / values.length;
+}
+
+
+/* =========================================================
+   TAB SWITCH & EVENTS
+========================================================= */
+
+document.querySelectorAll(".tab").forEach(button => {
+  button.addEventListener("click", () => {
+    document.querySelectorAll(".tab").forEach(item => item.classList.remove("active"));
+    document.querySelectorAll(".panel").forEach(panel => panel.classList.remove("active"));
+
+    button.classList.add("active");
+    const panel = document.getElementById(button.dataset.tab);
+    if (panel) panel.classList.add("active");
+  });
+});
+
+
+/* =========================================================
+   PROFIL
+========================================================= */
+
+function renderProfil() {
+  const selectedMembers = getFilteredProfilMembers();
+
+  renderStats("profilStats", [
+    { value: selectedMembers.length, label: "Total Anggota" },
+    { value: "KP", label: "Proda", color: "blue" },
+    { value: new Set(selectedMembers.map(item => item.kelas).filter(Boolean)).size, label: "Kelas", color: "orange" },
+    { value: DATA.profil.length, label: "Total Database", color: "green" }
+  ]);
+
+  document.getElementById("profilCount").textContent = selectedMembers.length + " anggota";
+
+  if (!selectedMembers.length) {
+    document.getElementById("profilTable").innerHTML = `<div class="empty">Tidak ada anggota yang sesuai.</div>`;
+    return;
+  }
+
+  let html = `
+    <table>
+      <thead>
+        <tr>
+          <th>No</th>
+          <th>Kode / ID Anggota</th>
+          <th>Proda</th>
+          <th>Kelas</th>
+        </tr>
+      </thead>
+      <tbody>
+  `;
+
+  selectedMembers.forEach((member, index) => {
+    html += `
+      <tr>
+        <td>${index + 1}</td>
+        <td><strong>${escapeHtml(member.id)}</strong></td>
+        <td>${escapeHtml(member.sektor)}</td>
+        <td>${escapeHtml(member.kelas)}</td>
+      </tr>
+    `;
+  });
+
+  html += `</tbody></table>`;
+  document.getElementById("profilTable").innerHTML = html;
+}
+
+
+/* =========================================================
+   BAROMIJ
+========================================================= */
+
+function renderBaromij() {
+  const selectedMembers = getFilteredProfilMembers();
+  const rows = getFilteredRowsByValidMembers(DATA.baromij);
+
+  const barCols = {
+    walashadir: findColumn(DATA.baromij, ["walashadir"]),
+    tilawah: findColumn(DATA.baromij, ["tilawah_hafalan"]),
+    kalam: findColumn(DATA.baromij, ["kalam_naqib"]),
+    tatsqif: findColumn(DATA.baromij, ["tatsqif_usroh"]),
+    talimat: findColumn(DATA.baromij, ["talimat"]),
+    offline: findColumn(DATA.baromij, ["kelasoffline"])
+  };
+
+  renderStats("baromijStats", [
+    { value: selectedMembers.length, label: "Anggota Terfilter", color: "blue" },
+    { value: new Set(selectedMembers.map(item => item.kelas).filter(Boolean)).size, label: "Kelas Terisi", color: "orange" },
+    { value: rows.length, label: "Data Agenda", color: "green" }
+  ]);
+
+  const metrics = [
+    { label: "Walas Hadir", value: yesPercentage(rows, barCols.walashadir) },
+    { label: "Tilawah / Hafalan", value: yesPercentage(rows, barCols.tilawah) },
+    { label: "Kalam Naqib", value: yesPercentage(rows, barCols.kalam) },
+    { label: "Tatsqif Usroh", value: yesPercentage(rows, barCols.tatsqif) },
+    { label: "Ta'limat", value: yesPercentage(rows, barCols.talimat) },
+    { label: "Kelas Offline", value: yesPercentage(rows, barCols.offline) }
+  ];
+
+  renderChart(
+    "baromijChart",
+    metrics.map(item => ({
+      label: item.label,
+      value: item.value,
+      display: formatPercent(item.value)
+    })),
+    100
+  );
+
+  renderBaromijKeterangan(rows);
+}
+
+
+function renderBaromijKeterangan(rows) {
+  const cols = columnInfo(DATA.baromij);
+  const element = document.getElementById("baromijKetTable");
+  const count = document.getElementById("baromijKetCount");
+
+  if (!cols.keterangan) {
+    count.textContent = "0 keterangan";
+    element.innerHTML = `<div class="empty">Kolom keterangan tidak ditemukan.</div>`;
+    return;
+  }
+
+  const filtered = rows.filter(row => clean(row[cols.keterangan]));
+  count.textContent = filtered.length + " keterangan";
+
+  if (!filtered.length) {
+    element.innerHTML = `<div class="empty">Tidak ada keterangan yang terisi.</div>`;
+    return;
+  }
+
+  const columns = [cols.idAnggota, cols.idSektor, cols.idKelas, cols.keterangan].filter(Boolean);
+
+  renderTable("baromijKetTable", filtered, columns, {
+    [cols.idAnggota]: "ID Anggota",
+    [cols.idSektor]: "Proda",
+    [cols.idKelas]: "Kelas",
+    [cols.keterangan]: "Keterangan"
+  });
+}
+
+
+/* =========================================================
+   YAUMIYAN
+========================================================= */
+
+function renderYaumiyan() {
+  const selectedMembers = getFilteredProfilMembers();
+  const rows = getFilteredRowsByValidMembers(DATA.yaumiyan);
+
+  const cols = {
+    kehadiran: findColumn(DATA.yaumiyan, ["kehadiran_kelas"]),
+    sholat: findColumn(DATA.yaumiyan, ["sholat_jamaah"]),
+    qiyam: findColumn(DATA.yaumiyan, ["qiyamul_lail"]),
+    tilawah: findColumn(DATA.yaumiyan, ["tilawah"]),
+    shoum: findColumn(DATA.yaumiyan, ["shoum_sunnah"]),
+    olahraga: findColumn(DATA.yaumiyan, ["olah_raga"]),
+    matsurot: findColumn(DATA.yaumiyan, ["al_matsurot"])
+  };
+
+  renderStats("yaumiyanStats", [
+    { value: selectedMembers.length, label: "Anggota Terfilter", color: "blue" },
+    { value: new Set(selectedMembers.map(item => item.kelas).filter(Boolean)).size, label: "Kelas Terisi", color: "orange" },
+    { value: rows.length, label: "Pengisian Data", color: "green" }
+  ]);
+
+  const metrics = [
+    { label: "Kehadiran Kelas", value: yesPercentage(rows, cols.kehadiran), display: formatPercent(yesPercentage(rows, cols.kehadiran)) },
+    { label: "Sholat Jamaah", value: numericAverage(rows, cols.sholat), display: formatNumber(numericAverage(rows, cols.sholat)) },
+    { label: "Qiyamul Lail", value: numericAverage(rows, cols.qiyam), display: formatNumber(numericAverage(rows, cols.qiyam)) },
+    { label: "Tilawah", value: numericAverage(rows, cols.tilawah), display: formatNumber(numericAverage(rows, cols.tilawah)) },
+    { label: "Shoum Sunnah", value: numericAverage(rows, cols.shoum), display: formatNumber(numericAverage(rows, cols.shoum)) },
+    { label: "Olahraga", value: numericAverage(rows, cols.olahraga), display: formatNumber(numericAverage(rows, cols.olahraga)) },
+    { label: "Al-Matsurot", value: numericAverage(rows, cols.matsurot), display: formatNumber(numericAverage(rows, cols.matsurot)) }
+  ];
+
+  const max = Math.max(100, ...metrics.map(item => Number(item.value) || 0));
+
+  renderChart("yaumiyanChart", metrics, max);
+  renderYaumiyanKeterangan(rows);
+  renderYaumiyanStatus(selectedMembers, rows);
+}
+
+
+function renderYaumiyanKeterangan(rows) {
+  const cols = columnInfo(DATA.yaumiyan);
+  const element = document.getElementById("yaumiyanKetTable");
+  const count = document.getElementById("yaumiyanKetCount");
+
+  if (!cols.keterangan) {
+    count.textContent = "0 keterangan";
+    element.innerHTML = `<div class="empty">Kolom keterangan tidak ditemukan.</div>`;
+    return;
+  }
+
+  const filtered = rows.filter(row => clean(row[cols.keterangan]));
+  count.textContent = filtered.length + " keterangan";
+
+  if (!filtered.length) {
+    element.innerHTML = `<div class="empty">Tidak ada keterangan yang terisi.</div>`;
+    return;
+  }
+
+  const columns = [cols.idAnggota, cols.idSektor, cols.idKelas, cols.keterangan].filter(Boolean);
+
+  renderTable("yaumiyanKetTable", filtered, columns, {
+    [cols.idAnggota]: "ID Anggota",
+    [cols.idSektor]: "Proda",
+    [cols.idKelas]: "Kelas",
+    [cols.keterangan]: "Keterangan"
+  });
+}
+
+
+function renderYaumiyanStatus(members, rows) {
+  const yaCols = columnInfo(DATA.yaumiyan);
+  const filledIds = new Set();
+
+  if (yaCols.idAnggota) {
+    rows.forEach(row => {
+      const id = clean(row[yaCols.idAnggota]);
+      if (id) filledIds.add(id);
+    });
+  }
+
+  const sudah = members.filter(member => filledIds.has(member.id)).length;
+  const belum = members.length - sudah;
+
+  document.getElementById("yaumiyanStatusCount").textContent = "Sudah " + sudah + " · Belum " + belum;
+  const element = document.getElementById("yaumiyanStatusTable");
+
+  if (!members.length) {
+    element.innerHTML = `<div class="empty">Tidak ada anggota yang sesuai filter profil.</div>`;
+    return;
+  }
+
+  let html = `
+    <table>
+      <thead>
+        <tr>
+          <th>No</th>
+          <th>ID Anggota</th>
+          <th>Proda</th>
+          <th>Kelas</th>
+          <th>Status</th>
+        </tr>
+      </thead>
+      <tbody>
+  `;
+
+  members.forEach((member, index) => {
+    const filled = filledIds.has(member.id);
+    html += `
+      <tr>
+        <td>${index + 1}</td>
+        <td><strong>${escapeHtml(member.id)}</strong></td>
+        <td>${escapeHtml(member.sektor)}</td>
+        <td>${escapeHtml(member.kelas)}</td>
+        <td>
+          ${filled
+            ? `<span class="badge badge-success">✓ Sudah Isi</span>`
+            : `<span class="badge badge-danger">✕ Belum Isi</span>`
+          }
+        </td>
+      </tr>
+    `;
+  });
+
+  html += `</tbody></table>`;
+  element.innerHTML = html;
+}
+
+
+/* =========================================================
+   IB - BULAN & NORMALISASI TAHUN
+========================================================= */
+
+const MONTHS = [
+  { value: 1, label: "Januari" },
+  { value: 2, label: "Februari" },
+  { value: 3, label: "Maret" },
+  { value: 4, label: "April" },
+  { value: 5, label: "Mei" },
+  { value: 6, label: "Juni" },
+  { value: 7, label: "Juli" },
+  { value: 8, label: "Agustus" },
+  { value: 9, label: "September" },
+  { value: 10, label: "Oktober" },
+  { value: 11, label: "November" },
+  { value: 12, label: "Desember" }
+];
+
+
+function normalizeMonth(value) {
+  const text = clean(value).toLowerCase();
+  if (!text) return null;
+
+  const numeric = Number(text);
+  if (numeric >= 1 && numeric <= 12) {
+    return numeric;
+  }
+
+  const found = MONTHS.find(month => month.label.toLowerCase() === text);
+  if (found) return found.value;
+
+  const match = text.match(/^(\d{1,2})/);
+  if (match) {
+    const n = Number(match[1]);
+    if (n >= 1 && n <= 12) return n;
+  }
+
+  return null;
+}
+
+
+function normalizeYear(value) {
+  const text = clean(value);
+  if (!text) return null;
+
+  const n = Number(text);
+  if (!Number.isFinite(n)) return null;
+
+  if (n < 100) {
+    return 2000 + n;
+  }
+
+  return n;
+}
+
+
+/* =========================================================
+   INITIALIZE IB
+========================================================= */
+
+function initializeIB() {
+  const month = document.getElementById("ibMonth");
+  const year = document.getElementById("ibYear");
+
+  month.innerHTML = MONTHS.map(item => `
+    <option value="${item.value}">${item.label}</option>
+  `).join("");
+
+  const ibYearColumn = findColumn(DATA.ib, ["tahun"]);
+  const years = new Set();
+
+  if (ibYearColumn) {
+    DATA.ib.forEach(row => {
+      const yearNorm = normalizeYear(row[ibYearColumn]);
+      if (yearNorm !== null) {
+        years.add(yearNorm);
+      }
+    });
+  }
+
+  const currentYear = new Date().getFullYear();
+
+  for (let yearValue = currentYear - 2; yearValue <= currentYear + 1; yearValue++) {
+    years.add(yearValue);
+  }
+
+  year.innerHTML = [...years]
+    .sort((a,b) => b - a)
+    .map(value => `<option value="${value}">${value}</option>`)
+    .join("");
+
+  month.value = new Date().getMonth() + 1;
+  year.value = currentYear;
+
+  month.addEventListener("change", renderIB);
+  year.addEventListener("change", renderIB);
+}
+
+
+/* =========================================================
+   FILTER IB
+========================================================= */
+
+function renderIB() {
+  const month = Number(document.getElementById("ibMonth").value);
+  const year = Number(document.getElementById("ibYear").value);
+
+  const members = getFilteredProfilMembers();
+  const rows = getFilteredRowsByValidMembers(DATA.ib);
+
+  const ibCols = columnInfo(DATA.ib);
+  const monthColumn = findColumn(DATA.ib, ["bulan"]);
+  const yearColumn = findColumn(DATA.ib, ["tahun"]);
+
+  let periodRows = [];
+
+  if (monthColumn && yearColumn) {
+    periodRows = rows.filter(row => {
+      const rowMonth = normalizeMonth(row[monthColumn]);
+      const rowYear = normalizeYear(row[yearColumn]);
+
+      return (rowMonth === month && rowYear === year);
+    });
+  } else {
+    periodRows = rows;
+  }
+
+  const filledIds = new Set();
+
+  if (ibCols.idAnggota) {
+    periodRows.forEach(row => {
+      const id = clean(row[ibCols.idAnggota]);
+      if (id) filledIds.add(id);
+    });
+  }
+
+  const sudah = members.filter(member => filledIds.has(member.id)).length;
+  const belum = members.length - sudah;
+
+  renderStats("ibStats", [
+    { value: members.length, label: "Anggota Terfilter" },
+    { value: sudah, label: "Sudah Isi", color: "green" },
+    { value: belum, label: "Belum Isi", color: "orange" },
+    { value: periodRows.length, label: "Data IB", color: "blue" }
+  ]);
+
+  document.getElementById("ibStatusCount").textContent = "Sudah " + sudah + " · Belum " + belum;
+  renderIBTable(members, filledIds);
+}
+
+
+function renderIBTable(members, filledIds) {
+  const element = document.getElementById("ibStatusTable");
+
+  if (!members.length) {
+    element.innerHTML = `<div class="empty">Tidak ada anggota yang sesuai filter.</div>`;
+    return;
+  }
+
+  let html = `
+    <table>
+      <thead>
+        <tr>
+          <th>No</th>
+          <th>ID Anggota</th>
+          <th>Proda</th>
+          <th>Kelas</th>
+          <th>Status</th>
+        </tr>
+      </thead>
+      <tbody>
+  `;
+
+  members.forEach((member, index) => {
+    const filled = filledIds.has(member.id);
+    html += `
+      <tr>
+        <td>${index + 1}</td>
+        <td><strong>${escapeHtml(member.id)}</strong></td>
+        <td>${escapeHtml(member.sektor)}</td>
+        <td>${escapeHtml(member.kelas)}</td>
+        <td>
+          ${filled
+            ? `<span class="badge badge-success">✓ Sudah Isi</span>`
+            : `<span class="badge badge-danger">✕ Belum Isi</span>`
+          }
+        </td>
+      </tr>
+    `;
+  });
+
+  html += `</tbody></table>`;
+  element.innerHTML = html;
+}
+
+
+/* =========================================================
+   LISTENERS FILTER PROFIL
+========================================================= */
+
+["profilProda", "profilKelas1", "profilKelas2", "profilKelas3"].forEach(id => {
+  document.getElementById(id).addEventListener("change", renderAll);
+});
+
+document.getElementById("profilKodeAnggota").addEventListener("input", renderAll);
+
+
+/* =========================================================
+   RENDER SEMUA & START
+========================================================= */
+
+function renderAll() {
+  renderProfil();
+  renderBaromij();
+  renderYaumiyan();
+  renderIB();
+}
+
+loadAllData(false);
+
+</script>
+
 </body>
 </html>
