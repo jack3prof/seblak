@@ -1,0 +1,1099 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard Laporan Evaluasi</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.2.0"></script>
+    <style>
+        body { background-color: #f4f6f9; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
+        .metric-card { background: white; border-radius: 10px; padding: 12px; text-align: center; box-shadow: 0 2px 4px rgba(0,0,0,0.05); }
+        .chart-container { position: relative; height: 300px; width: 100%; }
+        @media (max-width: 576px) {
+            .chart-container { height: 260px; }
+            .card-body { padding: 10px; }
+            table { font-size: 11px; }
+        }
+    </style>
+</head>
+<body>
+<div class="container my-3 px-2 px-md-3">
+    <div class="text-center mb-3">
+        <h4 class="fw-bold">LAPORAN EVALUASI AKTIVITAS</h4>
+        <p class="text-secondary small mb-0">Periode: <b>01 Aug 26</b> s/d <b>29 Aug 26</b></p>
+    </div>
+
+    <div class="row g-2 mb-3">
+        <div class="col-6">
+            <div class="metric-card">
+                <span class="text-muted extra-small">Total User</span>
+                <h4 class="fw-bold text-primary mb-0">574</h4>
+            </div>
+        </div>
+        <div class="col-6">
+            <div class="metric-card">
+                <span class="text-muted extra-small">Total Kelas</span>
+                <h4 class="fw-bold text-success mb-0">111</h4>
+            </div>
+        </div>
+    </div>
+
+    
+    <div class="card shadow-sm mb-4">
+        <div class="card-header bg-white fw-bold text-primary">
+            1. Partisipasi: Jumlah User Terdaftar per Sektor
+        </div>
+        <div class="card-body">
+            <p class="text-muted small mb-2">Grafik menampilkan distribusi jumlah user terdaftar per sektor. Total user terdaftar: 574.</p>
+            <div class="row align-items-center">
+                <div class="col-12 col-lg-7 mb-3 mb-lg-0">
+                    <div class="chart-container">
+                        <canvas id="chart_0"></canvas>
+                    </div>
+                </div>
+                <div class="col-12 col-lg-5">
+                    <div class="table-responsive small">
+                        <table border="1" class="dataframe table table-striped table-hover table-sm text-center mb-0">
+  <thead>
+    <tr style="text-align: center;">
+      <th>Sektor</th>
+      <th>Total User Terdaftar</th>
+      <th>Proporsi (%)</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>BA</td>
+      <td>96</td>
+      <td>17</td>
+    </tr>
+    <tr>
+      <td>BI</td>
+      <td>6</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <td>GA</td>
+      <td>104</td>
+      <td>18</td>
+    </tr>
+    <tr>
+      <td>MA</td>
+      <td>12</td>
+      <td>2</td>
+    </tr>
+    <tr>
+      <td>PR</td>
+      <td>65</td>
+      <td>11</td>
+    </tr>
+    <tr>
+      <td>RG</td>
+      <td>47</td>
+      <td>8</td>
+    </tr>
+    <tr>
+      <td>RW</td>
+      <td>65</td>
+      <td>11</td>
+    </tr>
+    <tr>
+      <td>SA</td>
+      <td>108</td>
+      <td>19</td>
+    </tr>
+    <tr>
+      <td>SL</td>
+      <td>34</td>
+      <td>6</td>
+    </tr>
+    <tr>
+      <td>SU</td>
+      <td>37</td>
+      <td>6</td>
+    </tr>
+    <tr>
+      <td>ALL</td>
+      <td>574</td>
+      <td>100</td>
+    </tr>
+  </tbody>
+</table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="card shadow-sm mb-4">
+        <div class="card-header bg-white fw-bold text-primary">
+            2. Keaktifan Yaumiyan: Keaktifan Pengisian Yaumiyan per Sektor (User Aktif vs Terdaftar)
+        </div>
+        <div class="card-body">
+            <p class="text-muted small mb-2">Membandingkan user yang aktif mengisi Yaumiyan terhadap total user terdaftar (01 Aug 26 s/d 29 Aug 26).</p>
+            <div class="row align-items-center">
+                <div class="col-12 col-lg-7 mb-3 mb-lg-0">
+                    <div class="chart-container">
+                        <canvas id="chart_1"></canvas>
+                    </div>
+                </div>
+                <div class="col-12 col-lg-5">
+                    <div class="table-responsive small">
+                        <table border="1" class="dataframe table table-striped table-hover table-sm text-center mb-0">
+  <thead>
+    <tr style="text-align: center;">
+      <th>Sektor</th>
+      <th>User Mengisi</th>
+      <th>User Terdaftar</th>
+      <th>Tingkat Keaktifan (%)</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>BA</td>
+      <td>75</td>
+      <td>96</td>
+      <td>78</td>
+    </tr>
+    <tr>
+      <td>BI</td>
+      <td>1</td>
+      <td>6</td>
+      <td>17</td>
+    </tr>
+    <tr>
+      <td>GA</td>
+      <td>89</td>
+      <td>104</td>
+      <td>86</td>
+    </tr>
+    <tr>
+      <td>MA</td>
+      <td>5</td>
+      <td>12</td>
+      <td>42</td>
+    </tr>
+    <tr>
+      <td>PR</td>
+      <td>55</td>
+      <td>65</td>
+      <td>85</td>
+    </tr>
+    <tr>
+      <td>RG</td>
+      <td>33</td>
+      <td>47</td>
+      <td>70</td>
+    </tr>
+    <tr>
+      <td>RW</td>
+      <td>48</td>
+      <td>65</td>
+      <td>74</td>
+    </tr>
+    <tr>
+      <td>SA</td>
+      <td>81</td>
+      <td>108</td>
+      <td>75</td>
+    </tr>
+    <tr>
+      <td>SL</td>
+      <td>25</td>
+      <td>34</td>
+      <td>74</td>
+    </tr>
+    <tr>
+      <td>SU</td>
+      <td>14</td>
+      <td>37</td>
+      <td>38</td>
+    </tr>
+    <tr>
+      <td>ALL</td>
+      <td>426</td>
+      <td>574</td>
+      <td>74</td>
+    </tr>
+  </tbody>
+</table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="card shadow-sm mb-4">
+        <div class="card-header bg-white fw-bold text-primary">
+            3. Keaktifan Kelas: Keaktifan Kelas per Sektor (Kelas Aktif vs Terdaftar)
+        </div>
+        <div class="card-body">
+            <p class="text-muted small mb-2">Perbandingan ID Kelas aktif mengisi Baromij vs total ID Kelas (01 Aug 26 s/d 29 Aug 26). Total kelas: 111.</p>
+            <div class="row align-items-center">
+                <div class="col-12 col-lg-7 mb-3 mb-lg-0">
+                    <div class="chart-container">
+                        <canvas id="chart_2"></canvas>
+                    </div>
+                </div>
+                <div class="col-12 col-lg-5">
+                    <div class="table-responsive small">
+                        <table border="1" class="dataframe table table-striped table-hover table-sm text-center mb-0">
+  <thead>
+    <tr style="text-align: center;">
+      <th>Sektor</th>
+      <th>Kelas Aktif Mengisi</th>
+      <th>Total Kelas Terdaftar</th>
+      <th>Rasio Keaktifan Kelas (%)</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>BA</td>
+      <td>12</td>
+      <td>16</td>
+      <td>75</td>
+    </tr>
+    <tr>
+      <td>BI</td>
+      <td>0</td>
+      <td>4</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <td>GA</td>
+      <td>15</td>
+      <td>16</td>
+      <td>94</td>
+    </tr>
+    <tr>
+      <td>MA</td>
+      <td>1</td>
+      <td>4</td>
+      <td>25</td>
+    </tr>
+    <tr>
+      <td>PR</td>
+      <td>12</td>
+      <td>11</td>
+      <td>109</td>
+    </tr>
+    <tr>
+      <td>RG</td>
+      <td>5</td>
+      <td>9</td>
+      <td>56</td>
+    </tr>
+    <tr>
+      <td>RW</td>
+      <td>9</td>
+      <td>15</td>
+      <td>60</td>
+    </tr>
+    <tr>
+      <td>SA</td>
+      <td>13</td>
+      <td>20</td>
+      <td>65</td>
+    </tr>
+    <tr>
+      <td>SL</td>
+      <td>3</td>
+      <td>7</td>
+      <td>43</td>
+    </tr>
+    <tr>
+      <td>SU</td>
+      <td>3</td>
+      <td>9</td>
+      <td>33</td>
+    </tr>
+    <tr>
+      <td>ALL</td>
+      <td>73</td>
+      <td>111</td>
+      <td>66</td>
+    </tr>
+  </tbody>
+</table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="card shadow-sm mb-4">
+        <div class="card-header bg-white fw-bold text-primary">
+            4. Kepatuhan IB: Kepatuhan Pelaporan IB per Sektor
+        </div>
+        <div class="card-body">
+            <p class="text-muted small mb-2">Pelaporan IB (01 Aug 26 s/d 29 Aug 26). Total pelapor: 215 user.</p>
+            <div class="row align-items-center">
+                <div class="col-12 col-lg-7 mb-3 mb-lg-0">
+                    <div class="chart-container">
+                        <canvas id="chart_3"></canvas>
+                    </div>
+                </div>
+                <div class="col-12 col-lg-5">
+                    <div class="table-responsive small">
+                        <table border="1" class="dataframe table table-striped table-hover table-sm text-center mb-0">
+  <thead>
+    <tr style="text-align: center;">
+      <th>Sektor</th>
+      <th>User Mengisi IB</th>
+      <th>User Terdaftar Sektor</th>
+      <th>Kepatuhan Sektor (%)</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>BA</td>
+      <td>47</td>
+      <td>96</td>
+      <td>49</td>
+    </tr>
+    <tr>
+      <td>BI</td>
+      <td>1</td>
+      <td>6</td>
+      <td>17</td>
+    </tr>
+    <tr>
+      <td>GA</td>
+      <td>53</td>
+      <td>104</td>
+      <td>51</td>
+    </tr>
+    <tr>
+      <td>MA</td>
+      <td>4</td>
+      <td>12</td>
+      <td>33</td>
+    </tr>
+    <tr>
+      <td>PR</td>
+      <td>35</td>
+      <td>65</td>
+      <td>54</td>
+    </tr>
+    <tr>
+      <td>RG</td>
+      <td>6</td>
+      <td>47</td>
+      <td>13</td>
+    </tr>
+    <tr>
+      <td>RW</td>
+      <td>20</td>
+      <td>65</td>
+      <td>31</td>
+    </tr>
+    <tr>
+      <td>SA</td>
+      <td>39</td>
+      <td>108</td>
+      <td>36</td>
+    </tr>
+    <tr>
+      <td>SL</td>
+      <td>3</td>
+      <td>34</td>
+      <td>9</td>
+    </tr>
+    <tr>
+      <td>SU</td>
+      <td>7</td>
+      <td>37</td>
+      <td>19</td>
+    </tr>
+    <tr>
+      <td>ALL</td>
+      <td>215</td>
+      <td>574</td>
+      <td>37</td>
+    </tr>
+  </tbody>
+</table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="card shadow-sm mb-4">
+        <div class="card-header bg-white fw-bold text-primary">
+            5. Capaian Yaumiyan: Rata-rata Capaian Yaumiyan Per Sektor
+        </div>
+        <div class="card-body">
+            <p class="text-muted small mb-2">Performa rata-rata amalan yaumiyan per sektor (01 Aug 26 s/d 29 Aug 26).</p>
+            <div class="row align-items-center">
+                <div class="col-12 col-lg-7 mb-3 mb-lg-0">
+                    <div class="chart-container">
+                        <canvas id="chart_4"></canvas>
+                    </div>
+                </div>
+                <div class="col-12 col-lg-5">
+                    <div class="table-responsive small">
+                        <table border="1" class="dataframe table table-striped table-hover table-sm text-center mb-0">
+  <thead>
+    <tr style="text-align: center;">
+      <th>Sektor</th>
+      <th>Sholat Jamaah</th>
+      <th>Qiyamul Lail</th>
+      <th>Tilawah</th>
+      <th>Shoum Sunnah</th>
+      <th>Olah Raga</th>
+      <th>Al-Matsurot</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>BA</td>
+      <td>23</td>
+      <td>3</td>
+      <td>5</td>
+      <td>1</td>
+      <td>2</td>
+      <td>6</td>
+    </tr>
+    <tr>
+      <td>BI</td>
+      <td>31</td>
+      <td>4</td>
+      <td>9</td>
+      <td>0</td>
+      <td>1</td>
+      <td>14</td>
+    </tr>
+    <tr>
+      <td>GA</td>
+      <td>27</td>
+      <td>3</td>
+      <td>5</td>
+      <td>1</td>
+      <td>3</td>
+      <td>6</td>
+    </tr>
+    <tr>
+      <td>MA</td>
+      <td>15</td>
+      <td>4</td>
+      <td>2</td>
+      <td>0</td>
+      <td>2</td>
+      <td>5</td>
+    </tr>
+    <tr>
+      <td>PR</td>
+      <td>24</td>
+      <td>4</td>
+      <td>6</td>
+      <td>1</td>
+      <td>2</td>
+      <td>8</td>
+    </tr>
+    <tr>
+      <td>RG</td>
+      <td>23</td>
+      <td>3</td>
+      <td>5</td>
+      <td>1</td>
+      <td>2</td>
+      <td>6</td>
+    </tr>
+    <tr>
+      <td>RW</td>
+      <td>26</td>
+      <td>4</td>
+      <td>7</td>
+      <td>1</td>
+      <td>2</td>
+      <td>7</td>
+    </tr>
+    <tr>
+      <td>SA</td>
+      <td>19</td>
+      <td>3</td>
+      <td>5</td>
+      <td>1</td>
+      <td>2</td>
+      <td>7</td>
+    </tr>
+    <tr>
+      <td>SL</td>
+      <td>22</td>
+      <td>3</td>
+      <td>5</td>
+      <td>1</td>
+      <td>2</td>
+      <td>7</td>
+    </tr>
+    <tr>
+      <td>SU</td>
+      <td>22</td>
+      <td>3</td>
+      <td>7</td>
+      <td>1</td>
+      <td>2</td>
+      <td>4</td>
+    </tr>
+    <tr>
+      <td>ALL</td>
+      <td>23</td>
+      <td>3</td>
+      <td>6</td>
+      <td>1</td>
+      <td>2</td>
+      <td>7</td>
+    </tr>
+  </tbody>
+</table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="card shadow-sm mb-4">
+        <div class="card-header bg-white fw-bold text-primary">
+            6. Capaian Baromij: Persentase Capaian Baromij Per Sektor (%)
+        </div>
+        <div class="card-body">
+            <p class="text-muted small mb-2">Persentase pemenuhan indikator Baromij (01 Aug 26 s/d 29 Aug 26).</p>
+            <div class="row align-items-center">
+                <div class="col-12 col-lg-7 mb-3 mb-lg-0">
+                    <div class="chart-container">
+                        <canvas id="chart_5"></canvas>
+                    </div>
+                </div>
+                <div class="col-12 col-lg-5">
+                    <div class="table-responsive small">
+                        <table border="1" class="dataframe table table-striped table-hover table-sm text-center mb-0">
+  <thead>
+    <tr style="text-align: center;">
+      <th>Sektor</th>
+      <th>Walashadir</th>
+      <th>Tilawah &amp; Hafalan</th>
+      <th>Kalam Naqib</th>
+      <th>Membaca MR</th>
+      <th>Tatsqif Usroh</th>
+      <th>Talimat</th>
+      <th>Monev Program</th>
+      <th>Qodhoya Rawai</th>
+      <th>Kelas Offline</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>BA</td>
+      <td>96</td>
+      <td>96</td>
+      <td>96</td>
+      <td>92</td>
+      <td>88</td>
+      <td>96</td>
+      <td>96</td>
+      <td>96</td>
+      <td>92</td>
+    </tr>
+    <tr>
+      <td>GA</td>
+      <td>86</td>
+      <td>88</td>
+      <td>86</td>
+      <td>74</td>
+      <td>71</td>
+      <td>90</td>
+      <td>76</td>
+      <td>81</td>
+      <td>64</td>
+    </tr>
+    <tr>
+      <td>MA</td>
+      <td>100</td>
+      <td>100</td>
+      <td>100</td>
+      <td>100</td>
+      <td>100</td>
+      <td>100</td>
+      <td>0</td>
+      <td>100</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <td>PR</td>
+      <td>100</td>
+      <td>88</td>
+      <td>81</td>
+      <td>59</td>
+      <td>72</td>
+      <td>75</td>
+      <td>69</td>
+      <td>72</td>
+      <td>84</td>
+    </tr>
+    <tr>
+      <td>RG</td>
+      <td>100</td>
+      <td>79</td>
+      <td>79</td>
+      <td>43</td>
+      <td>79</td>
+      <td>93</td>
+      <td>79</td>
+      <td>86</td>
+      <td>71</td>
+    </tr>
+    <tr>
+      <td>RW</td>
+      <td>93</td>
+      <td>83</td>
+      <td>83</td>
+      <td>67</td>
+      <td>63</td>
+      <td>90</td>
+      <td>80</td>
+      <td>83</td>
+      <td>70</td>
+    </tr>
+    <tr>
+      <td>SA</td>
+      <td>100</td>
+      <td>77</td>
+      <td>66</td>
+      <td>54</td>
+      <td>60</td>
+      <td>57</td>
+      <td>51</td>
+      <td>63</td>
+      <td>86</td>
+    </tr>
+    <tr>
+      <td>SL</td>
+      <td>86</td>
+      <td>100</td>
+      <td>86</td>
+      <td>86</td>
+      <td>100</td>
+      <td>100</td>
+      <td>100</td>
+      <td>100</td>
+      <td>86</td>
+    </tr>
+    <tr>
+      <td>SU</td>
+      <td>86</td>
+      <td>86</td>
+      <td>86</td>
+      <td>71</td>
+      <td>71</td>
+      <td>57</td>
+      <td>71</td>
+      <td>71</td>
+      <td>86</td>
+    </tr>
+    <tr>
+      <td>ALL</td>
+      <td>94</td>
+      <td>86</td>
+      <td>82</td>
+      <td>68</td>
+      <td>72</td>
+      <td>82</td>
+      <td>74</td>
+      <td>79</td>
+      <td>77</td>
+    </tr>
+  </tbody>
+</table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="card shadow-sm mb-4">
+        <div class="card-header bg-white fw-bold text-primary">
+            7. Yaumiyan Gender: Perbandingan Rata-rata Yaumiyan Berdasarkan Gender
+        </div>
+        <div class="card-body">
+            <p class="text-muted small mb-2">Rata-rata amalan harian Ikhwan vs Akhwat (01 Aug 26 s/d 29 Aug 26).</p>
+            <div class="row align-items-center">
+                <div class="col-12 col-lg-7 mb-3 mb-lg-0">
+                    <div class="chart-container">
+                        <canvas id="chart_6"></canvas>
+                    </div>
+                </div>
+                <div class="col-12 col-lg-5">
+                    <div class="table-responsive small">
+                        <table border="1" class="dataframe table table-striped table-hover table-sm text-center mb-0">
+  <thead>
+    <tr style="text-align: center;">
+      <th>Gender</th>
+      <th>Sholat Jamaah</th>
+      <th>Qiyamul Lail</th>
+      <th>Tilawah</th>
+      <th>Shoum Sunnah</th>
+      <th>Olah Raga</th>
+      <th>Al-Matsurot</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Akhwat</td>
+      <td>24</td>
+      <td>4</td>
+      <td>5</td>
+      <td>1</td>
+      <td>2</td>
+      <td>6</td>
+    </tr>
+    <tr>
+      <td>Ikhwan</td>
+      <td>25</td>
+      <td>3</td>
+      <td>4</td>
+      <td>1</td>
+      <td>2</td>
+      <td>7</td>
+    </tr>
+  </tbody>
+</table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+<div class="card shadow-sm mb-4">
+    <div class="card-header bg-white fw-bold text-primary">
+        8. Demografi Anggota: Piramida Tingkatan L5 - L0
+    </div>
+    <div class="card-body">
+        <p class="text-muted small mb-2">
+            Piramida struktur tingkatan dari L5 (puncak) hingga L0 (dasar). L5-L3 berdasarkan data user, L2-L0 berdasarkan data binaan.
+        </p>
+        <div class="row align-items-center">
+            <div class="col-12 col-lg-7 mb-3 mb-lg-0">
+                <div class="chart-container">
+                    <canvas id="pyramid_chart"></canvas>
+                </div>
+            </div>
+            <div class="col-12 col-lg-5">
+                <div class="table-responsive small">
+                    <table border="1" class="dataframe table table-striped table-hover table-sm text-center mb-0">
+  <thead>
+    <tr style="text-align: center;">
+      <th>Tingkatan</th>
+      <th>Ikhwan (I)</th>
+      <th>Akhwat (A)</th>
+      <th>Total</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>L5</td>
+      <td>46</td>
+      <td>12</td>
+      <td>58</td>
+    </tr>
+    <tr>
+      <td>L4</td>
+      <td>124</td>
+      <td>72</td>
+      <td>196</td>
+    </tr>
+    <tr>
+      <td>L3</td>
+      <td>176</td>
+      <td>144</td>
+      <td>320</td>
+    </tr>
+    <tr>
+      <td>L2</td>
+      <td>6</td>
+      <td>14</td>
+      <td>20</td>
+    </tr>
+    <tr>
+      <td>L1</td>
+      <td>16</td>
+      <td>30</td>
+      <td>46</td>
+    </tr>
+    <tr>
+      <td>L0</td>
+      <td>41</td>
+      <td>54</td>
+      <td>95</td>
+    </tr>
+    <tr>
+      <td>ALL</td>
+      <td>409</td>
+      <td>326</td>
+      <td>735</td>
+    </tr>
+  </tbody>
+</table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+</div>
+
+<script>
+    
+    new Chart(document.getElementById('chart_0'), {
+        type: 'bar',
+        data: {
+            labels: ["BA", "BI", "GA", "MA", "PR", "RG", "RW", "SA", "SL", "SU"],
+            datasets: [{"label": "Total User Terdaftar", "data": [96, 6, 104, 12, 65, 47, 65, 108, 34, 37], "backgroundColor": "rgba(54, 162, 235, 0.75)"}]
+        },
+        plugins: [ChartDataLabels],
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            layout: { padding: { top: 25 } },
+            plugins: {
+                legend: { position: 'top', labels: { boxWidth: 12, font: { size: 10 } } },
+                datalabels: {
+                    anchor: 'end',
+                    align: 'top',
+                    offset: 2,
+                    rotation: -90,
+                    font: { weight: 'bold', size: 9 },
+                    formatter: function(value) { return (value !== null && value !== 0) ? value : ''; }
+                }
+            },
+            scales: {
+                y: { beginAtZero: true, grace: '12%' }
+            }
+        }
+    });
+    
+    new Chart(document.getElementById('chart_1'), {
+        type: 'bar',
+        data: {
+            labels: ["BA", "BI", "GA", "MA", "PR", "RG", "RW", "SA", "SL", "SU"],
+            datasets: [{"label": "User Mengisi", "data": [75, 1, 89, 5, 55, 33, 48, 81, 25, 14], "backgroundColor": "rgba(54, 162, 235, 0.75)"}, {"label": "User Terdaftar", "data": [96, 6, 104, 12, 65, 47, 65, 108, 34, 37], "backgroundColor": "rgba(255, 99, 132, 0.75)"}]
+        },
+        plugins: [ChartDataLabels],
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            layout: { padding: { top: 25 } },
+            plugins: {
+                legend: { position: 'top', labels: { boxWidth: 12, font: { size: 10 } } },
+                datalabels: {
+                    anchor: 'end',
+                    align: 'top',
+                    offset: 2,
+                    rotation: -90,
+                    font: { weight: 'bold', size: 9 },
+                    formatter: function(value) { return (value !== null && value !== 0) ? value : ''; }
+                }
+            },
+            scales: {
+                y: { beginAtZero: true, grace: '12%' }
+            }
+        }
+    });
+    
+    new Chart(document.getElementById('chart_2'), {
+        type: 'bar',
+        data: {
+            labels: ["BA", "BI", "GA", "MA", "PR", "RG", "RW", "SA", "SL", "SU"],
+            datasets: [{"label": "Kelas Aktif Mengisi", "data": [12, 0, 15, 1, 12, 5, 9, 13, 3, 3], "backgroundColor": "rgba(54, 162, 235, 0.75)"}, {"label": "Total Kelas Terdaftar", "data": [16, 4, 16, 4, 11, 9, 15, 20, 7, 9], "backgroundColor": "rgba(255, 99, 132, 0.75)"}]
+        },
+        plugins: [ChartDataLabels],
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            layout: { padding: { top: 25 } },
+            plugins: {
+                legend: { position: 'top', labels: { boxWidth: 12, font: { size: 10 } } },
+                datalabels: {
+                    anchor: 'end',
+                    align: 'top',
+                    offset: 2,
+                    rotation: -90,
+                    font: { weight: 'bold', size: 9 },
+                    formatter: function(value) { return (value !== null && value !== 0) ? value : ''; }
+                }
+            },
+            scales: {
+                y: { beginAtZero: true, grace: '12%' }
+            }
+        }
+    });
+    
+    new Chart(document.getElementById('chart_3'), {
+        type: 'bar',
+        data: {
+            labels: ["BA", "BI", "GA", "MA", "PR", "RG", "RW", "SA", "SL", "SU"],
+            datasets: [{"label": "User Mengisi IB", "data": [47, 1, 53, 4, 35, 6, 20, 39, 3, 7], "backgroundColor": "rgba(54, 162, 235, 0.75)"}, {"label": "User Terdaftar Sektor", "data": [96, 6, 104, 12, 65, 47, 65, 108, 34, 37], "backgroundColor": "rgba(255, 99, 132, 0.75)"}]
+        },
+        plugins: [ChartDataLabels],
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            layout: { padding: { top: 25 } },
+            plugins: {
+                legend: { position: 'top', labels: { boxWidth: 12, font: { size: 10 } } },
+                datalabels: {
+                    anchor: 'end',
+                    align: 'top',
+                    offset: 2,
+                    rotation: -90,
+                    font: { weight: 'bold', size: 9 },
+                    formatter: function(value) { return (value !== null && value !== 0) ? value : ''; }
+                }
+            },
+            scales: {
+                y: { beginAtZero: true, grace: '12%' }
+            }
+        }
+    });
+    
+    new Chart(document.getElementById('chart_4'), {
+        type: 'bar',
+        data: {
+            labels: ["BA", "BI", "GA", "MA", "PR", "RG", "RW", "SA", "SL", "SU"],
+            datasets: [{"label": "Sholat Jamaah", "data": [23, 31, 27, 15, 24, 23, 26, 19, 22, 22], "backgroundColor": "rgba(54, 162, 235, 0.75)"}, {"label": "Qiyamul Lail", "data": [3, 4, 3, 4, 4, 3, 4, 3, 3, 3], "backgroundColor": "rgba(255, 99, 132, 0.75)"}, {"label": "Tilawah", "data": [5, 9, 5, 2, 6, 5, 7, 5, 5, 7], "backgroundColor": "rgba(75, 192, 192, 0.75)"}, {"label": "Shoum Sunnah", "data": [1, 0, 1, 0, 1, 1, 1, 1, 1, 1], "backgroundColor": "rgba(255, 206, 86, 0.75)"}, {"label": "Olah Raga", "data": [2, 1, 3, 2, 2, 2, 2, 2, 2, 2], "backgroundColor": "rgba(153, 102, 255, 0.75)"}, {"label": "Al-Matsurot", "data": [6, 14, 6, 5, 8, 6, 7, 7, 7, 4], "backgroundColor": "rgba(255, 159, 64, 0.75)"}]
+        },
+        plugins: [ChartDataLabels],
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            layout: { padding: { top: 25 } },
+            plugins: {
+                legend: { position: 'top', labels: { boxWidth: 12, font: { size: 10 } } },
+                datalabels: {
+                    anchor: 'end',
+                    align: 'top',
+                    offset: 2,
+                    rotation: -90,
+                    font: { weight: 'bold', size: 9 },
+                    formatter: function(value) { return (value !== null && value !== 0) ? value : ''; }
+                }
+            },
+            scales: {
+                y: { beginAtZero: true, grace: '12%' }
+            }
+        }
+    });
+    
+    new Chart(document.getElementById('chart_5'), {
+        type: 'bar',
+        data: {
+            labels: ["BA", "GA", "MA", "PR", "RG", "RW", "SA", "SL", "SU"],
+            datasets: [{"label": "Walashadir", "data": [96, 86, 100, 100, 100, 93, 100, 86, 86], "backgroundColor": "rgba(54, 162, 235, 0.75)"}, {"label": "Tilawah & Hafalan", "data": [96, 88, 100, 88, 79, 83, 77, 100, 86], "backgroundColor": "rgba(255, 99, 132, 0.75)"}, {"label": "Kalam Naqib", "data": [96, 86, 100, 81, 79, 83, 66, 86, 86], "backgroundColor": "rgba(75, 192, 192, 0.75)"}, {"label": "Membaca MR", "data": [92, 74, 100, 59, 43, 67, 54, 86, 71], "backgroundColor": "rgba(255, 206, 86, 0.75)"}, {"label": "Tatsqif Usroh", "data": [88, 71, 100, 72, 79, 63, 60, 100, 71], "backgroundColor": "rgba(153, 102, 255, 0.75)"}, {"label": "Talimat", "data": [96, 90, 100, 75, 93, 90, 57, 100, 57], "backgroundColor": "rgba(255, 159, 64, 0.75)"}, {"label": "Monev Program", "data": [96, 76, 0, 69, 79, 80, 51, 100, 71], "backgroundColor": "rgba(201, 203, 207, 0.75)"}, {"label": "Qodhoya Rawai", "data": [96, 81, 100, 72, 86, 83, 63, 100, 71], "backgroundColor": "rgba(0, 200, 83, 0.75)"}, {"label": "Kelas Offline", "data": [92, 64, 0, 84, 71, 70, 86, 86, 86], "backgroundColor": "rgba(54, 162, 235, 0.75)"}]
+        },
+        plugins: [ChartDataLabels],
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            layout: { padding: { top: 25 } },
+            plugins: {
+                legend: { position: 'top', labels: { boxWidth: 12, font: { size: 10 } } },
+                datalabels: {
+                    anchor: 'end',
+                    align: 'top',
+                    offset: 2,
+                    rotation: -90,
+                    font: { weight: 'bold', size: 9 },
+                    formatter: function(value) { return (value !== null && value !== 0) ? value : ''; }
+                }
+            },
+            scales: {
+                y: { beginAtZero: true, grace: '12%' }
+            }
+        }
+    });
+    
+    new Chart(document.getElementById('chart_6'), {
+        type: 'bar',
+        data: {
+            labels: ["Akhwat", "Ikhwan"],
+            datasets: [{"label": "Sholat Jamaah", "data": [24, 25], "backgroundColor": "rgba(54, 162, 235, 0.75)"}, {"label": "Qiyamul Lail", "data": [4, 3], "backgroundColor": "rgba(255, 99, 132, 0.75)"}, {"label": "Tilawah", "data": [5, 4], "backgroundColor": "rgba(75, 192, 192, 0.75)"}, {"label": "Shoum Sunnah", "data": [1, 1], "backgroundColor": "rgba(255, 206, 86, 0.75)"}, {"label": "Olah Raga", "data": [2, 2], "backgroundColor": "rgba(153, 102, 255, 0.75)"}, {"label": "Al-Matsurot", "data": [6, 7], "backgroundColor": "rgba(255, 159, 64, 0.75)"}]
+        },
+        plugins: [ChartDataLabels],
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            layout: { padding: { top: 25 } },
+            plugins: {
+                legend: { position: 'top', labels: { boxWidth: 12, font: { size: 10 } } },
+                datalabels: {
+                    anchor: 'end',
+                    align: 'top',
+                    offset: 2,
+                    rotation: -90,
+                    font: { weight: 'bold', size: 9 },
+                    formatter: function(value) { return (value !== null && value !== 0) ? value : ''; }
+                }
+            },
+            scales: {
+                y: { beginAtZero: true, grace: '12%' }
+            }
+        }
+    });
+    
+new Chart(document.getElementById('pyramid_chart'), {
+    type: 'bar',
+    data: {
+        labels: ['L5', 'L4', 'L3', 'L2', 'L1', 'L0'],
+        datasets: [
+            {
+                label: 'Ikhwan (I)',
+                data: [-46, -124, -176, -6, -16, -41],
+                backgroundColor: 'rgba(54, 162, 235, 0.85)'
+            },
+            {
+                label: 'Akhwat (A)',
+                data: [12, 72, 144, 14, 30, 54],
+                backgroundColor: 'rgba(255, 99, 132, 0.85)'
+            }
+        ]
+    },
+    plugins: [ChartDataLabels],
+    options: {
+        indexAxis: 'y',
+        responsive: true,
+        maintainAspectRatio: false,
+        scales: {
+            x: {
+                stacked: true,
+                ticks: {
+                    callback: function(value) { return Math.abs(value); }
+                }
+            },
+            y: { stacked: true }
+        },
+        plugins: {
+            legend: { position: 'top' },
+            tooltip: {
+                callbacks: {
+                    label: function(context) {
+                        return context.dataset.label + ': ' + Math.abs(context.raw);
+                    }
+                }
+            },
+            datalabels: {
+                color: '#fff',
+                font: { weight: 'bold', size: 10 },
+                formatter: function(value) {
+                    var absVal = Math.abs(value);
+                    return absVal > 0 ? absVal : '';
+                }
+            }
+        }
+    }
+});
+
+</script>
+</body>
+</html>
