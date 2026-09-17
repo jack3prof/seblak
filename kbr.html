@@ -76,7 +76,7 @@
         .container { max-width: 1200px; margin: auto; padding: 12px; }
         .tabs {
             display: grid;
-            grid-template-columns: repeat(4, 1fr);
+            grid-template-columns: repeat(5, 1fr);
             gap: 4px;
             background: white;
             padding: 4px;
@@ -231,10 +231,13 @@
                 <span>🆔</span> <span>Profil</span>
             </button>
             <button class="tab-btn" onclick="switchMainTab('baromij')">
-                <span>📋</span> <span>Agenda</span>
+                <span>📋</span> <span>Agenda Kelas</span>
             </button>
             <button class="tab-btn" onclick="switchMainTab('yaumiyan')">
                 <span>📊</span> <span>Yaumiyan</span>
+            </button>
+            <button class="tab-btn" onclick="switchMainTab('rekrutmen')">
+                <span>👥</span> <span>Rekrutmen</span>
             </button>
             <button class="tab-btn" onclick="switchMainTab('ib')">
                 <span>💰</span> <span>Lapor IB</span>
@@ -281,9 +284,16 @@
                                     <option value="5">5</option>
                                 </select>
                                 <select id="regK3" class="p-2 border rounded text-sm">
-                                    <option value="01">01</option><option value="02">02</option>
-                                    <option value="03">03</option><option value="04">04</option>
+                                    <option value="01">01</option>
+									<option value="02">02</option>
+                                    <option value="03">03</option>
+									<option value="04">04</option>
                                     <option value="05">05</option>
+                                    <option value="06">06</option>
+                                    <option value="07">07</option>
+                                    <option value="08">08</option>
+                                    <option value="09">09</option>
+                                    <option value="10">10</option>
                                 </select>
                             </div>
                             <div>
@@ -367,6 +377,18 @@
                         </label>
 
                         <div>
+                            <label class="block text-xs font-bold text-slate-600 mb-1">Jumlah Rekrutmen Jama'i</label>
+                            <input type="number" step="1" name="rekrutmen_jamai" value="0" class="w-full p-2.5 border rounded-lg text-sm focus:ring-2 focus:ring-teal-600 outline-none">
+                            <p class="text-[11px] text-slate-500 mt-1 leading-relaxed">
+							<strong>Keterangan:</strong><br>
+							Jumlah rekrutmen diisi jumlah orang yang telah direkrut secara jama'i dan telah mengikuti program selama lebih dari 3x.<br>
+							Jumlah yang telah dilaporkan, tidak boleh dilaporkan lagi.<br>
+							Bila ada jumlah rekrutmen yang berkurang, yaitu tidak ikut program selama 6x berturut-turut, maka laporkan dengan angka negatif (contoh: -2).<br>
+							Jumlah rekrutmen yang dilakukan oleh perorangan (fardi), dilaporkan di tab Rekrutmen.
+                            </p>
+                        </div>
+
+                        <div>
                             <label class="block text-xs font-bold text-slate-600 mb-1">Keterangan</label>
                             <textarea name="keterangan" rows="3" placeholder="Isikan keterangan kegiatan..." class="w-full p-2.5 border rounded-lg text-sm focus:ring-2 focus:ring-teal-600 outline-none"></textarea>
                         </div>
@@ -404,7 +426,7 @@
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
                 <div class="card mb-0">
                     <h2 class="card-title">📊 Input Evaluasi Yaumiyan</h2>
-                    <p class="card-subtitle">Laporan Isian Amalan Yaumiyan Anggota</p>
+                    <p class="card-subtitle">Laporan Isian Amalan Yaumiyan Anggota<br>Diisi tiap 7 hari sekali, pada saat kelas berlangsung<br>Bila terlupa, maka segera isi saat teringat, tanpa mempengaruhi pengisian berikutnya (bukan merupakan rekapitulasi).</p>
 
                     <form id="formYaumiyan" onsubmit="handleYaumiyanSubmit(event)" class="space-y-4">
                         <label class="flex items-center justify-between p-3 bg-slate-50 rounded-lg border cursor-pointer text-sm">
@@ -475,7 +497,43 @@
         </section>
 
         <!-- =========================================================
-             TAB 4: LAPOR IB
+             TAB 4: REKRUTMEN
+        ========================================================= -->
+        <section id="sec-rekrutmen" class="panel space-y-6">
+            <div class="card">
+                <div class="table-head">
+                    <h3 class="table-title">👥 Rekrutmen Sampai Saat Ini</h3>
+                    <span id="rekrutmenStatusCount" class="table-count"></span>
+                </div>
+                <div id="rekrutmenStatusTable" class="table-scroll-limit"></div>
+            </div>
+
+            <div class="card max-w-xl mx-auto">
+                <h2 class="card-title">📝 Form Laporan Rekrutmen</h2>
+                <p class="card-subtitle">Laporan Hasil Rekrutmen Fardi Anggota</p>
+
+                <form id="formRekrutmen" onsubmit="handleRekrutmenSubmit(event)" class="space-y-4">
+                    <div>
+                        <label class="block text-xs font-bold text-slate-600 mb-1">Jumlah Rekrutmen *</label>
+                        <input type="number" step="1" id="jumlahRekrutmen" name="jumlah_rekrutmen" required value="0" class="w-full p-2.5 border rounded-lg text-sm focus:ring-2 focus:ring-teal-600 outline-none">
+                        <p class="text-[11px] text-slate-500 mt-1 leading-relaxed">
+							<strong>Keterangan:</strong><br>
+							Jumlah rekrutmen diisi jumlah orang yang telah direkrut secara fardi dan telah mengikuti program selama lebih dari 3x.<br>
+							Jumlah yang telah dilaporkan, tidak boleh dilaporkan lagi.<br>
+							Bila ada jumlah rekrutmen yang berkurang, yaitu tidak ikut program selama 6x berturut-turut, maka laporkan dengan angka negatif (contoh: -2).<br>
+							Jumlah rekrutmen yang dilakukan oleh kelas (jama'i), dilaporkan di tab Agenda Kelas.
+                        </p>
+                    </div>
+
+                    <button type="submit" class="w-full bg-teal-700 hover:bg-teal-800 text-white font-medium py-3 rounded-lg shadow-sm transition">
+                        Laporkan Rekrutmen
+                    </button>
+                </form>
+            </div>
+        </section>
+
+        <!-- =========================================================
+             TAB 5: LAPOR IB
         ========================================================= -->
         <section id="sec-ib" class="panel space-y-6">
             <div class="card">
@@ -487,12 +545,12 @@
             </div>
 
             <div class="card max-w-xl mx-auto">
-                <h2 class="card-title">💳 Form Laporan Setoran IB</h2>
-                <p class="card-subtitle">Konfirmasi Setoran Infaq/IB Bulanan Anda</p>
+                <h2 class="card-title">💳 Laporan IB</h2>
+                <p class="card-subtitle">Setelah setor IB, laporkan disini</p>
 
                 <form id="formIb" onsubmit="handleIbSubmit(event)" class="space-y-4">
                     <div>
-                        <label class="block text-xs font-bold text-slate-600 mb-1">Bulan Pelaporan *</label>
+                        <label class="block text-xs font-bold text-slate-600 mb-1">Sudah setor IB untuk Bulan :  *</label>
                         <select id="ibBulan" required class="w-full p-2.5 border rounded-lg text-sm focus:ring-2 focus:ring-teal-600 outline-none">
                             <option value="01">01 - Januari</option><option value="02">02 - Februari</option>
                             <option value="03">03 - Maret</option><option value="04">04 - April</option>
@@ -504,7 +562,7 @@
                     </div>
 
                     <div>
-                        <label class="block text-xs font-bold text-slate-600 mb-1">Tahun Pelaporan *</label>
+                        <label class="block text-xs font-bold text-slate-600 mb-1">Tahun : *</label>
                         <select id="ibTahun" required class="w-full p-2.5 border rounded-lg text-sm focus:ring-2 focus:ring-teal-600 outline-none"></select>
                     </div>
 
@@ -518,7 +576,7 @@
     </main>
 
     <footer class="footer">
-        Seblak KBR & Reporting System · Integrated System
+        Seblak KBR Reporting System
     </footer>
 
     <!-- =========================================================
@@ -528,13 +586,13 @@
         const CONFIG_API_URL = "https://script.google.com/macros/s/AKfycbzjHM6Gvv8Z_iMWcv4Yf84SmEOSIvgj3znG2aC7C4VTtQ0ty_yz3jiXJaAdVfbicLk/exec";
         const GOOGLE_SHEET_ID = "1rEycScG3ByhgymdLW9J8rMkjz5cBxPgYNlHMah86HXA";
 
-        const SHEETS = { profil: "Profil", baromij: "Baromij", yaumiyan: "Yaumiyan", ib: "IB" };
-        const DATA = { profil: [], baromij: [], yaumiyan: [], ib: [] };
+        const SHEETS = { profil: "Profil", baromij: "Baromij", yaumiyan: "Yaumiyan", rekrutmen: "Rekrutmen", ib: "IB" };
+        const DATA = { profil: [], baromij: [], yaumiyan: [], rekrutmen: [], ib: [] };
 
         let currentUser = JSON.parse(localStorage.getItem('ISIM_USER_PROFILE')) || null;
         let qrCodeObj = null;
 
-        const lastSubmitTimes = { baromij: 0, yaumiyan: 0, ib: 0 };
+        const lastSubmitTimes = { baromij: 0, yaumiyan: 0, rekrutmen: 0, ib: 0 };
 
         document.addEventListener('DOMContentLoaded', () => {
             initYearOptions();
@@ -755,6 +813,7 @@
                 walashadir: form.walashadir.checked ? 'ya' : 'tidak', tilawah_hafalan: form.tilawah_hafalan.checked ? 'ya' : 'tidak',
                 kalam_naqib: form.kalam_naqib.checked ? 'ya' : 'tidak', tatsqif_usroh: form.tatsqif_usroh.checked ? 'ya' : 'tidak',
                 talimat: form.talimat.checked ? 'ya' : 'tidak', kelasoffline: form.kelasoffline.checked ? 'ya' : 'tidak',
+                rekrutmen_jamai: parseInt(form.rekrutmen_jamai.value) || 0,
                 keterangan: form.keterangan.value || '-'
             };
 
@@ -784,6 +843,24 @@
                 showAlert('Laporan Yaumiyan berhasil dikirim!', 'bg-emerald-100 text-emerald-800 border-emerald-300');
                 form.reset();
                 resetYaumiyanNumberButtons();
+                loadAllData(true);
+            });
+        }
+
+        function handleRekrutmenSubmit(e) {
+            e.preventDefault();
+            if (!checkUserRegistered()) return;
+            if (!checkSubmitCooldown('rekrutmen')) return;
+
+            const form = document.getElementById('formRekrutmen');
+            const data = {
+                id_sektor: currentUser.id_sektor, id_kelas: currentUser.id_kelas, id_anggota: currentUser.id_anggota,
+                jumlah_rekrutmen: parseInt(form.jumlah_rekrutmen.value) || 0
+            };
+
+            sendToGoogleSheet('saveRekrutmen', data, (res) => {
+                showAlert('Laporan Rekrutmen berhasil dikirim!', 'bg-emerald-100 text-emerald-800 border-emerald-300');
+                form.reset();
                 loadAllData(true);
             });
         }
@@ -895,13 +972,14 @@
             try {
                 const results = await Promise.all([
                     fetchSheet(SHEETS.profil), fetchSheet(SHEETS.baromij),
-                    fetchSheet(SHEETS.yaumiyan), fetchSheet(SHEETS.ib)
+                    fetchSheet(SHEETS.yaumiyan), fetchSheet(SHEETS.rekrutmen), fetchSheet(SHEETS.ib)
                 ]);
 
                 DATA.profil = results[0].filter(row => Object.values(row).some(v => clean(v)));
                 DATA.baromij = results[1].filter(row => Object.values(row).some(v => clean(v)));
                 DATA.yaumiyan = results[2].filter(row => Object.values(row).some(v => clean(v)));
-                DATA.ib = results[3].filter(row => Object.values(row).some(v => clean(v)));
+                DATA.rekrutmen = results[3].filter(row => Object.values(row).some(v => clean(v)));
+                DATA.ib = results[4].filter(row => Object.values(row).some(v => clean(v)));
 
                 setConnection("Terhubung · System Active", "success");
                 renderAll();
@@ -920,14 +998,14 @@
 
         function showGlobalError(error) {
             const msg = `<div class="error-box"><strong>Gagal memuat data.</strong><br>Detail: ${escapeHtml(error.message)}</div>`;
-            ["baromijStatusTable", "yaumiyanStatusTable", "ibStatusTable"].forEach(id => {
+            ["baromijStatusTable", "yaumiyanStatusTable", "rekrutmenStatusTable", "ibStatusTable"].forEach(id => {
                 const el = document.getElementById(id); if (el) el.innerHTML = msg;
             });
         }
 
         function showLoading() {
             const html = `<div class="loading"><div class="spinner"></div>Memuat data...</div>`;
-            ["baromijStatusTable", "yaumiyanStatusTable", "ibStatusTable"].forEach(id => {
+            ["baromijStatusTable", "yaumiyanStatusTable", "rekrutmenStatusTable", "ibStatusTable"].forEach(id => {
                 const el = document.getElementById(id); if (el) el.innerHTML = html;
             });
         }
@@ -1015,7 +1093,7 @@
         }
 
         /* =========================================================
-           RENDER ENGINES (AGENDA, YAUMIYAN, & IB)
+           RENDER ENGINES (AGENDA, YAUMIYAN, REKRUTMEN & IB)
         ========================================================= */
 
         /* 1. AGENDA KELAS RENDER */
@@ -1045,6 +1123,7 @@
                     tatsqif: findColumn(DATA.baromij, ["tatsqif_usroh"]),
                     talimat: findColumn(DATA.baromij, ["talimat"]),
                     offline: findColumn(DATA.baromij, ["kelasoffline"]),
+                    rekrutmen: findColumn(DATA.baromij, ["rekrutmen_jamai"]),
                     ket: columnInfo(DATA.baromij).keterangan
                 };
 
@@ -1059,6 +1138,7 @@
                     <th>Kultum</th>
                     <th>Pengumuman</th>
                     <th>Offline</th>
+                    <th>Rekrutmen Jama'i</th>
                     <th>Keterangan</th>
                 </tr></thead><tbody>`;
 
@@ -1078,6 +1158,7 @@
                         <td>${escapeHtml(r[cols.tatsqif] || '-')}</td>
                         <td>${escapeHtml(r[cols.talimat] || '-')}</td>
                         <td>${escapeHtml(r[cols.offline] || '-')}</td>
+                        <td><strong>${escapeHtml(r[cols.rekrutmen] ?? 0)}</strong></td>
                         <td class="keterangan">${escapeHtml(r[cols.ket] || '-')}</td>
                     </tr>`;
                 });
@@ -1191,7 +1272,61 @@
             renderChart("yaumiyanChart", metrics, Math.max(100, ...metrics.map(i => Number(i.value) || 0)));
         }
 
-        /* 3. LAPOR IB RENDER */
+        /* 3. REKRUTMEN RENDER */
+        function renderRekrutmen() {
+            const rows = getFilteredRowsByValidMembers(DATA.rekrutmen);
+            const statusTableEl = document.getElementById("rekrutmenStatusTable");
+            const statusCountEl = document.getElementById("rekrutmenStatusCount");
+
+            if (!currentUser || !currentUser.id_anggota) {
+                statusCountEl.textContent = "Profil Belum Diisi";
+                statusTableEl.innerHTML = `<div class="empty">Silakan isi Profil & ID Card terlebih dahulu.</div>`;
+                return;
+            }
+
+            if (!rows.length) {
+                statusCountEl.textContent = "0 Laporan Rekrutmen";
+                statusTableEl.innerHTML = `<div class="empty">Belum ada riwayat rekrutmen untuk ID Profil ini.</div>`;
+                return;
+            }
+
+            const sortedRows = sortByTimestampDesc(rows, DATA.rekrutmen);
+            
+            // Hitung akumulasi total rekrutmen dilaporkan
+            const colJml = findColumn(DATA.rekrutmen, ["jumlah_rekrutmen"]);
+            const totalAkumulasi = rows.reduce((acc, r) => acc + (parseInt(r[colJml]) || 0), 0);
+
+            statusCountEl.textContent = `Total Dilaporkan: ${totalAkumulasi} Orang (${sortedRows.length} Isian)`;
+
+            const cols = {
+                ts: columnInfo(DATA.rekrutmen).timestamp,
+                sektor: columnInfo(DATA.rekrutmen).idSektor,
+                kelas: columnInfo(DATA.rekrutmen).idKelas,
+                anggota: columnInfo(DATA.rekrutmen).idAnggota,
+                jumlah: colJml
+            };
+
+            let html = `<table><thead><tr><th>Waktu (Timestamp)</th><th>Proda</th><th>Kelas</th><th>ID Anggota</th><th>Jumlah Rekrutmen</th></tr></thead><tbody>`;
+
+            sortedRows.forEach(row => {
+                const rowSektor = cols.sektor ? clean(row[cols.sektor]) : currentUser.id_sektor;
+                const rowKelas = cols.kelas ? clean(row[cols.kelas]) : currentUser.id_kelas;
+                const rowAnggota = cols.anggota ? clean(row[cols.anggota]) : currentUser.id_anggota;
+                const jml = parseInt(row[cols.jumlah]) || 0;
+
+                html += `<tr>
+                    <td>${formatTimestamp(row[cols.ts])}</td>
+                    <td>${escapeHtml(rowSektor || '-')}</td>
+                    <td>${escapeHtml(rowKelas || '-')}</td>
+                    <td><strong>${escapeHtml(rowAnggota || '-')}</strong></td>
+                    <td><strong>${jml > 0 ? '+' + jml : jml}</strong></td>
+                </tr>`;
+            });
+
+            statusTableEl.innerHTML = html + `</tbody></table>`;
+        }
+
+        /* 4. LAPOR IB RENDER */
         const MONTHS = [{v:1,l:"Januari"},{v:2,l:"Februari"},{v:3,l:"Maret"},{v:4,l:"April"},{v:5,l:"Mei"},{v:6,l:"Juni"},{v:7,l:"Juli"},{v:8,l:"Agustus"},{v:9,l:"September"},{v:10,l:"Oktober"},{v:11,l:"November"},{v:12,l:"Desember"}];
         function normMonth(v) {
             const t = clean(v).toLowerCase();
@@ -1269,6 +1404,7 @@
         function renderAll() {
             renderBaromij();
             renderYaumiyan();
+            renderRekrutmen();
             renderIB();
         }
     </script>
