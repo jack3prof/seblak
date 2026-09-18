@@ -623,13 +623,23 @@
                     </button>
                 </form>
 
-                <!-- Tombol Kecil Bulat "id" di Pojok Kanan Bawah Card Rekrutmen -->
-				<button type="button"
-				  onclick="handleIdBtnClick()"
-				  title="Manajemen ID"
-				  class="fixed bottom-3 right-3 w-7 h-7 bg-teal-600 hover:bg-teal-700 active:scale-95 text-white rounded-full text-xs font-semibold lowercase flex items-center justify-center shadow transition-all duration-150 z-10">
-                    id
-                </button>
+                <!-- Container Tombol Melayang (Target & ID) di Pojok Kanan Bawah Card Rekrutmen -->
+                <div class="fixed bottom-3 right-3 flex flex-col gap-2 z-10 items-center">
+                    <!-- Tombol "target" di Atas -->
+                    <button type="button"
+                      onclick="handleTargetBtnClick()"
+                      title="Target Rekrutmen"
+                      class="w-7 h-7 bg-amber-600 hover:bg-amber-700 active:scale-95 text-white rounded-full text-[10px] font-semibold lowercase flex items-center justify-center shadow transition-all duration-150">
+                        target
+                    </button>
+                    <!-- Tombol "id" di Bawah -->
+                    <button type="button"
+                      onclick="handleIdBtnClick()"
+                      title="Manajemen ID"
+                      class="w-7 h-7 bg-teal-600 hover:bg-teal-700 active:scale-95 text-white rounded-full text-xs font-semibold lowercase flex items-center justify-center shadow transition-all duration-150">
+                        id
+                    </button>
+                </div>
             </div>
         </section>
 
@@ -734,6 +744,35 @@
         </div>
     </div>
 
+    <!-- MODAL DIALOG UNTUK FITUR TARGET REKRUTMEN -->
+    <div id="targetModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-[2000] hidden flex items-center justify-center p-4">
+        <div class="bg-white rounded-xl shadow-2xl max-w-md w-full overflow-hidden border border-slate-100 flex flex-col max-h-[90vh]">
+            <div class="bg-amber-600 text-white p-4 flex items-center justify-between">
+                <h3 class="font-bold text-base">🎯 Target Rekrutmen</h3>
+                <button onclick="closeTargetModal()" class="text-white hover:text-slate-200 text-xl font-bold leading-none">&times;</button>
+            </div>
+            
+            <div class="p-5 overflow-y-auto space-y-4 flex-1">
+                <div class="flex border-b border-slate-200">
+                    <button id="targetTabProda" onclick="switchTargetTab('proda')" class="flex-1 py-2 font-bold text-xs border-b-2 border-amber-600 text-amber-700">Target Proda</button>
+                    <button id="targetTabProca" onclick="switchTargetTab('proca')" class="flex-1 py-2 font-bold text-xs border-b-2 border-transparent text-slate-500">Target Proca</button>
+                </div>
+
+                <!-- DAFTAR TARGET PRODA -->
+                <div id="targetProdaList" class="space-y-2 max-h-60 overflow-y-auto"></div>
+
+                <!-- DAFTAR TARGET PROCA -->
+                <div id="targetProcaList" class="hidden space-y-2 max-h-60 overflow-y-auto"></div>
+            </div>
+
+            <div class="bg-slate-50 p-3 border-t text-right">
+                <button type="button" onclick="closeTargetModal()" class="text-xs bg-slate-500 hover:bg-slate-600 text-white font-bold py-1.5 px-3 rounded-lg">
+                    Tutup
+                </button>
+            </div>
+        </div>
+    </div>
+
     <footer class="footer">
         Seblak KBR Reporting System
     </footer>
@@ -745,8 +784,25 @@
         const CONFIG_API_URL = "https://script.google.com/macros/s/AKfycbzjHM6Gvv8Z_iMWcv4Yf84SmEOSIvgj3znG2aC7C4VTtQ0ty_yz3jiXJaAdVfbicLk/exec";
         const GOOGLE_SHEET_ID = "1rEycScG3ByhgymdLW9J8rMkjz5cBxPgYNlHMah86HXA";
 
-        const SHEETS = { profil: "Profil", baromij: "Baromij", yaumiyan: "Yaumiyan", rekrutmen: "Rekrutmen", ib: "IB", id: "id" };
-        const DATA = { profil: [], baromij: [], yaumiyan: [], rekrutmen: [], ib: [], id: [] };
+        const SHEETS = { profil: "Profil", baromij: "Baromij", yaumiyan: "Yaumiyan", rekrutmen: "Rekrutmen", ib: "IB", id: "id", targetrekrutmen: "targetrekrutmen" };
+        const DATA = { profil: [], baromij: [], yaumiyan: [], rekrutmen: [], ib: [], id: [], targetrekrutmen: [] };
+
+        // Data target default
+        let TARGET_DATA = {
+            proda: { "BK": 10, "KB": 10, "KH": 10, "KM": 20, "KP": 10, "KS": 10, "KT": 10, "KU": 10, "LD": 10, "MP": 10, "MW": 10, "SB": 10, "SG": 10, "SK": 10, "ST": 10 },
+            proca: { "UN": 5, "PP": 5, "PS": 5, "IA": 5, "YA": 5, "UP": 5, "PB": 5 }
+        };
+
+        // Clear local storage keys except ISIM_USER_PROFILE and ISIM_USER_PROFILE_PESERTA
+        function cleanupLocalStorage() {
+            const allowedKeys = ['ISIM_USER_PROFILE', 'ISIM_USER_PROFILE_PESERTA'];
+            Object.keys(localStorage).forEach(key => {
+                if (!allowedKeys.includes(key)) {
+                    localStorage.removeItem(key);
+                }
+            });
+        }
+        cleanupLocalStorage();
 
         let currentUser = JSON.parse(localStorage.getItem('ISIM_USER_PROFILE')) || null;
         let currentUserPeserta = JSON.parse(localStorage.getItem('ISIM_USER_PROFILE_PESERTA')) || null;
@@ -765,6 +821,36 @@
             handleProdaPesertaChange();
             loadAllData(false);
         });
+
+        /* =========================================================
+           FUNGSI PEMBANTU: MEMILIH PROFIL DENGAN LOGIKA ADVANCE
+        ========================================================= */
+        function getActiveProfileData() {
+            // Memeriksa apakah mode Advance sedang aktif (Tab Profil Inti tidak tersembunyi)
+            const isAdvanceActive = !document.getElementById('tabBtnProfileInti').classList.contains('hidden');
+
+            if (isAdvanceActive && currentUser) {
+                // SETELAH KLIK ADVANCE:
+                // Ambil data dari Tab Profil Inti
+                return {
+                    id_sektor: currentUser.id_sektor || '',
+                    proca_pj: currentUser.proca_pj || '',
+                    id_kelas: currentUser.id_kelas || '', // Menggunakan ID Kelas
+                    id_anggota: currentUser.id_anggota || ''
+                };
+            } else if (currentUserPeserta) {
+                // SEBELUM KLIK ADVANCE:
+                // Ambil data dari Tab Profil Peserta
+                return {
+                    id_sektor: currentUserPeserta.id_sektor || '',
+                    proca_pj: currentUserPeserta.proca_pj || '',
+                    id_kelas: currentUserPeserta.nama || '', // Menggunakan NAMA untuk id_kelas
+                    id_anggota: currentUserPeserta.id_anggota || ''
+                };
+            }
+
+            return null;
+        }
 
         /* LOGIKA TAMPILAN PROCA/PJ SAAT PRODA BERUBAH (PROFIL INTI) */
         function handleProdaChange() {
@@ -803,25 +889,120 @@
         /* =========================================================
            ADVANCE TAB TOGGLE LOGIC
         ========================================================= */
-		function handleAdvanceClick() {
-			const pwd = prompt("Masukkan password Advance:");
-			if (pwd === "kmkbr") {
-				// Tampilkan tab fitur Advance
-				document.getElementById('tabBtnProfileInti').classList.remove('hidden');
-				document.getElementById('tabBtnBaromij').classList.remove('hidden');
-				document.getElementById('tabBtnRekrutmen').classList.remove('hidden');
-				
-				// Sembunyikan tab Profil Peserta jika diinginkan:
-				document.getElementById('tabBtnProfilePeserta').classList.add('hidden');
-				
-				// Pindah tampilan aktif ke tab Profil Inti
-				switchMainTab('profileInti');
+        function handleAdvanceClick() {
+            const pwd = prompt("Masukkan password Advance:");
+            if (pwd === "kmkbr") {
+                // Tampilkan tab fitur Advance
+                document.getElementById('tabBtnProfileInti').classList.remove('hidden');
+                document.getElementById('tabBtnBaromij').classList.remove('hidden');
+                document.getElementById('tabBtnRekrutmen').classList.remove('hidden');
+                
+                // Sembunyikan tab Profil Peserta jika diinginkan:
+                document.getElementById('tabBtnProfilePeserta').classList.add('hidden');
+                
+                // Pindah tampilan aktif ke tab Profil Inti
+                switchMainTab('profileInti');
 
-				showAlert('Akses Advance diterima. Tab Profil Inti, Agenda Kelas & Rekrutmen berhasil ditampilkan!', 'bg-emerald-100 text-emerald-800 border-emerald-300');
-			} else if (pwd !== null) {
-				showAlert('Password salah!', 'bg-red-100 text-red-800 border-red-300');
-			}
-		}
+                showAlert('Akses Advance diterima. Tab Profil Inti, Agenda Kelas & Rekrutmen berhasil ditampilkan!', 'bg-emerald-100 text-emerald-800 border-emerald-300');
+            } else if (pwd !== null) {
+                showAlert('Password salah!', 'bg-red-100 text-red-800 border-red-300');
+            }
+        }
+
+        /* =========================================================
+           TARGET REKRUTMEN MODAL LOGIC
+        ========================================================= */
+        function handleTargetBtnClick() {
+            const pwd = prompt("Masukkan password Target:");
+            if (pwd === "adminkmkbr") {
+                renderTargetLists();
+                document.getElementById('targetModal').classList.remove('hidden');
+            } else if (pwd !== null) {
+                showAlert('Password Target salah!', 'bg-red-100 text-red-800 border-red-300');
+            }
+        }
+
+        function closeTargetModal() {
+            document.getElementById('targetModal').classList.add('hidden');
+        }
+
+        function switchTargetTab(type) {
+            const tabProda = document.getElementById('targetTabProda');
+            const tabProca = document.getElementById('targetTabProca');
+            const listProda = document.getElementById('targetProdaList');
+            const listProca = document.getElementById('targetProcaList');
+
+            if (type === 'proda') {
+                tabProda.className = "flex-1 py-2 font-bold text-xs border-b-2 border-amber-600 text-amber-700";
+                tabProca.className = "flex-1 py-2 font-bold text-xs border-b-2 border-transparent text-slate-500";
+                listProda.classList.remove('hidden');
+                listProca.classList.add('hidden');
+            } else {
+                tabProca.className = "flex-1 py-2 font-bold text-xs border-b-2 border-amber-600 text-amber-700";
+                tabProda.className = "flex-1 py-2 font-bold text-xs border-b-2 border-transparent text-slate-500";
+                listProca.classList.remove('hidden');
+                listProda.classList.add('hidden');
+            }
+        }
+
+        function renderTargetLists() {
+            const listProda = document.getElementById('targetProdaList');
+            const listProca = document.getElementById('targetProcaList');
+
+            listProda.innerHTML = '';
+            listProca.innerHTML = '';
+
+            Object.keys(TARGET_DATA.proda).forEach(key => {
+                const val = TARGET_DATA.proda[key];
+                const div = document.createElement('div');
+                div.className = "flex justify-between items-center p-2.5 bg-slate-50 rounded-lg border text-xs";
+                div.innerHTML = `
+                    <span class="font-bold text-slate-700">Proda ${key}</span>
+                    <div class="flex items-center gap-2">
+                        <span class="font-mono font-bold text-teal-800">${val}</span>
+                        <button type="button" onclick="ubahTarget('proda', '${key}')" class="px-2 py-1 bg-amber-600 hover:bg-amber-700 text-white rounded text-[10px] font-bold">Ubah</button>
+                    </div>
+                `;
+                listProda.appendChild(div);
+            });
+
+            Object.keys(TARGET_DATA.proca).forEach(key => {
+                const val = TARGET_DATA.proca[key];
+                const div = document.createElement('div');
+                div.className = "flex justify-between items-center p-2.5 bg-slate-50 rounded-lg border text-xs";
+                div.innerHTML = `
+                    <span class="font-bold text-slate-700">Proca ${key}</span>
+                    <div class="flex items-center gap-2">
+                        <span class="font-mono font-bold text-teal-800">${val}</span>
+                        <button type="button" onclick="ubahTarget('proca', '${key}')" class="px-2 py-1 bg-amber-600 hover:bg-amber-700 text-white rounded text-[10px] font-bold">Ubah</button>
+                    </div>
+                `;
+                listProca.appendChild(div);
+            });
+        }
+
+        function ubahTarget(type, key) {
+            const currentVal = TARGET_DATA[type][key];
+            const newVal = prompt(`Masukkan angka target baru untuk ${type.toUpperCase()} ${key}:`, currentVal);
+            if (newVal !== null) {
+                const parsed = parseInt(newVal);
+                if (!isNaN(parsed) && parsed >= 0) {
+                    TARGET_DATA[type][key] = parsed;
+                    renderTargetLists();
+                    sendToGoogleSheet('saveTarget', { 
+                        sheetName: SHEETS.targetrekrutmen, 
+                        type: type, 
+                        key: key, 
+                        value: parsed 
+                    }, (res) => {
+                        showAlert(`Target ${type.toUpperCase()} ${key} berhasil disimpan ke sheet ${SHEETS.targetrekrutmen}!`, 'bg-emerald-100 text-emerald-800 border-emerald-300');
+                    });
+                } else {
+                    alert("Masukkan angka target yang valid!");
+                }
+            }
+        }
+
         /* =========================================================
            MANAJEMEN ID & MODAL LOGIC (TAB REKRUTMEN)
         ========================================================= */
@@ -884,15 +1065,15 @@
                 } else {
                     inisial = w.padEnd(3, 'X');
                 }
-			} else if (words.length === 2) {
-				const w1 = words[0];
-				const w2 = words[1];
+            } else if (words.length === 2) {
+                const w1 = words[0];
+                const w2 = words[1];
 
-				if (w1.length === 1) {
-					inisial = w1 + w2.substring(0, 2);
-				} else {
-					inisial = w1.substring(0, 2) + w2.substring(0, 1);
-				}
+                if (w1.length === 1) {
+                    inisial = w1 + w2.substring(0, 2);
+                } else {
+                    inisial = w1.substring(0, 2) + w2.substring(0, 1);
+                }
             } else {
                 inisial = words[0][0] + words[1][0] + words[2][0];
             }
@@ -1230,6 +1411,7 @@
                 id_sektor: idSektor,
                 proca_pj: procaPj,
                 nama: namaPeserta,
+                id_kelas: namaPeserta,
                 id_anggota: idAnggota
             };
 
@@ -1298,7 +1480,7 @@
             if (!checkUserRegistered()) return;
             if (!checkSubmitCooldown('baromij')) return;
 
-            const activeUser = currentUser || currentUserPeserta;
+            const activeUser = getActiveProfileData();
 
             const form = document.getElementById('formBaromij');
             const data = {
@@ -1317,20 +1499,35 @@
             });
         }
 
+        /* =========================================================
+           HANDLING SUBMIT YAUMIYAN (DIPERBAIKI)
+        ========================================================= */
         function handleYaumiyanSubmit(e) {
             e.preventDefault();
             if (!checkUserRegistered()) return;
             if (!checkSubmitCooldown('yaumiyan')) return;
 
-            const activeUser = currentUser || currentUserPeserta;
+            // Mengambil profil sesuai status Advance
+            const activeUser = getActiveProfileData();
+
+            if (!activeUser) {
+                showAlert('Data profil belum lengkap!', 'bg-amber-100 text-amber-800 border-amber-300');
+                return;
+            }
 
             const form = document.getElementById('formYaumiyan');
             const data = {
-                id_sektor: activeUser.id_sektor, proca_pj: activeUser.proca_pj || '', id_kelas: activeUser.id_kelas || '', id_anggota: activeUser.id_anggota,
+                id_sektor: activeUser.id_sektor,
+                proca_pj: activeUser.proca_pj,
+                id_kelas: activeUser.id_kelas, // Terisi NAMA (Sebelum Advance) atau ID_KELAS (Setelah Advance)
+                id_anggota: activeUser.id_anggota,
                 kehadiran_kelas: form.kehadiran_kelas.checked ? 'ya' : 'tidak',
-                sholat_jamaah: form.sholat_jamaah.value || 0, qiyamul_lail: form.qiyamul_lail.value || 0,
-                tilawah: form.tilawah.value || 0, shoum_sunnah: form.shoum_sunnah.value || 0,
-                olah_raga: form.olah_raga.value || 0, al_matsurot: form.al_matsurot.value || 0,
+                sholat_jamaah: form.sholat_jamaah.value || 0,
+                qiyamul_lail: form.qiyamul_lail.value || 0,
+                tilawah: form.tilawah.value || 0,
+                shoum_sunnah: form.shoum_sunnah.value || 0,
+                olah_raga: form.olah_raga.value || 0,
+                al_matsurot: form.al_matsurot.value || 0,
                 keterangan: form.keterangan.value || '-'
             };
 
@@ -1347,7 +1544,7 @@
             if (!checkUserRegistered()) return;
             if (!checkSubmitCooldown('rekrutmen')) return;
 
-            const activeUser = currentUser || currentUserPeserta;
+            const activeUser = getActiveProfileData();
 
             const form = document.getElementById('formRekrutmen');
             const data = {
@@ -1362,16 +1559,29 @@
             });
         }
 
+        /* =========================================================
+           HANDLING SUBMIT LAPOR IB (DIPERBAIKI)
+        ========================================================= */
         function handleIbSubmit(e) {
             e.preventDefault();
             if (!checkUserRegistered()) return;
             if (!checkSubmitCooldown('ib')) return;
 
-            const activeUser = currentUser || currentUserPeserta;
+            // Mengambil profil sesuai status Advance
+            const activeUser = getActiveProfileData();
+
+            if (!activeUser) {
+                showAlert('Data profil belum lengkap!', 'bg-amber-100 text-amber-800 border-amber-300');
+                return;
+            }
 
             const data = {
-                id_sektor: activeUser.id_sektor, proca_pj: activeUser.proca_pj || '', id_kelas: activeUser.id_kelas || '', id_anggota: activeUser.id_anggota,
-                bulan: document.getElementById('ibBulan').value, tahun: document.getElementById('ibTahun').value
+                id_sektor: activeUser.id_sektor,
+                proca_pj: activeUser.proca_pj,
+                id_kelas: activeUser.id_kelas, // Terisi NAMA (Sebelum Advance) atau ID_KELAS (Setelah Advance)
+                id_anggota: activeUser.id_anggota,
+                bulan: document.getElementById('ibBulan').value,
+                tahun: document.getElementById('ibTahun').value
             };
 
             sendToGoogleSheet('saveIb', data, (res) => {
@@ -1380,11 +1590,20 @@
             });
         }
 
+        /* =========================================================
+           PENYESUAIAN CEK REGISTRASI USER (DIPERBAIKI)
+        ========================================================= */
         function checkUserRegistered() {
-            const activeUser = currentUser || currentUserPeserta;
+            const activeUser = getActiveProfileData();
             if (!activeUser || !activeUser.id_anggota || !activeUser.id_sektor) {
                 showAlert('Silakan mendaftarkan ID Profil Anda secara lengkap terlebih dahulu!', 'bg-amber-100 text-amber-800 border-amber-300');
-                switchMainTab('profilePeserta');
+                
+                const isAdvanceActive = !document.getElementById('tabBtnProfileInti').classList.contains('hidden');
+                if (isAdvanceActive) {
+                    switchMainTab('profileInti');
+                } else {
+                    switchMainTab('profilePeserta');
+                }
                 return false;
             }
             return true;
@@ -1516,11 +1735,11 @@
            FILTER ENGINE (TRIPLE KEY MATCH: SEKTOR + KELAS + ANGGOTA)
         ========================================================= */
         function getFilteredRowsByValidMembers(sheetData) {
-            const activeUser = currentUser || currentUserPeserta;
+            const activeUser = getActiveProfileData();
             if (!activeUser || !activeUser.id_anggota) return [];
 
             const activeSektor = clean(activeUser.id_sektor).toUpperCase();
-            const activeKelas = clean(activeUser.id_kelas || '').toUpperCase();
+            const activeKelas = clean(activeUser.id_kelas).toUpperCase();
             const activeAnggota = clean(activeUser.id_anggota).toUpperCase();
 
             const cols = columnInfo(sheetData);
@@ -1601,7 +1820,7 @@
 
         /* 1. AGENDA KELAS RENDER */
         function renderBaromij() {
-            const activeUser = currentUser || currentUserPeserta;
+            const activeUser = getActiveProfileData();
             const rows = getFilteredRowsByValidMembers(DATA.baromij);
             const statusCountEl = document.getElementById("baromijStatusCount");
             const statusTableEl = document.getElementById("baromijStatusTable");
@@ -1648,7 +1867,7 @@
 
                 sortedRows.forEach(r => {
                     const rSektor = cols.sektor ? clean(r[cols.sektor]) : activeUser.id_sektor;
-                    const rKelas = cols.kelas ? clean(r[cols.kelas]) : (activeUser.id_kelas || '-');
+                    const rKelas = cols.kelas ? clean(r[cols.kelas]) : activeUser.id_kelas;
                     const rAnggota = cols.anggota ? clean(r[cols.anggota]) : activeUser.id_anggota;
 
                     html += `<tr>
@@ -1688,7 +1907,7 @@
 
         /* 2. YAUMIYAN RENDER */
         function renderYaumiyan() {
-            const activeUser = currentUser || currentUserPeserta;
+            const activeUser = getActiveProfileData();
             const rows = getFilteredRowsByValidMembers(DATA.yaumiyan);
             const statusCountEl = document.getElementById("yaumiyanStatusCount");
             const statusTableEl = document.getElementById("yaumiyanStatusTable");
@@ -1705,8 +1924,6 @@
 
                 const cols = {
                     ts: columnInfo(DATA.yaumiyan).timestamp,
-                    sektor: columnInfo(DATA.yaumiyan).idSektor,
-                    kelas: columnInfo(DATA.yaumiyan).idKelas,
                     anggota: columnInfo(DATA.yaumiyan).idAnggota,
                     kehadiran: findColumn(DATA.yaumiyan, ["kehadiran_kelas"]),
                     sholat: findColumn(DATA.yaumiyan, ["sholat_jamaah"]),
@@ -1720,8 +1937,6 @@
 
                 let html = `<table><thead><tr>
                     <th>Waktu (Timestamp)</th>
-                    <th>Proda</th>
-                    <th>Kelas</th>
                     <th>ID Anggota</th>
                     <th>Hadir Kelas</th>
                     <th>Sholat Jamaah</th>
@@ -1734,14 +1949,10 @@
                 </tr></thead><tbody>`;
 
                 sortedRows.forEach(r => {
-                    const rSektor = cols.sektor ? clean(r[cols.sektor]) : activeUser.id_sektor;
-                    const rKelas = cols.kelas ? clean(r[cols.kelas]) : (activeUser.id_kelas || '-');
                     const rAnggota = cols.anggota ? clean(r[cols.anggota]) : activeUser.id_anggota;
 
                     html += `<tr>
                         <td>${formatTimestamp(r[cols.ts])}</td>
-                        <td>${escapeHtml(rSektor || '-')}</td>
-                        <td>${escapeHtml(rKelas || '-')}</td>
                         <td><strong>${escapeHtml(rAnggota || '-')}</strong></td>
                         <td>${escapeHtml(r[cols.kehadiran] || '-')}</td>
                         <td>${escapeHtml(r[cols.sholat] ?? '-')}</td>
@@ -1779,7 +1990,7 @@
 
         /* 3. REKRUTMEN RENDER */
         function renderRekrutmen() {
-            const activeUser = currentUser || currentUserPeserta;
+            const activeUser = getActiveProfileData();
             const rows = getFilteredRowsByValidMembers(DATA.rekrutmen);
             const statusTableEl = document.getElementById("rekrutmenStatusTable");
             const statusCountEl = document.getElementById("rekrutmenStatusCount");
@@ -1792,62 +2003,48 @@
 
             if (!rows.length) {
                 statusCountEl.textContent = "0 Laporan Rekrutmen";
-                statusTableEl.innerHTML = `<div class="empty">Belum ada riwayat rekrutmen untuk ID Profil ini.</div>`;
-                return;
+                statusTableEl.innerHTML = `<div class="empty">Belum ada riwayat isian Rekrutmen untuk ID Profil ini.</div>`;
+            } else {
+                const sortedRows = sortByTimestampDesc(rows, DATA.rekrutmen);
+                statusCountEl.textContent = `${sortedRows.length} Total Isian`;
+
+                const cols = {
+                    ts: columnInfo(DATA.rekrutmen).timestamp,
+                    sektor: columnInfo(DATA.rekrutmen).idSektor,
+                    kelas: columnInfo(DATA.rekrutmen).idKelas,
+                    anggota: columnInfo(DATA.rekrutmen).idAnggota,
+                    jumlah: findColumn(DATA.rekrutmen, ["jumlah_rekrutmen", "jumlah"])
+                };
+
+                let html = `<table><thead><tr>
+                    <th>Waktu (Timestamp)</th>
+                    <th>Proda</th>
+                    <th>Kelas</th>
+                    <th>ID Anggota</th>
+                    <th>Jumlah Rekrutmen</th>
+                </tr></thead><tbody>`;
+
+                sortedRows.forEach(r => {
+                    const rSektor = cols.sektor ? clean(r[cols.sektor]) : activeUser.id_sektor;
+                    const rKelas = cols.kelas ? clean(r[cols.kelas]) : activeUser.id_kelas;
+                    const rAnggota = cols.anggota ? clean(r[cols.anggota]) : activeUser.id_anggota;
+
+                    html += `<tr>
+                        <td>${formatTimestamp(r[cols.ts])}</td>
+                        <td>${escapeHtml(rSektor || '-')}</td>
+                        <td>${escapeHtml(rKelas || '-')}</td>
+                        <td><strong>${escapeHtml(rAnggota || '-')}</strong></td>
+                        <td><strong>${escapeHtml(r[cols.jumlah] ?? 0)}</strong></td>
+                    </tr>`;
+                });
+
+                statusTableEl.innerHTML = html + `</tbody></table>`;
             }
-
-            const sortedRows = sortByTimestampDesc(rows, DATA.rekrutmen);
-            
-            const colJml = findColumn(DATA.rekrutmen, ["jumlah_rekrutmen"]);
-            const totalAkumulasi = rows.reduce((acc, r) => acc + (parseInt(r[colJml]) || 0), 0);
-
-            statusCountEl.textContent = `Total Dilaporkan: ${totalAkumulasi} Orang (${sortedRows.length} Isian)`;
-
-            const cols = {
-                ts: columnInfo(DATA.rekrutmen).timestamp,
-                sektor: columnInfo(DATA.rekrutmen).idSektor,
-                kelas: columnInfo(DATA.rekrutmen).idKelas,
-                anggota: columnInfo(DATA.rekrutmen).idAnggota,
-                jumlah: colJml
-            };
-
-            let html = `<table><thead><tr><th>Waktu (Timestamp)</th><th>Proda</th><th>Kelas</th><th>ID Anggota</th><th>Jumlah Rekrutmen</th></tr></thead><tbody>`;
-
-            sortedRows.forEach(row => {
-                const rowSektor = cols.sektor ? clean(row[cols.sektor]) : activeUser.id_sektor;
-                const rowKelas = cols.kelas ? clean(row[cols.kelas]) : (activeUser.id_kelas || '-');
-                const rowAnggota = cols.anggota ? clean(row[cols.anggota]) : activeUser.id_anggota;
-                const jml = parseInt(row[cols.jumlah]) || 0;
-
-                html += `<tr>
-                    <td>${formatTimestamp(row[cols.ts])}</td>
-                    <td>${escapeHtml(rowSektor || '-')}</td>
-                    <td>${escapeHtml(rowKelas || '-')}</td>
-                    <td><strong>${escapeHtml(rowAnggota || '-')}</strong></td>
-                    <td><strong>${jml > 0 ? '+' + jml : jml}</strong></td>
-                </tr>`;
-            });
-
-            statusTableEl.innerHTML = html + `</tbody></table>`;
         }
 
-        /* 4. LAPOR IB RENDER */
-        const MONTHS = [{v:1,l:"Januari"},{v:2,l:"Februari"},{v:3,l:"Maret"},{v:4,l:"April"},{v:5,l:"Mei"},{v:6,l:"Juni"},{v:7,l:"Juli"},{v:8,l:"Agustus"},{v:9,l:"September"},{v:10,l:"Oktober"},{v:11,l:"November"},{v:12,l:"Desember"}];
-        function normMonth(v) {
-            const t = clean(v).toLowerCase();
-            if (!t) return 0;
-            const n = Number(t);
-            if (n >= 1 && n <= 12) return n;
-            const f = MONTHS.find(m => m.l.toLowerCase() === t);
-            return f ? f.v : 0;
-        }
-        function normYear(v) {
-            const n = Number(clean(v));
-            return !Number.isFinite(n) ? 0 : (n < 100 ? 2000 + n : n);
-        }
-
-        function renderIB() {
-            const activeUser = currentUser || currentUserPeserta;
+        /* 4. IB RENDER */
+        function renderIb() {
+            const activeUser = getActiveProfileData();
             const rows = getFilteredRowsByValidMembers(DATA.ib);
             const statusTableEl = document.getElementById("ibStatusTable");
             const statusCountEl = document.getElementById("ibStatusCount");
@@ -1859,59 +2056,56 @@
             }
 
             if (!rows.length) {
-                statusCountEl.textContent = "0 Laporan IB";
-                statusTableEl.innerHTML = `<div class="empty">Belum ada riwayat setoran IB untuk ID Profil ini.</div>`;
-                return;
+                statusCountEl.textContent = "0 Lapor IB";
+                statusTableEl.innerHTML = `<div class="empty">Belum ada riwayat Lapor IB untuk ID Profil ini.</div>`;
+            } else {
+                const sortedRows = sortByTimestampDesc(rows, DATA.ib);
+                statusCountEl.textContent = `${sortedRows.length} Setoran IB`;
+
+                const cols = {
+                    ts: columnInfo(DATA.ib).timestamp,
+                    sektor: columnInfo(DATA.ib).idSektor,
+                    kelas: columnInfo(DATA.ib).idKelas,
+                    anggota: columnInfo(DATA.ib).idAnggota,
+                    bulan: findColumn(DATA.ib, ["bulan"]),
+                    tahun: findColumn(DATA.ib, ["tahun"])
+                };
+
+                let html = `<table><thead><tr>
+                    <th>Waktu (Timestamp)</th>
+                    <th>Proda</th>
+                    <th>Kelas</th>
+                    <th>ID Anggota</th>
+                    <th>Bulan / Tahun</th>
+                    <th>Status</th>
+                </tr></thead><tbody>`;
+
+                sortedRows.forEach(r => {
+                    const rSektor = cols.sektor ? clean(r[cols.sektor]) : activeUser.id_sektor;
+                    const rKelas = cols.kelas ? clean(r[cols.kelas]) : activeUser.id_kelas;
+                    const rAnggota = cols.anggota ? clean(r[cols.anggota]) : activeUser.id_anggota;
+                    const bln = cols.bulan ? clean(r[cols.bulan]) : '-';
+                    const thn = cols.tahun ? clean(r[cols.tahun]) : '-';
+
+                    html += `<tr>
+                        <td>${formatTimestamp(r[cols.ts])}</td>
+                        <td>${escapeHtml(rSektor || '-')}</td>
+                        <td>${escapeHtml(rKelas || '-')}</td>
+                        <td><strong>${escapeHtml(rAnggota || '-')}</strong></td>
+                        <td><strong>${escapeHtml(bln)} / 20${escapeHtml(thn)}</strong></td>
+                        <td><span class="badge badge-success">Lunas / Terlaporkan</span></td>
+                    </tr>`;
+                });
+
+                statusTableEl.innerHTML = html + `</tbody></table>`;
             }
-
-            const cols = columnInfo(DATA.ib);
-            const mCol = findColumn(DATA.ib, ["bulan"]);
-            const yCol = findColumn(DATA.ib, ["tahun"]);
-
-            const sortedRows = [...rows].sort((a, b) => {
-                const yA = normYear(a[yCol]); const yB = normYear(b[yCol]);
-                if (yA !== yB) return yB - yA;
-
-                const mA = normMonth(a[mCol]); const mB = normMonth(b[mCol]);
-                if (mA !== mB) return mB - mA;
-
-                const tsA = cols.timestamp ? parseTimestampToMs(a[cols.timestamp]) : 0;
-                const tsB = cols.timestamp ? parseTimestampToMs(b[cols.timestamp]) : 0;
-                return tsB - tsA;
-            });
-
-            statusCountEl.textContent = `${sortedRows.length} Total Laporan`;
-
-            let html = `<table><thead><tr><th>Waktu (Timestamp)</th><th>Proda</th><th>Kelas</th><th>ID Anggota</th><th>Bulan/Tahun</th><th>Status IB</th></tr></thead><tbody>`;
-            
-            sortedRows.forEach(row => {
-                const blnVal = normMonth(row[mCol]);
-                const thnVal = normYear(row[yCol]);
-                const displayPeriode = (blnVal && thnVal) ? `${String(blnVal).padStart(2, '0')}/${thnVal}` : `${clean(row[mCol])}/${clean(row[yCol])}`;
-
-                const rowSektor = cols.idSektor ? clean(row[cols.idSektor]) : activeUser.id_sektor;
-                const rowKelas = cols.idKelas ? clean(row[cols.idKelas]) : (activeUser.id_kelas || '-');
-                const rowAnggota = cols.idAnggota ? clean(row[cols.idAnggota]) : activeUser.id_anggota;
-
-                html += `<tr>
-                    <td>${formatTimestamp(row[cols.timestamp])}</td>
-                    <td>${escapeHtml(rowSektor || '-')}</td>
-                    <td>${escapeHtml(rowKelas || '-')}</td>
-                    <td><strong>${escapeHtml(rowAnggota || '-')}</strong></td>
-                    <td><strong>${escapeHtml(displayPeriode)}</strong></td>
-                    <td><span class="badge badge-success">✓ Lunas / Setor</span></td>
-                </tr>`;
-            });
-
-            statusTableEl.innerHTML = html + `</tbody></table>`;
         }
 
-        /* MASTER RENDER */
         function renderAll() {
             renderBaromij();
             renderYaumiyan();
             renderRekrutmen();
-            renderIB();
+            renderIb();
         }
     </script>
 </body>
