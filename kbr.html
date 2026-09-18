@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Seblak KBR</title>
 
-    
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
     
@@ -44,7 +43,7 @@
         .header-row { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
         .title { margin: 0; font-size: 22px; font-weight: 800; letter-spacing: -.4px; }
         .subtitle { margin: 2px 0 0; font-size: 11px; opacity: .86; }
-        .refresh-btn {
+        .refresh-btn, .advance-btn {
             border: 1px solid rgba(255,255,255,.3);
             background: rgba(255,255,255,.14);
             color: white;
@@ -54,8 +53,8 @@
             font-weight: 700;
             transition: all 0.2s;
         }
-        .refresh-btn:hover { background: rgba(255,255,255,.25); }
-        .refresh-btn:active { transform: scale(.97); }
+        .refresh-btn:hover, .advance-btn:hover { background: rgba(255,255,255,.25); }
+        .refresh-btn:active, .advance-btn:active { transform: scale(.97); }
         .connection {
             display: inline-flex;
             align-items: center;
@@ -76,7 +75,7 @@
         .container { max-width: 1200px; margin: auto; padding: 12px; }
         .tabs {
             display: grid;
-            grid-template-columns: repeat(5, 1fr);
+            grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
             gap: 4px;
             background: white;
             padding: 4px;
@@ -120,6 +119,7 @@
             margin-bottom: 16px;
             box-shadow: 0 3px 15px rgba(15,23,42,.055);
             border: 1px solid #e2e8f0;
+            position: relative;
         }
         .card-title { margin: 0; font-size: 16px; font-weight: 800; color: #0f172a; }
         .card-subtitle { color: #64748b; font-size: 11px; margin: 4px 0 14px; line-height: 1.45; }
@@ -208,8 +208,9 @@
                     <h1 class="title">Seblak KBR</h1>
                     <p class="subtitle">Sistem Input & Laporan Mutaba'ah Integrated</p>
                 </div>
-                <div class="flex items-center gap-2">
+                <div class="flex flex-col sm:flex-row items-end sm:items-center gap-2">
                     <button class="refresh-btn" onclick="loadAllData(true)">↻ Refresh</button>
+                    <button id="btnAdvance" class="advance-btn" onclick="handleAdvanceClick()">⚡ Advance</button>
                 </div>
             </div>
             <div id="connection" class="connection">
@@ -227,16 +228,21 @@
 
         <!-- TAB NAVIGATION -->
         <nav class="tabs">
-            <button class="tab-btn active" onclick="switchMainTab('profile')">
-                <span>🆔</span> <span>Profil</span>
+            <!-- TAB PROFIL PESERTA (DEFAULT AKTIF SAAT PERTAMA KALI DIBUKA) -->
+            <button id="tabBtnProfilePeserta" class="tab-btn active" onclick="switchMainTab('profilePeserta')">
+                <span>🎓</span> <span>Profil Peserta</span>
             </button>
-            <button class="tab-btn" onclick="switchMainTab('baromij')">
+            <!-- TAB PROFIL INTI (DISEMBUNYIKAN TERLEBIH DAHULU) -->
+            <button id="tabBtnProfileInti" class="tab-btn hidden" onclick="switchMainTab('profileInti')">
+                <span>🆔</span> <span>Profil Inti</span>
+            </button>
+            <button id="tabBtnBaromij" class="tab-btn hidden" onclick="switchMainTab('baromij')">
                 <span>📋</span> <span>Agenda Kelas</span>
             </button>
             <button class="tab-btn" onclick="switchMainTab('yaumiyan')">
                 <span>📊</span> <span>Yaumiyan</span>
             </button>
-            <button class="tab-btn" onclick="switchMainTab('rekrutmen')">
+            <button id="tabBtnRekrutmen" class="tab-btn hidden" onclick="switchMainTab('rekrutmen')">
                 <span>👥</span> <span>Rekrutmen</span>
             </button>
             <button class="tab-btn" onclick="switchMainTab('ib')">
@@ -245,26 +251,113 @@
         </nav>
 
         <!-- =========================================================
-             TAB 1: PROFIL & MYID
+             TAB PROFIL PESERTA
         ========================================================= -->
-        <section id="sec-profile" class="panel active">
+        <section id="sec-profilePeserta" class="panel active">
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <!-- FORM EDIT PROFIL -->
+                <!-- FORM EDIT PROFIL PESERTA -->
                 <div class="card mb-0">
-                    <h2 class="card-title mb-1">📝 Edit Profil Anggota</h2>
-                    <p class="card-subtitle">Isi atau perbarui data identitas diri Anda</p>
-                    <form id="formProfile" onsubmit="handleProfileSubmit(event)" class="space-y-4">
+                    <h2 class="card-title mb-1">📝 Profil Peserta</h2>
+                    <p class="card-subtitle">Isi atau perbarui data identitas diri Peserta</p>
+                    <form id="formProfilePeserta" onsubmit="handleProfilePesertaSubmit(event)" class="space-y-4">
                         <div>
-                            <label class="block text-xs font-bold text-slate-600 mb-1">Proda *</label>
-                            <select id="regSektor" required class="w-full p-2.5 border rounded-lg focus:ring-2 focus:ring-teal-600 text-sm">
+                            <label class="block text-xs font-bold text-slate-600 mb-1">Daerah *</label>
+                            <select id="regSektorPeserta" required onchange="handleProdaPesertaChange()" class="w-full p-2.5 border rounded-lg focus:ring-2 focus:ring-teal-600 text-sm">
                                 <option value="BK">BK</option><option value="KB">KB</option>
-                                <option value="KH">KH</option><option value="KM">KM</option>
-                                <option value="KP" selected>KP</option><option value="KS">KS</option>
+                                <option value="KH">KH</option><option value="KM" selected>KM</option>
+                                <option value="KP">KP</option><option value="KS">KS</option>
                                 <option value="KT">KT</option><option value="KU">KU</option>
                                 <option value="LD">LD</option><option value="MP">MP</option>
                                 <option value="MW">MW</option><option value="SB">SB</option>
                                 <option value="SG">SG</option><option value="SK">SK</option>
                                 <option value="ST">ST</option>
+                            </select>
+                        </div>
+
+                        <!-- ISIAN KAMPUS -->
+                        <div>
+                            <label class="block text-xs font-bold text-slate-600 mb-1">Kampus *</label>
+                            <select id="regProcaPjPeserta" disabled class="w-full p-2.5 border rounded-lg focus:ring-2 focus:ring-teal-600 text-sm bg-slate-100 cursor-not-allowed">
+                                <option value="">-- Pilih Kampus --</option>
+                                <option value="UN">UNTAN (UN)</option>
+                                <option value="PP">POLNEP (PP)</option>
+                                <option value="PS">POLTEKKES (PS)</option>
+                                <option value="IA">IAIN (IA)</option>
+                                <option value="YA">YARSI (YA)</option>
+                                <option value="UP">UPGRI (UP)</option>
+                                <option value="PB">PANCA BHAKTI (PB)</option>
+                            </select>
+                        </div>
+
+                        <!-- ISIAN NAMA LANGSUNG -->
+                        <div>
+                            <label class="block text-xs font-bold text-slate-600 mb-1">Nama *</label>
+                            <input type="text" id="regNamaPeserta" required placeholder="Masukkan Nama Lengkap Peserta" class="w-full p-2.5 border rounded-lg focus:ring-2 focus:ring-teal-600 text-sm">
+                        </div>
+
+                        <div>
+                            <label class="block text-xs font-bold text-slate-600 mb-1">ID Peserta (Contoh: WAC01) *<br>Bila belum tahu, tanya ke pembina</label>
+                            <input type="text" id="regIdAnggotaPeserta" required pattern="^[A-Za-z]{3}\d{2}$" title="Format harus 3 huruf diikuti 2 angka (contoh: WAC01)" placeholder="WAC01" oninput="this.value = this.value.toUpperCase()" class="w-full p-2.5 border rounded-lg uppercase focus:ring-2 focus:ring-teal-600 text-sm font-mono font-bold">
+                        </div>
+
+                        <button type="submit" class="w-full bg-teal-700 hover:bg-teal-800 text-white font-medium py-2.5 rounded-lg transition shadow-sm">
+                            Simpan Profil Peserta
+                        </button>
+                    </form>
+                </div>
+
+                <!-- MYID / QR CODE PESERTA -->
+                <div class="card mb-0 flex flex-col items-center justify-center text-center">
+                    <h2 class="card-title mb-1">🎓 Kartu Digital Peserta</h2>
+                    <p class="card-subtitle">Perlihatkan QR Code ini bila diminta pada acara offline</p>
+
+                    <div id="qrcodePeserta" class="p-4 bg-white border-2 border-dashed border-slate-300 rounded-xl mb-3 min-h-[180px] min-w-[180px] flex items-center justify-center">
+                        <span class="text-slate-400 text-sm">Data profil peserta belum diisi</span>
+                    </div>
+
+                    <div id="qrTextDetailPeserta" class="font-mono font-bold text-slate-800 text-base tracking-wide bg-slate-100 py-1.5 px-4 rounded-md border border-slate-200">
+                        -
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- =========================================================
+             TAB 1: PROFIL & MYID INTI
+        ========================================================= -->
+        <section id="sec-profileInti" class="panel">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <!-- FORM EDIT PROFIL -->
+                <div class="card mb-0">
+                    <h2 class="card-title mb-1">📝 Profil Anggota Inti</h2>
+                    <p class="card-subtitle">Isi atau perbarui data identitas diri Anda</p>
+                    <form id="formProfile" onsubmit="handleProfileSubmit(event)" class="space-y-4">
+                        <div>
+                            <label class="block text-xs font-bold text-slate-600 mb-1">Proda *</label>
+                            <select id="regSektor" required onchange="handleProdaChange()" class="w-full p-2.5 border rounded-lg focus:ring-2 focus:ring-teal-600 text-sm">
+                                <option value="BK">BK</option><option value="KB">KB</option>
+                                <option value="KH">KH</option><option value="KM" selected>KM</option>
+                                <option value="KP">KP</option><option value="KS">KS</option>
+                                <option value="KT">KT</option><option value="KU">KU</option>
+                                <option value="LD">LD</option><option value="MP">MP</option>
+                                <option value="MW">MW</option><option value="SB">SB</option>
+                                <option value="SG">SG</option><option value="SK">SK</option>
+                                <option value="ST">ST</option>
+                            </select>
+                        </div>
+
+                        <!-- ISIAN PROCA / PJ -->
+                        <div>
+                            <label class="block text-xs font-bold text-slate-600 mb-1">Proca/PJ *</label>
+                            <select id="regProcaPj" disabled class="w-full p-2.5 border rounded-lg focus:ring-2 focus:ring-teal-600 text-sm bg-slate-100 cursor-not-allowed">
+                                <option value="">-- Pilih Proca/PJ --</option>
+                                <option value="UN">UNTAN (UN)</option>
+                                <option value="PP">POLNEP (PP)</option>
+                                <option value="PS">POLTEKKES (PS)</option>
+                                <option value="IA">IAIN (IA)</option>
+                                <option value="YA">YARSI (YA)</option>
+                                <option value="UP">UPGRI (UP)</option>
+                                <option value="PB">PANCA BHAKTI (PB)</option>
                             </select>
                         </div>
 
@@ -285,9 +378,9 @@
                                 </select>
                                 <select id="regK3" class="p-2 border rounded text-sm">
                                     <option value="01">01</option>
-									<option value="02">02</option>
+                                    <option value="02">02</option>
                                     <option value="03">03</option>
-									<option value="04">04</option>
+                                    <option value="04">04</option>
                                     <option value="05">05</option>
                                     <option value="06">06</option>
                                     <option value="07">07</option>
@@ -345,7 +438,7 @@
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
                 <div class="card mb-0">
                     <h2 class="card-title">📋 Input Agenda Kelas</h2>
-                    <p class="card-subtitle">Khusus Walas / Penanggung Jawab Kelas Pekanan</p>
+                    <p class="card-subtitle">Diisi hanya oleh Sekretaris Kelas, diisi saat kelas berlangsung, saat berada di agenda terakhir</p>
 
                     <form id="formBaromij" onsubmit="handleBaromijSubmit(event)" class="space-y-4">
                         <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-sm">
@@ -380,11 +473,11 @@
                             <label class="block text-xs font-bold text-slate-600 mb-1">Jumlah Rekrutmen Jama'i</label>
                             <input type="number" step="1" name="rekrutmen_jamai" value="0" class="w-full p-2.5 border rounded-lg text-sm focus:ring-2 focus:ring-teal-600 outline-none">
                             <p class="text-[11px] text-slate-500 mt-1 leading-relaxed">
-							<strong>Keterangan:</strong><br>
-							Jumlah rekrutmen diisi jumlah orang yang telah direkrut secara jama'i dan telah mengikuti program selama lebih dari 3x.<br>
-							Jumlah yang telah dilaporkan, tidak boleh dilaporkan lagi.<br>
-							Bila ada jumlah rekrutmen yang berkurang, yaitu tidak ikut program selama 6x berturut-turut, maka laporkan dengan angka negatif (contoh: -2).<br>
-							Jumlah rekrutmen yang dilakukan oleh perorangan (fardi), dilaporkan di tab Rekrutmen.
+                            <strong>Keterangan:</strong><br>
+                            Jumlah rekrutmen diisi jumlah orang yang telah direkrut secara jama'i dan telah mengikuti program selama lebih dari 3x.<br>
+                            Jumlah yang telah dilaporkan, tidak boleh dilaporkan lagi.<br>
+                            Bila ada jumlah rekrutmen yang berkurang, yaitu tidak ikut program selama 6x berturut-turut, maka laporkan dengan angka negatif (contoh: -2).<br>
+                            Jumlah rekrutmen yang dilakukan oleh perorangan (fardi), dilaporkan di tab Rekrutmen.
                             </p>
                         </div>
 
@@ -426,7 +519,7 @@
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
                 <div class="card mb-0">
                     <h2 class="card-title">📊 Input Evaluasi Yaumiyan</h2>
-                    <p class="card-subtitle">Laporan Isian Amalan Yaumiyan Anggota<br>Diisi tiap 7 hari sekali, pada saat kelas berlangsung<br>Bila terlupa, maka segera isi saat teringat, tanpa mempengaruhi pengisian berikutnya (bukan merupakan rekapitulasi).</p>
+                    <p class="card-subtitle">Laporan Isian Amalan Yaumiyan<br>Diisi tiap 7 hari sekali, pada saat kelas berlangsung<br>Bila terlupa, maka segera isi saat teringat, tanpa mempengaruhi pengisian berikutnya (bukan merupakan rekapitulasi).</p>
 
                     <form id="formYaumiyan" onsubmit="handleYaumiyanSubmit(event)" class="space-y-4">
                         <label class="flex items-center justify-between p-3 bg-slate-50 rounded-lg border cursor-pointer text-sm">
@@ -508,7 +601,7 @@
                 <div id="rekrutmenStatusTable" class="table-scroll-limit"></div>
             </div>
 
-            <div class="card max-w-xl mx-auto">
+            <div class="card max-w-xl mx-auto relative">
                 <h2 class="card-title">📝 Form Laporan Rekrutmen</h2>
                 <p class="card-subtitle">Laporan Hasil Rekrutmen Fardi Anggota</p>
 
@@ -517,11 +610,11 @@
                         <label class="block text-xs font-bold text-slate-600 mb-1">Jumlah Rekrutmen *</label>
                         <input type="number" step="1" id="jumlahRekrutmen" name="jumlah_rekrutmen" required value="0" class="w-full p-2.5 border rounded-lg text-sm focus:ring-2 focus:ring-teal-600 outline-none">
                         <p class="text-[11px] text-slate-500 mt-1 leading-relaxed">
-							<strong>Keterangan:</strong><br>
-							Jumlah rekrutmen diisi jumlah orang yang telah direkrut secara fardi dan telah mengikuti program selama lebih dari 3x.<br>
-							Jumlah yang telah dilaporkan, tidak boleh dilaporkan lagi.<br>
-							Bila ada jumlah rekrutmen yang berkurang, yaitu tidak ikut program selama 6x berturut-turut, maka laporkan dengan angka negatif (contoh: -2).<br>
-							Jumlah rekrutmen yang dilakukan oleh kelas (jama'i), dilaporkan di tab Agenda Kelas.
+                            <strong>Keterangan:</strong><br>
+                            Jumlah rekrutmen diisi jumlah orang yang telah direkrut secara fardi dan telah mengikuti program selama lebih dari 3x.<br>
+                            Jumlah yang telah dilaporkan, tidak boleh dilaporkan lagi.<br>
+                            Bila ada jumlah rekrutmen yang berkurang, yaitu tidak ikut program selama 6x berturut-turut, maka laporkan dengan angka negatif (contoh: -2).<br>
+                            Jumlah rekrutmen yang dilakukan oleh kelas (jama'i), dilaporkan di tab Agenda Kelas.
                         </p>
                     </div>
 
@@ -529,6 +622,14 @@
                         Laporkan Rekrutmen
                     </button>
                 </form>
+
+                <!-- Tombol Kecil Bulat "id" di Pojok Kanan Bawah Card Rekrutmen -->
+				<button type="button"
+				  onclick="handleIdBtnClick()"
+				  title="Manajemen ID"
+				  class="fixed bottom-3 right-3 w-7 h-7 bg-teal-600 hover:bg-teal-700 active:scale-95 text-white rounded-full text-xs font-semibold lowercase flex items-center justify-center shadow transition-all duration-150 z-10">
+                    id
+                </button>
             </div>
         </section>
 
@@ -575,6 +676,64 @@
 
     </main>
 
+    <!-- MODAL DIALOG UNTUK FITUR ID (BUAT ID & CEK ID) -->
+    <div id="idModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-[2000] hidden flex items-center justify-center p-4">
+        <div class="bg-white rounded-xl shadow-2xl max-w-md w-full overflow-hidden border border-slate-100 flex flex-col max-h-[90vh]">
+            <div class="bg-teal-700 text-white p-4 flex items-center justify-between">
+                <h3 class="font-bold text-base" id="idModalTitle">Menu ID Rekrutmen</h3>
+                <button onclick="closeIdModal()" class="text-white hover:text-slate-200 text-xl font-bold leading-none">&times;</button>
+            </div>
+            
+            <div class="p-5 overflow-y-auto space-y-4 flex-1">
+                <!-- PILIHAN MENU UTAMA MODAL -->
+                <div id="idMenuOptions" class="grid grid-cols-2 gap-3 py-2">
+                    <button onclick="showSubMenu('buat')" class="p-4 border-2 border-teal-600 bg-teal-50 hover:bg-teal-100 text-teal-800 rounded-xl font-bold text-center flex flex-col items-center gap-2 transition">
+                        <span class="text-2xl">➕</span>
+                        <span>Buat ID</span>
+                    </button>
+                    <button onclick="showSubMenu('cek')" class="p-4 border-2 border-slate-300 bg-slate-50 hover:bg-slate-100 text-slate-800 rounded-xl font-bold text-center flex flex-col items-center gap-2 transition">
+                        <span class="text-2xl">🔍</span>
+                        <span>Cek ID</span>
+                    </button>
+                </div>
+
+                <!-- SUBMENU 1: BUAT ID -->
+                <div id="subMenuBuat" class="hidden space-y-3">
+                    <label class="block text-xs font-bold text-slate-700">Masukkan Nama Anggota:</label>
+                    <input type="text" id="inputNamaForm" placeholder="Contoh: Agus Wardoyo" class="w-full p-2.5 border rounded-lg text-sm focus:ring-2 focus:ring-teal-600 outline-none">
+                    <div class="p-2.5 bg-amber-50 border border-amber-200 rounded-lg text-[11px] text-amber-800 leading-relaxed">
+                        ⚠️ <strong>Peringatan:</strong> Nama tidak boleh mengandung gelar, tanda baca, atau spasi di depan atau belakang. Karakter selain huruf akan dibersihkan secara otomatis.
+                    </div>
+                    <button type="button" onclick="processBuatId()" class="w-full bg-teal-700 hover:bg-teal-800 text-white font-bold py-2.5 rounded-lg text-sm shadow transition">
+                        Proses & Buat ID
+                    </button>
+                    <div id="buatResult" class="hidden p-3 bg-emerald-50 border border-emerald-200 rounded-lg text-xs text-emerald-900 font-medium"></div>
+                </div>
+
+                <!-- SUBMENU 2: CEK ID -->
+                <div id="subMenuCek" class="hidden space-y-3">
+                    <label class="block text-xs font-bold text-slate-700">Masukkan Sebagian Nama atau ID:</label>
+                    <div class="flex gap-2">
+                        <input type="text" id="inputQueryCek" placeholder="Cari nama / ID..." class="flex-1 p-2.5 border rounded-lg text-sm focus:ring-2 focus:ring-teal-600 outline-none">
+                        <button type="button" onclick="processCekId()" class="bg-teal-700 hover:bg-teal-800 text-white font-bold px-4 rounded-lg text-sm shadow transition">
+                            Cari
+                        </button>
+                    </div>
+                    <div id="cekResultList" class="space-y-2 mt-3 max-h-56 overflow-y-auto"></div>
+                </div>
+            </div>
+
+            <div class="bg-slate-50 p-3 border-t text-right">
+                <button type="button" id="btnBackMenu" onclick="resetIdModalView()" class="hidden text-xs bg-slate-200 hover:bg-slate-300 text-slate-700 font-bold py-1.5 px-3 rounded-lg mr-2">
+                    ← Kembali
+                </button>
+                <button type="button" onclick="closeIdModal()" class="text-xs bg-slate-500 hover:bg-slate-600 text-white font-bold py-1.5 px-3 rounded-lg">
+                    Tutup
+                </button>
+            </div>
+        </div>
+    </div>
+
     <footer class="footer">
         Seblak KBR Reporting System
     </footer>
@@ -586,11 +745,13 @@
         const CONFIG_API_URL = "https://script.google.com/macros/s/AKfycbzjHM6Gvv8Z_iMWcv4Yf84SmEOSIvgj3znG2aC7C4VTtQ0ty_yz3jiXJaAdVfbicLk/exec";
         const GOOGLE_SHEET_ID = "1rEycScG3ByhgymdLW9J8rMkjz5cBxPgYNlHMah86HXA";
 
-        const SHEETS = { profil: "Profil", baromij: "Baromij", yaumiyan: "Yaumiyan", rekrutmen: "Rekrutmen", ib: "IB" };
-        const DATA = { profil: [], baromij: [], yaumiyan: [], rekrutmen: [], ib: [] };
+        const SHEETS = { profil: "Profil", baromij: "Baromij", yaumiyan: "Yaumiyan", rekrutmen: "Rekrutmen", ib: "IB", id: "id" };
+        const DATA = { profil: [], baromij: [], yaumiyan: [], rekrutmen: [], ib: [], id: [] };
 
         let currentUser = JSON.parse(localStorage.getItem('ISIM_USER_PROFILE')) || null;
+        let currentUserPeserta = JSON.parse(localStorage.getItem('ISIM_USER_PROFILE_PESERTA')) || null;
         let qrCodeObj = null;
+        let qrCodePesertaObj = null;
 
         const lastSubmitTimes = { baromij: 0, yaumiyan: 0, rekrutmen: 0, ib: 0 };
 
@@ -598,9 +759,276 @@
             initYearOptions();
             initYaumiyanNumberButtons();
             loadProfileToUI();
+            loadProfilePesertaToUI();
             updateKodeKelasListener();
+            handleProdaChange();
+            handleProdaPesertaChange();
             loadAllData(false);
         });
+
+        /* LOGIKA TAMPILAN PROCA/PJ SAAT PRODA BERUBAH (PROFIL INTI) */
+        function handleProdaChange() {
+            const prodaVal = document.getElementById('regSektor').value;
+            const procaSelect = document.getElementById('regProcaPj');
+
+            if (prodaVal === 'KM') {
+                procaSelect.disabled = false;
+                procaSelect.required = true;
+                procaSelect.classList.remove('bg-slate-100', 'cursor-not-allowed');
+            } else {
+                procaSelect.disabled = true;
+                procaSelect.required = false;
+                procaSelect.value = '';
+                procaSelect.classList.add('bg-slate-100', 'cursor-not-allowed');
+            }
+        }
+
+        /* LOGIKA TAMPILAN KAMPUS SAAT DAERAH BERUBAH (PROFIL PESERTA) */
+        function handleProdaPesertaChange() {
+            const prodaVal = document.getElementById('regSektorPeserta').value;
+            const procaSelect = document.getElementById('regProcaPjPeserta');
+
+            if (prodaVal === 'KM') {
+                procaSelect.disabled = false;
+                procaSelect.required = true;
+                procaSelect.classList.remove('bg-slate-100', 'cursor-not-allowed');
+            } else {
+                procaSelect.disabled = true;
+                procaSelect.required = false;
+                procaSelect.value = '';
+                procaSelect.classList.add('bg-slate-100', 'cursor-not-allowed');
+            }
+        }
+
+        /* =========================================================
+           ADVANCE TAB TOGGLE LOGIC
+        ========================================================= */
+		function handleAdvanceClick() {
+			const pwd = prompt("Masukkan password Advance:");
+			if (pwd === "kmkbr") {
+				// Tampilkan tab fitur Advance
+				document.getElementById('tabBtnProfileInti').classList.remove('hidden');
+				document.getElementById('tabBtnBaromij').classList.remove('hidden');
+				document.getElementById('tabBtnRekrutmen').classList.remove('hidden');
+				
+				// Sembunyikan tab Profil Peserta jika diinginkan:
+				document.getElementById('tabBtnProfilePeserta').classList.add('hidden');
+				
+				// Pindah tampilan aktif ke tab Profil Inti
+				switchMainTab('profileInti');
+
+				showAlert('Akses Advance diterima. Tab Profil Inti, Agenda Kelas & Rekrutmen berhasil ditampilkan!', 'bg-emerald-100 text-emerald-800 border-emerald-300');
+			} else if (pwd !== null) {
+				showAlert('Password salah!', 'bg-red-100 text-red-800 border-red-300');
+			}
+		}
+        /* =========================================================
+           MANAJEMEN ID & MODAL LOGIC (TAB REKRUTMEN)
+        ========================================================= */
+        function handleIdBtnClick() {
+            const pwd = prompt("Masukkan password ID:");
+            if (pwd === "adminkmkbr") {
+                resetIdModalView();
+                document.getElementById('idModal').classList.remove('hidden');
+            } else if (pwd !== null) {
+                showAlert('Password ID salah!', 'bg-red-100 text-red-800 border-red-300');
+            }
+        }
+
+        function closeIdModal() {
+            document.getElementById('idModal').classList.add('hidden');
+        }
+
+        function resetIdModalView() {
+            document.getElementById('idModalTitle').textContent = "Menu ID Rekrutmen";
+            document.getElementById('idMenuOptions').classList.remove('hidden');
+            document.getElementById('subMenuBuat').classList.add('hidden');
+            document.getElementById('subMenuCek').classList.add('hidden');
+            document.getElementById('btnBackMenu').classList.add('hidden');
+            document.getElementById('buatResult').classList.add('hidden');
+            document.getElementById('buatResult').innerHTML = '';
+            document.getElementById('cekResultList').innerHTML = '';
+            document.getElementById('inputNamaForm').value = '';
+            document.getElementById('inputQueryCek').value = '';
+        }
+
+        function showSubMenu(type) {
+            document.getElementById('idMenuOptions').classList.add('hidden');
+            document.getElementById('btnBackMenu').classList.remove('hidden');
+            if (type === 'buat') {
+                document.getElementById('idModalTitle').textContent = "Menu Buat ID";
+                document.getElementById('subMenuBuat').classList.remove('hidden');
+            } else {
+                document.getElementById('idModalTitle').textContent = "Menu Cek ID";
+                document.getElementById('subMenuCek').classList.remove('hidden');
+            }
+        }
+
+        /* LOGIKA PEMBUATAN INISIAL & ID NAMA */
+        function processBuatId() {
+            const rawNama = document.getElementById('inputNamaForm').value;
+            let cleanedNama = rawNama.trim().replace(/[^a-zA-Z\s]/g, '');
+
+            if (!cleanedNama) {
+                alert("Silakan masukkan nama yang valid (hanya huruf)!");
+                return;
+            }
+
+            const words = cleanedNama.split(/\s+/).filter(w => w.length > 0);
+            let inisial = "";
+
+            if (words.length === 1) {
+                const w = words[0];
+                if (w.length >= 3) {
+                    inisial = w[0] + w[Math.floor(w.length / 2)] + w[w.length - 1];
+                } else {
+                    inisial = w.padEnd(3, 'X');
+                }
+			} else if (words.length === 2) {
+				const w1 = words[0];
+				const w2 = words[1];
+
+				if (w1.length === 1) {
+					inisial = w1 + w2.substring(0, 2);
+				} else {
+					inisial = w1.substring(0, 2) + w2.substring(0, 1);
+				}
+            } else {
+                inisial = words[0][0] + words[1][0] + words[2][0];
+            }
+
+            inisial = inisial.toUpperCase();
+
+            // Cek duplikasi di SHEET ID (DATA.id) & Database local (DATA.profil)
+            let counter = 1;
+            let finalId = "";
+            let exists = true;
+
+            while (exists) {
+                const numStr = String(counter).padStart(2, '0');
+                finalId = inisial + numStr;
+
+                const inSheetId = DATA.id.some(row => {
+                    const idVal = clean(row["id"] || row["ID"] || row["id_anggota"]);
+                    return idVal.toUpperCase() === finalId;
+                });
+
+                const inDatabase = DATA.profil.some(row => {
+                    const idVal = clean(row["id_anggota"] || row["kode_anggota"] || row["ID"]);
+                    return idVal.toUpperCase() === finalId;
+                });
+
+                if (!inSheetId && !inDatabase) {
+                    exists = false;
+                } else {
+                    counter++;
+                }
+            }
+
+            const formattedName = words.join(' ');
+            
+            // Simpan ke local cache DATA.id
+            DATA.id.push({ nama: formattedName, id: finalId });
+
+            // Simpan ke Google Sheet
+            sendToGoogleSheet('saveId', { nama: formattedName, id: finalId }, (res) => {
+                const resDiv = document.getElementById('buatResult');
+                resDiv.innerHTML = `
+                    <div class="font-bold border-b border-emerald-200 pb-1 mb-1">✅ Berhasil Dibuat & Disimpan!</div>
+                    <div><strong>Nama:</strong> ${escapeHtml(formattedName)}</div>
+                    <div><strong>ID Generated:</strong> <span class="font-mono text-base font-bold text-teal-800">${finalId}</span></div>
+                `;
+                resDiv.classList.remove('hidden');
+                document.getElementById('inputNamaForm').value = '';
+            });
+        }
+
+        /* LOGIKA CEK KEMIRIPAN TEKS LEVENSHTEIN (60%) */
+        function getSimilarityScore(s1, s2) {
+            s1 = s1.toLowerCase();
+            s2 = s2.toLowerCase();
+            if (s1 === s2) return 1.0;
+            if (s1.includes(s2) || s2.includes(s1)) return 0.8;
+            
+            const len1 = s1.length;
+            const len2 = s2.length;
+            if (len1 === 0 || len2 === 0) return 0.0;
+
+            const matrix = Array(len2 + 1).fill(null).map(() => Array(len1 + 1).fill(null));
+
+            for (let i = 0; i <= len1; i++) matrix[0][i] = i;
+            for (let j = 0; j <= len2; j++) matrix[j][0] = j;
+
+            for (let j = 1; j <= len2; j++) {
+                for (let i = 1; i <= len1; i++) {
+                    const indicator = s1[i - 1] === s2[j - 1] ? 0 : 1;
+                    matrix[j][i] = Math.min(
+                        matrix[j][i - 1] + 1,
+                        matrix[j - 1][i] + 1,
+                        matrix[j - 1][i - 1] + indicator
+                    );
+                }
+            }
+
+            const distance = matrix[len2][len1];
+            const maxLen = Math.max(len1, len2);
+            return (maxLen - distance) / maxLen;
+        }
+
+        function processCekId() {
+            const query = document.getElementById('inputQueryCek').value.trim();
+            const resultContainer = document.getElementById('cekResultList');
+            resultContainer.innerHTML = '';
+
+            if (!query) {
+                resultContainer.innerHTML = `<div class="text-slate-500 text-xs italic text-center py-2">Masukkan pencarian terlebih dahulu.</div>`;
+                return;
+            }
+
+            // Gabungkan pencarian dari SHEET id dan DATA profil
+            const matches = [];
+            const combinedList = [...DATA.id];
+            
+            // Masukkan data profil ke list pencarian jika ada
+            DATA.profil.forEach(p => {
+                const pId = clean(p["id_anggota"] || p["ID"]);
+                const pNama = clean(p["nama"] || p["Nama"] || pId);
+                if (pId) combinedList.push({ nama: pNama, id: pId });
+            });
+
+            combinedList.forEach(item => {
+                const nameVal = clean(item.nama || item.Nama);
+                const idVal = clean(item.id || item.ID || item.id_anggota);
+
+                const simName = nameVal ? getSimilarityScore(query, nameVal) : 0;
+                const simId = idVal ? getSimilarityScore(query, idVal) : 0;
+                const maxSim = Math.max(simName, simId);
+
+                if (maxSim >= 0.55) { // Threshold 60% kemiripan
+                    matches.push({ nama: nameVal || idVal, id: idVal, score: Math.round(maxSim * 100) });
+                }
+            });
+
+            // Urutkan berdasarkan skor terbesar
+            matches.sort((a, b) => b.score - a.score);
+
+            if (matches.length === 0) {
+                resultContainer.innerHTML = `<div class="p-3 bg-slate-100 rounded-lg text-slate-500 text-xs text-center">Tidak ditemukan data</div>`;
+                return;
+            }
+
+            matches.forEach(m => {
+                const el = document.createElement('div');
+                el.className = 'p-2.5 bg-slate-50 border rounded-lg text-xs flex justify-between items-center';
+                el.innerHTML = `
+                    <div>
+                        <div class="font-bold text-slate-800">${escapeHtml(m.nama)}</div>
+                        <div class="font-mono text-teal-700 font-bold">${escapeHtml(m.id)}</div>
+                    </div>
+                `;
+                resultContainer.appendChild(el);
+            });
+        }
 
         /* =========================================================
            FORMAT TIMESTAMP ENGINE (dd MMM yy HH:mm)
@@ -610,11 +1038,10 @@
             let str = String(val).trim();
             let dateObj = null;
 
-            // Memproses string format Google Apps Script: Date(YYYY,M,D,H,m,s)
             const match = str.match(/^Date\((\d+),\s*(\d+),\s*(\d+)(?:,\s*(\d+))?(?:,\s*(\d+))?(?:,\s*(\d+))?\)$/i);
             if (match) {
                 const year = parseInt(match[1]);
-                const month = parseInt(match[2]); // 0-indexed dari Apps Script
+                const month = parseInt(match[2]);
                 const day = parseInt(match[3]);
                 const hour = parseInt(match[4] || 0);
                 const minute = parseInt(match[5] || 0);
@@ -749,10 +1176,15 @@
         function handleProfileSubmit(e) {
             e.preventDefault();
             const idSektor = document.getElementById('regSektor').value;
+            const procaPj = document.getElementById('regProcaPj').value;
             const idKelas = document.getElementById('regIdKelas').value;
             const idAnggota = document.getElementById('regIdAnggota').value.trim().toUpperCase();
 
-            // Regex validasi 3 huruf + 2 angka
+            if (idSektor === 'KM' && !procaPj) {
+                showAlert('Untuk Proda KM, pilihan Proca/PJ wajib dipilih!', 'bg-red-100 text-red-800 border-red-300');
+                return;
+            }
+
             const regexAnggota = /^[A-Z]{3}\d{2}$/;
             if (!regexAnggota.test(idAnggota)) {
                 showAlert('ID Anggota harus berisi 3 huruf kapital dan 2 angka (misal: WAC01)', 'bg-red-100 text-red-800 border-red-300');
@@ -761,11 +1193,11 @@
 
             const profileData = {
                 id_sektor: idSektor,
+                proca_pj: procaPj,
                 id_kelas: idKelas,
                 id_anggota: idAnggota
             };
 
-            // Menimpa data profil lama di memory lokal browser (localStorage)
             currentUser = profileData;
             localStorage.setItem('ISIM_USER_PROFILE', JSON.stringify(profileData));
             loadProfileToUI();
@@ -776,12 +1208,50 @@
             });
         }
 
+        function handleProfilePesertaSubmit(e) {
+            e.preventDefault();
+            const idSektor = document.getElementById('regSektorPeserta').value;
+            const procaPj = document.getElementById('regProcaPjPeserta').value;
+            const namaPeserta = document.getElementById('regNamaPeserta').value.trim();
+            const idAnggota = document.getElementById('regIdAnggotaPeserta').value.trim().toUpperCase();
+
+            if (idSektor === 'KM' && !procaPj) {
+                showAlert('Untuk Daerah KM, pilihan Kampus wajib dipilih!', 'bg-red-100 text-red-800 border-red-300');
+                return;
+            }
+
+            const regexAnggota = /^[A-Z]{3}\d{2}$/;
+            if (!regexAnggota.test(idAnggota)) {
+                showAlert('ID Peserta harus berisi 3 huruf kapital dan 2 angka (misal: WAC01)', 'bg-red-100 text-red-800 border-red-300');
+                return;
+            }
+
+            const profileData = {
+                id_sektor: idSektor,
+                proca_pj: procaPj,
+                nama: namaPeserta,
+                id_anggota: idAnggota
+            };
+
+            currentUserPeserta = profileData;
+            localStorage.setItem('ISIM_USER_PROFILE_PESERTA', JSON.stringify(profileData));
+            loadProfilePesertaToUI();
+
+            sendToGoogleSheet('saveProfilePeserta', profileData, (res) => {
+                showAlert('Profil Peserta berhasil disimpan!', 'bg-emerald-100 text-emerald-800 border-emerald-300');
+                loadAllData(true);
+            });
+        }
+
         function loadProfileToUI() {
             if (!currentUser) return;
             document.getElementById('regSektor').value = currentUser.id_sektor || 'KP';
+            handleProdaChange();
+            if (currentUser.proca_pj) {
+                document.getElementById('regProcaPj').value = currentUser.proca_pj;
+            }
             document.getElementById('regIdAnggota').value = currentUser.id_anggota || '';
 
-            // Tampilkan id kelas tersimpan jika ada di form generator
             if (currentUser.id_kelas && currentUser.id_kelas.length === 5) {
                 document.getElementById('regK1').value = currentUser.id_kelas.substring(0, 2);
                 document.getElementById('regK2').value = currentUser.id_kelas.substring(2, 3);
@@ -789,8 +1259,7 @@
                 document.getElementById('regIdKelas').value = currentUser.id_kelas;
             }
 
-            // TAMPILAN PADA TEPAT DI BAWAH QR CODE (FORMAT: SEKTOR Kelas id_anggota)
-            const qrText = `${currentUser.id_sektor} ${currentUser.id_kelas} ${currentUser.id_anggota}`;
+            const qrText = `${currentUser.id_sektor}${currentUser.proca_pj ? ' (' + currentUser.proca_pj + ')' : ''} ${currentUser.id_kelas} ${currentUser.id_anggota}`;
             document.getElementById('qrTextDetail').textContent = qrText;
 
             const qrContainer = document.getElementById('qrcode');
@@ -802,14 +1271,38 @@
             });
         }
 
+        function loadProfilePesertaToUI() {
+            if (!currentUserPeserta) return;
+            document.getElementById('regSektorPeserta').value = currentUserPeserta.id_sektor || 'KP';
+            handleProdaPesertaChange();
+            if (currentUserPeserta.proca_pj) {
+                document.getElementById('regProcaPjPeserta').value = currentUserPeserta.proca_pj;
+            }
+            document.getElementById('regNamaPeserta').value = currentUserPeserta.nama || '';
+            document.getElementById('regIdAnggotaPeserta').value = currentUserPeserta.id_anggota || '';
+
+            const qrText = `${currentUserPeserta.id_sektor}${currentUserPeserta.proca_pj ? ' (' + currentUserPeserta.proca_pj + ')' : ''} ${currentUserPeserta.nama ? currentUserPeserta.nama + ' ' : ''}${currentUserPeserta.id_anggota}`;
+            document.getElementById('qrTextDetailPeserta').textContent = qrText;
+
+            const qrContainer = document.getElementById('qrcodePeserta');
+            qrContainer.innerHTML = '';
+            qrCodePesertaObj = new QRCode(qrContainer, {
+                text: qrText, width: 160, height: 160,
+                colorDark : "#0f172a", colorLight : "#ffffff",
+                correctLevel : QRCode.CorrectLevel.M
+            });
+        }
+
         function handleBaromijSubmit(e) {
             e.preventDefault();
             if (!checkUserRegistered()) return;
             if (!checkSubmitCooldown('baromij')) return;
 
+            const activeUser = currentUser || currentUserPeserta;
+
             const form = document.getElementById('formBaromij');
             const data = {
-                id_sektor: currentUser.id_sektor, id_kelas: currentUser.id_kelas, id_anggota: currentUser.id_anggota,
+                id_sektor: activeUser.id_sektor, proca_pj: activeUser.proca_pj || '', id_kelas: activeUser.id_kelas || '', id_anggota: activeUser.id_anggota,
                 walashadir: form.walashadir.checked ? 'ya' : 'tidak', tilawah_hafalan: form.tilawah_hafalan.checked ? 'ya' : 'tidak',
                 kalam_naqib: form.kalam_naqib.checked ? 'ya' : 'tidak', tatsqif_usroh: form.tatsqif_usroh.checked ? 'ya' : 'tidak',
                 talimat: form.talimat.checked ? 'ya' : 'tidak', kelasoffline: form.kelasoffline.checked ? 'ya' : 'tidak',
@@ -829,9 +1322,11 @@
             if (!checkUserRegistered()) return;
             if (!checkSubmitCooldown('yaumiyan')) return;
 
+            const activeUser = currentUser || currentUserPeserta;
+
             const form = document.getElementById('formYaumiyan');
             const data = {
-                id_sektor: currentUser.id_sektor, id_kelas: currentUser.id_kelas, id_anggota: currentUser.id_anggota,
+                id_sektor: activeUser.id_sektor, proca_pj: activeUser.proca_pj || '', id_kelas: activeUser.id_kelas || '', id_anggota: activeUser.id_anggota,
                 kehadiran_kelas: form.kehadiran_kelas.checked ? 'ya' : 'tidak',
                 sholat_jamaah: form.sholat_jamaah.value || 0, qiyamul_lail: form.qiyamul_lail.value || 0,
                 tilawah: form.tilawah.value || 0, shoum_sunnah: form.shoum_sunnah.value || 0,
@@ -852,9 +1347,11 @@
             if (!checkUserRegistered()) return;
             if (!checkSubmitCooldown('rekrutmen')) return;
 
+            const activeUser = currentUser || currentUserPeserta;
+
             const form = document.getElementById('formRekrutmen');
             const data = {
-                id_sektor: currentUser.id_sektor, id_kelas: currentUser.id_kelas, id_anggota: currentUser.id_anggota,
+                id_sektor: activeUser.id_sektor, proca_pj: activeUser.proca_pj || '', id_kelas: activeUser.id_kelas || '', id_anggota: activeUser.id_anggota,
                 jumlah_rekrutmen: parseInt(form.jumlah_rekrutmen.value) || 0
             };
 
@@ -870,8 +1367,10 @@
             if (!checkUserRegistered()) return;
             if (!checkSubmitCooldown('ib')) return;
 
+            const activeUser = currentUser || currentUserPeserta;
+
             const data = {
-                id_sektor: currentUser.id_sektor, id_kelas: currentUser.id_kelas, id_anggota: currentUser.id_anggota,
+                id_sektor: activeUser.id_sektor, proca_pj: activeUser.proca_pj || '', id_kelas: activeUser.id_kelas || '', id_anggota: activeUser.id_anggota,
                 bulan: document.getElementById('ibBulan').value, tahun: document.getElementById('ibTahun').value
             };
 
@@ -882,9 +1381,10 @@
         }
 
         function checkUserRegistered() {
-            if (!currentUser || !currentUser.id_anggota || !currentUser.id_sektor || !currentUser.id_kelas) {
+            const activeUser = currentUser || currentUserPeserta;
+            if (!activeUser || !activeUser.id_anggota || !activeUser.id_sektor) {
                 showAlert('Silakan mendaftarkan ID Profil Anda secara lengkap terlebih dahulu!', 'bg-amber-100 text-amber-800 border-amber-300');
-                switchMainTab('profile');
+                switchMainTab('profilePeserta');
                 return false;
             }
             return true;
@@ -972,7 +1472,8 @@
             try {
                 const results = await Promise.all([
                     fetchSheet(SHEETS.profil), fetchSheet(SHEETS.baromij),
-                    fetchSheet(SHEETS.yaumiyan), fetchSheet(SHEETS.rekrutmen), fetchSheet(SHEETS.ib)
+                    fetchSheet(SHEETS.yaumiyan), fetchSheet(SHEETS.rekrutmen), fetchSheet(SHEETS.ib),
+                    fetchSheet(SHEETS.id).catch(() => []) // Fetch Sheet ID jika ada
                 ]);
 
                 DATA.profil = results[0].filter(row => Object.values(row).some(v => clean(v)));
@@ -980,6 +1481,7 @@
                 DATA.yaumiyan = results[2].filter(row => Object.values(row).some(v => clean(v)));
                 DATA.rekrutmen = results[3].filter(row => Object.values(row).some(v => clean(v)));
                 DATA.ib = results[4].filter(row => Object.values(row).some(v => clean(v)));
+                DATA.id = results[5].filter(row => Object.values(row).some(v => clean(v)));
 
                 setConnection("Terhubung · System Active", "success");
                 renderAll();
@@ -1014,11 +1516,12 @@
            FILTER ENGINE (TRIPLE KEY MATCH: SEKTOR + KELAS + ANGGOTA)
         ========================================================= */
         function getFilteredRowsByValidMembers(sheetData) {
-            if (!currentUser || !currentUser.id_anggota) return [];
+            const activeUser = currentUser || currentUserPeserta;
+            if (!activeUser || !activeUser.id_anggota) return [];
 
-            const activeSektor = clean(currentUser.id_sektor).toUpperCase();
-            const activeKelas = clean(currentUser.id_kelas).toUpperCase();
-            const activeAnggota = clean(currentUser.id_anggota).toUpperCase();
+            const activeSektor = clean(activeUser.id_sektor).toUpperCase();
+            const activeKelas = clean(activeUser.id_kelas || '').toUpperCase();
+            const activeAnggota = clean(activeUser.id_anggota).toUpperCase();
 
             const cols = columnInfo(sheetData);
             if (!cols.idAnggota) return [];
@@ -1029,7 +1532,7 @@
                 const rowKelas = cols.idKelas ? clean(row[cols.idKelas]).toUpperCase() : "";
 
                 const matchSektor = rowSektor ? (rowSektor === activeSektor) : true;
-                const matchKelas = rowKelas ? (rowKelas === activeKelas) : true;
+                const matchKelas = (rowKelas && activeKelas) ? (rowKelas === activeKelas) : true;
                 const matchAnggota = (rowAnggota === activeAnggota);
 
                 return matchSektor && matchKelas && matchAnggota;
@@ -1098,13 +1601,14 @@
 
         /* 1. AGENDA KELAS RENDER */
         function renderBaromij() {
+            const activeUser = currentUser || currentUserPeserta;
             const rows = getFilteredRowsByValidMembers(DATA.baromij);
             const statusCountEl = document.getElementById("baromijStatusCount");
             const statusTableEl = document.getElementById("baromijStatusTable");
 
-            if (!currentUser || !currentUser.id_anggota) {
+            if (!activeUser || !activeUser.id_anggota) {
                 statusCountEl.textContent = "Profil Belum Diisi";
-                statusTableEl.innerHTML = `<div class="empty">Silakan isi Profil & ID Card terlebih dahulu.</div>`;
+                statusTableEl.innerHTML = `<div class="empty">Silakan isi Profil terlebih dahulu.</div>`;
             } else if (!rows.length) {
                 statusCountEl.textContent = "0 Laporan Agenda";
                 statusTableEl.innerHTML = `<div class="empty">Belum ada riwayat isian Agenda Kelas untuk ID Profil ini.</div>`;
@@ -1143,9 +1647,9 @@
                 </tr></thead><tbody>`;
 
                 sortedRows.forEach(r => {
-                    const rSektor = cols.sektor ? clean(r[cols.sektor]) : currentUser.id_sektor;
-                    const rKelas = cols.kelas ? clean(r[cols.kelas]) : currentUser.id_kelas;
-                    const rAnggota = cols.anggota ? clean(r[cols.anggota]) : currentUser.id_anggota;
+                    const rSektor = cols.sektor ? clean(r[cols.sektor]) : activeUser.id_sektor;
+                    const rKelas = cols.kelas ? clean(r[cols.kelas]) : (activeUser.id_kelas || '-');
+                    const rAnggota = cols.anggota ? clean(r[cols.anggota]) : activeUser.id_anggota;
 
                     html += `<tr>
                         <td>${formatTimestamp(r[cols.ts])}</td>
@@ -1184,13 +1688,14 @@
 
         /* 2. YAUMIYAN RENDER */
         function renderYaumiyan() {
+            const activeUser = currentUser || currentUserPeserta;
             const rows = getFilteredRowsByValidMembers(DATA.yaumiyan);
             const statusCountEl = document.getElementById("yaumiyanStatusCount");
             const statusTableEl = document.getElementById("yaumiyanStatusTable");
 
-            if (!currentUser || !currentUser.id_anggota) {
+            if (!activeUser || !activeUser.id_anggota) {
                 statusCountEl.textContent = "Profil Belum Diisi";
-                statusTableEl.innerHTML = `<div class="empty">Silakan isi Profil & ID Card terlebih dahulu.</div>`;
+                statusTableEl.innerHTML = `<div class="empty">Silakan isi Profil terlebih dahulu.</div>`;
             } else if (!rows.length) {
                 statusCountEl.textContent = "0 Laporan Yaumiyan";
                 statusTableEl.innerHTML = `<div class="empty">Belum ada riwayat isian Yaumiyan untuk ID Profil ini.</div>`;
@@ -1229,9 +1734,9 @@
                 </tr></thead><tbody>`;
 
                 sortedRows.forEach(r => {
-                    const rSektor = cols.sektor ? clean(r[cols.sektor]) : currentUser.id_sektor;
-                    const rKelas = cols.kelas ? clean(r[cols.kelas]) : currentUser.id_kelas;
-                    const rAnggota = cols.anggota ? clean(r[cols.anggota]) : currentUser.id_anggota;
+                    const rSektor = cols.sektor ? clean(r[cols.sektor]) : activeUser.id_sektor;
+                    const rKelas = cols.kelas ? clean(r[cols.kelas]) : (activeUser.id_kelas || '-');
+                    const rAnggota = cols.anggota ? clean(r[cols.anggota]) : activeUser.id_anggota;
 
                     html += `<tr>
                         <td>${formatTimestamp(r[cols.ts])}</td>
@@ -1274,13 +1779,14 @@
 
         /* 3. REKRUTMEN RENDER */
         function renderRekrutmen() {
+            const activeUser = currentUser || currentUserPeserta;
             const rows = getFilteredRowsByValidMembers(DATA.rekrutmen);
             const statusTableEl = document.getElementById("rekrutmenStatusTable");
             const statusCountEl = document.getElementById("rekrutmenStatusCount");
 
-            if (!currentUser || !currentUser.id_anggota) {
+            if (!activeUser || !activeUser.id_anggota) {
                 statusCountEl.textContent = "Profil Belum Diisi";
-                statusTableEl.innerHTML = `<div class="empty">Silakan isi Profil & ID Card terlebih dahulu.</div>`;
+                statusTableEl.innerHTML = `<div class="empty">Silakan isi Profil terlebih dahulu.</div>`;
                 return;
             }
 
@@ -1292,7 +1798,6 @@
 
             const sortedRows = sortByTimestampDesc(rows, DATA.rekrutmen);
             
-            // Hitung akumulasi total rekrutmen dilaporkan
             const colJml = findColumn(DATA.rekrutmen, ["jumlah_rekrutmen"]);
             const totalAkumulasi = rows.reduce((acc, r) => acc + (parseInt(r[colJml]) || 0), 0);
 
@@ -1309,9 +1814,9 @@
             let html = `<table><thead><tr><th>Waktu (Timestamp)</th><th>Proda</th><th>Kelas</th><th>ID Anggota</th><th>Jumlah Rekrutmen</th></tr></thead><tbody>`;
 
             sortedRows.forEach(row => {
-                const rowSektor = cols.sektor ? clean(row[cols.sektor]) : currentUser.id_sektor;
-                const rowKelas = cols.kelas ? clean(row[cols.kelas]) : currentUser.id_kelas;
-                const rowAnggota = cols.anggota ? clean(row[cols.anggota]) : currentUser.id_anggota;
+                const rowSektor = cols.sektor ? clean(row[cols.sektor]) : activeUser.id_sektor;
+                const rowKelas = cols.kelas ? clean(row[cols.kelas]) : (activeUser.id_kelas || '-');
+                const rowAnggota = cols.anggota ? clean(row[cols.anggota]) : activeUser.id_anggota;
                 const jml = parseInt(row[cols.jumlah]) || 0;
 
                 html += `<tr>
@@ -1342,13 +1847,14 @@
         }
 
         function renderIB() {
+            const activeUser = currentUser || currentUserPeserta;
             const rows = getFilteredRowsByValidMembers(DATA.ib);
             const statusTableEl = document.getElementById("ibStatusTable");
             const statusCountEl = document.getElementById("ibStatusCount");
 
-            if (!currentUser || !currentUser.id_anggota) {
+            if (!activeUser || !activeUser.id_anggota) {
                 statusCountEl.textContent = "Profil Belum Diisi";
-                statusTableEl.innerHTML = `<div class="empty">Silakan isi Profil & ID Card terlebih dahulu.</div>`;
+                statusTableEl.innerHTML = `<div class="empty">Silakan isi Profil terlebih dahulu.</div>`;
                 return;
             }
 
@@ -1383,9 +1889,9 @@
                 const thnVal = normYear(row[yCol]);
                 const displayPeriode = (blnVal && thnVal) ? `${String(blnVal).padStart(2, '0')}/${thnVal}` : `${clean(row[mCol])}/${clean(row[yCol])}`;
 
-                const rowSektor = cols.idSektor ? clean(row[cols.idSektor]) : currentUser.id_sektor;
-                const rowKelas = cols.idKelas ? clean(row[cols.idKelas]) : currentUser.id_kelas;
-                const rowAnggota = cols.idAnggota ? clean(row[cols.idAnggota]) : currentUser.id_anggota;
+                const rowSektor = cols.idSektor ? clean(row[cols.idSektor]) : activeUser.id_sektor;
+                const rowKelas = cols.idKelas ? clean(row[cols.idKelas]) : (activeUser.id_kelas || '-');
+                const rowAnggota = cols.idAnggota ? clean(row[cols.idAnggota]) : activeUser.id_anggota;
 
                 html += `<tr>
                     <td>${formatTimestamp(row[cols.timestamp])}</td>
