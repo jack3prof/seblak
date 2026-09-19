@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Laporan Seblak KBR KP</title>
+<title>Laporan Seblak KBR</title>
 
 <style>
 /* =========================================================
@@ -155,7 +155,7 @@ button {
 
 .tabs {
   display: grid;
-  grid-template-columns: repeat(5, 1fr);
+  grid-template-columns: repeat(6, 1fr);
   gap: 5px;
   background: white;
   padding: 5px;
@@ -517,7 +517,7 @@ tr:hover td { background: #fafafa; }
   .title { font-size: 19px; }
   .subtitle { font-size: 10px; }
   .container { padding: 9px; }
-  .tabs { top: 84px; }
+  .tabs { top: 84px; grid-template-columns: repeat(3, 1fr); gap: 4px; }
   .tab { font-size: 9px; padding: 9px 3px; }
   .filter-grid, .filter-grid.four { grid-template-columns: 1fr 1fr; }
   .stats { grid-template-columns: 1fr 1fr; }
@@ -545,7 +545,7 @@ tr:hover td { background: #fafafa; }
   <div class="header-inner">
     <div class="header-row">
       <div>
-        <h1 class="title">Laporan Seblak KBR KP</h1>
+        <h1 class="title">Laporan Seblak KBR</h1>
         <div class="subtitle">Dashboard Laporan Pengisian Seblak KBR Integrated</div>
       </div>
       <div class="header-actions">
@@ -566,6 +566,7 @@ tr:hover td { background: #fafafa; }
   <button class="tab active" data-tab="profil">👥<br>Profil</button>
   <button class="tab" data-tab="baromij">📊<br>Agenda</button>
   <button class="tab" data-tab="yaumiyan">📋<br>Yaumiyan</button>
+  <button class="tab" data-tab="binaan">🌱<br>Binaan</button>
   <button class="tab" data-tab="rekrutmen">🤝<br>Rekrutmen</button>
   <button class="tab" data-tab="ib">📅<br>IB</button>
 </nav>
@@ -574,13 +575,14 @@ tr:hover td { background: #fafafa; }
 <section id="profil" class="panel active">
   <div class="card">
     <h2 class="card-title">Laporan Anggota</h2>
-    <p class="card-subtitle">Gunakan filter untuk melihat seluruh anggota, daerah tertentu, atau kelas tertentu.</p>
+    <p class="card-subtitle">Gunakan filter untuk melihat seluruh anggota, Daerah, atau Kelas tertentu.</p>
     <div class="filter-grid">
       <div class="field">
         <label>Tampilkan</label>
         <select id="profilFilter">
           <option value="all">Seluruh Database</option>
           <option value="sektor">Per Daerah</option>
+          <option value="proca">Per Proca/PJ</option>
           <option value="kelas">Per Kelas</option>
         </select>
       </div>
@@ -618,6 +620,7 @@ tr:hover td { background: #fafafa; }
         <select id="baromijFilter">
           <option value="all">Seluruh Database</option>
           <option value="sektor">Per Daerah</option>
+          <option value="proca">Per Proca/PJ</option>
           <option value="kelas">Per Kelas</option>
         </select>
       </div>
@@ -675,6 +678,7 @@ tr:hover td { background: #fafafa; }
         <select id="yaumiyanFilter">
           <option value="all">Seluruh Database</option>
           <option value="sektor">Per Daerah</option>
+          <option value="proca">Per Proca/PJ</option>
           <option value="kelas">Per Kelas</option>
           <option value="anggota">Per Anggota</option>
         </select>
@@ -722,17 +726,67 @@ tr:hover td { background: #fafafa; }
   </div>
 </section>
 
-<!-- TAB 4 : REKRUTMEN -->
+<!-- TAB 4 : BINAAN -->
+<section id="binaan" class="panel">
+  <div class="card">
+    <h2 class="card-title">Laporan Binaan</h2>
+    <p class="card-subtitle">Pantau statistik mutasi dan seleksi binaan (L0, L1, L2).</p>
+    <div class="filter-grid four">
+      <div class="field">
+        <label>Tampilkan</label>
+        <select id="binaanFilter">
+          <option value="all">Seluruh Database</option>
+          <option value="sektor">Per Daerah</option>
+          <option value="proca">Per Proca/PJ</option>
+          <option value="kelas">Per Kelas</option>
+          <option value="anggota">Per Anggota</option>
+        </select>
+      </div>
+      <div class="field">
+        <label>Pilihan</label>
+        <select id="binaanValue"><option value="">Semua</option></select>
+      </div>
+      <div class="field">
+        <label>Mulai Tanggal</label>
+        <input type="date" id="binaanStartDate" class="search-input">
+      </div>
+      <div class="field">
+        <label>Sampai Tanggal</label>
+        <input type="date" id="binaanEndDate" class="search-input">
+      </div>
+    </div>
+    <div style="margin-top:9px">
+      <div class="field">
+        <label>Cari Anggota</label>
+        <div class="search-box">
+          <span class="search-icon">🔎</span>
+          <input id="binaanSearch" class="search-input search-with-icon" type="search" placeholder="ID anggota...">
+        </div>
+      </div>
+    </div>
+  </div>
+  <div id="binaanStats" class="stats"></div>
+  <div class="card">
+    <div class="table-head">
+      <h3 class="table-title">Riwayat Laporan Binaan</h3>
+      <span id="binaanCount" class="table-count"></span>
+    </div>
+    <div id="binaanTable" class="table-scroll"></div>
+  </div>
+</section>
+
+<!-- TAB 5 : REKRUTMEN -->
 <section id="rekrutmen" class="panel">
   <div class="card">
-    <h2 class="card-title">Laporan Rekrutmen</h2>
-    <p class="card-subtitle">Pantau statistik dan riwayat rekrutmen Jama'i (Kelas) maupun Fardi (Perorangan).</p>
+    <h2 class="card-title">Laporan Rekrutmen & Target</h2>
+    <p class="card-subtitle">Pantau capaian target rekrutmen per Proca / PJ serta riwayat rekrutmen Jama'i & Fardi.</p>
     <div class="filter-grid four">
       <div class="field">
         <label>Tampilkan</label>
         <select id="rekrutmenFilter">
           <option value="all">Seluruh Database</option>
           <option value="sektor">Per Daerah</option>
+          <option value="proca">Per Proca/PJ</option>
           <option value="kelas">Per Kelas</option>
           <option value="anggota">Per Anggota</option>
         </select>
@@ -761,6 +815,15 @@ tr:hover td { background: #fafafa; }
     </div>
   </div>
   <div id="rekrutmenStats" class="stats"></div>
+  
+  <div class="card">
+    <div class="table-head">
+      <h3 class="table-title">Pencapaian Target Rekrutmen Per Proca / PJ</h3>
+      <span class="table-count">Daerah & Proca Target</span>
+    </div>
+    <div id="rekrutmenTargetTable" class="table-scroll"></div>
+  </div>
+
   <div class="card">
     <div class="table-head">
       <h3 class="table-title">Riwayat Rekrutmen Fardi & Jama'i</h3>
@@ -770,7 +833,7 @@ tr:hover td { background: #fafafa; }
   </div>
 </section>
 
-<!-- TAB 5 : IB -->
+<!-- TAB 6 : IB -->
 <section id="ib" class="panel">
   <div class="card">
     <h2 class="card-title">Laporan IB</h2>
@@ -781,6 +844,7 @@ tr:hover td { background: #fafafa; }
         <select id="ibFilter">
           <option value="all">Seluruh Database</option>
           <option value="sektor">Per Daerah</option>
+          <option value="proca">Per Proca/PJ</option>
           <option value="kelas">Per Kelas</option>
           <option value="anggota">Per Anggota</option>
         </select>
@@ -818,7 +882,7 @@ tr:hover td { background: #fafafa; }
   </div>
 </section>
 
-<div class="footer">Laporan Seblak KBR KP · Integrated Analytics System</div>
+<div class="footer">Laporan Seblak KBR · Integrated Analytics System</div>
 
 </main>
 
@@ -832,7 +896,9 @@ const SHEETS = {
   profil: "Profil",
   baromij: "Baromij",
   yaumiyan: "Yaumiyan",
+  binaan: "Binaan",
   rekrutmen: "Rekrutmen",
+  targetrekrutmen: "targetrekrutmen",
   ib: "IB"
 };
 
@@ -840,7 +906,9 @@ const DATA = {
   profil: [],
   baromij: [],
   yaumiyan: [],
+  binaan: [],
   rekrutmen: [],
+  targetrekrutmen: [],
   ib: []
 };
 
@@ -978,6 +1046,7 @@ function columnInfo(data) {
   return {
     idAnggota: findColumn(data, ["id_anggota", "kode_anggota", "anggota"]),
     idSektor: findColumn(data, ["id_sektor", "proda", "sektor"]),
+    procaPj: findColumn(data, ["proca_pj", "proca", "pj"]),
     idKelas: findColumn(data, ["id_kelas", "kode_kelas", "kelas"]),
     timestamp: findColumn(data, ["Timestamp", "timestamp", "waktu"]),
     keterangan: findColumn(data, ["keterangan"])
@@ -1021,17 +1090,21 @@ async function loadAllData(isRefresh = false) {
       fetchSheet(SHEETS.profil),
       fetchSheet(SHEETS.baromij),
       fetchSheet(SHEETS.yaumiyan),
+      fetchSheet(SHEETS.binaan),
       fetchSheet(SHEETS.rekrutmen),
+      fetchSheet(SHEETS.targetrekrutmen),
       fetchSheet(SHEETS.ib)
     ]);
 
     DATA.profil = results[0].filter(row => Object.values(row).some(v => clean(v)));
     DATA.baromij = results[1].filter(row => Object.values(row).some(v => clean(v)));
     DATA.yaumiyan = results[2].filter(row => Object.values(row).some(v => clean(v)));
-    DATA.rekrutmen = results[3].filter(row => Object.values(row).some(v => clean(v)));
-    DATA.ib = results[4].filter(row => Object.values(row).some(v => clean(v)));
+    DATA.binaan = results[3].filter(row => Object.values(row).some(v => clean(v)));
+    DATA.rekrutmen = results[4].filter(row => Object.values(row).some(v => clean(v)));
+    DATA.targetrekrutmen = results[5].filter(row => Object.values(row).some(v => clean(v)));
+    DATA.ib = results[6].filter(row => Object.values(row).some(v => clean(v)));
 
-    const totalRecords = DATA.profil.length + DATA.baromij.length + DATA.yaumiyan.length + DATA.rekrutmen.length + DATA.ib.length;
+    const totalRecords = DATA.profil.length + DATA.baromij.length + DATA.yaumiyan.length + DATA.binaan.length + DATA.rekrutmen.length + DATA.ib.length;
     setConnection("Terhubung · " + totalRecords.toLocaleString("id-ID") + " data", "success");
 
     initializeFilters();
@@ -1051,7 +1124,7 @@ function setConnection(text, status) {
 
 function showGlobalError(error) {
   const message = `<div class="error-box"><strong>Gagal memuat data.</strong><br>${escapeHtml(error.message)}</div>`;
-  ["profilTable", "baromijKetTable", "yaumiyanKetTable", "rekrutmenTable", "ibStatusTable"].forEach(id => {
+  ["profilTable", "baromijKetTable", "yaumiyanKetTable", "binaanTable", "rekrutmenTargetTable", "rekrutmenTable", "ibStatusTable"].forEach(id => {
     const el = document.getElementById(id);
     if (el) el.innerHTML = message;
   });
@@ -1059,7 +1132,7 @@ function showGlobalError(error) {
 
 function showLoading() {
   const html = `<div class="loading"><div class="spinner"></div>Memuat data Google Sheet...</div>`;
-  ["profilTable", "baromijKetTable", "yaumiyanKetTable", "rekrutmenTable", "ibStatusTable"].forEach(id => {
+  ["profilTable", "baromijKetTable", "yaumiyanKetTable", "binaanTable", "rekrutmenTargetTable", "rekrutmenTable", "ibStatusTable"].forEach(id => {
     const el = document.getElementById(id);
     if (el) el.innerHTML = html;
   });
@@ -1081,17 +1154,19 @@ document.querySelectorAll('.tab').forEach(tabBtn => {
 
 function initializeFilters() {
   const sectors = Array.from(new Set(DATA.profil.map(r => clean(r[findColumn(DATA.profil, ["id_sektor"])])))).filter(Boolean).sort();
+  const procas = Array.from(new Set(DATA.profil.map(r => clean(r[findColumn(DATA.profil, ["proca_pj"])])))).filter(Boolean).sort();
   const classes = Array.from(new Set(DATA.profil.map(r => clean(r[findColumn(DATA.profil, ["id_kelas"])])))).filter(Boolean).sort();
   const members = Array.from(new Set(DATA.profil.map(r => clean(r[findColumn(DATA.profil, ["id_anggota"])])))).filter(Boolean).sort();
 
-  setupFilterControl("profil", sectors, classes, members);
-  setupFilterControl("baromij", sectors, classes, members);
-  setupFilterControl("yaumiyan", sectors, classes, members);
-  setupFilterControl("rekrutmen", sectors, classes, members);
-  setupFilterControl("ib", sectors, classes, members);
+  setupFilterControl("profil", sectors, procas, classes, members);
+  setupFilterControl("baromij", sectors, procas, classes, members);
+  setupFilterControl("yaumiyan", sectors, procas, classes, members);
+  setupFilterControl("binaan", sectors, procas, classes, members);
+  setupFilterControl("rekrutmen", sectors, procas, classes, members);
+  setupFilterControl("ib", sectors, procas, classes, members);
 }
 
-function setupFilterControl(prefix, sectors, classes, members) {
+function setupFilterControl(prefix, sectors, procas, classes, members) {
   const filterSel = document.getElementById(prefix + "Filter");
   const valueSel = document.getElementById(prefix + "Value");
   const searchInp = document.getElementById(prefix + "Search");
@@ -1106,6 +1181,7 @@ function setupFilterControl(prefix, sectors, classes, members) {
 
     let list = [];
     if (mode === "sektor") list = sectors;
+    else if (mode === "proca") list = procas;
     else if (mode === "kelas") list = classes;
     else if (mode === "anggota") list = members;
 
@@ -1170,6 +1246,8 @@ function getFilteredRows(sheetData, prefix) {
 
   if (filterMode === "sektor" && filterVal && cols.idSektor) {
     rows = rows.filter(r => clean(r[cols.idSektor]) === filterVal);
+  } else if (filterMode === "proca" && filterVal && cols.procaPj) {
+    rows = rows.filter(r => clean(r[cols.procaPj]) === filterVal);
   } else if (filterMode === "kelas" && filterVal && cols.idKelas) {
     rows = rows.filter(r => clean(r[cols.idKelas]) === filterVal);
   } else if (filterMode === "anggota" && filterVal && cols.idAnggota) {
@@ -1190,6 +1268,7 @@ function renderAll() {
   renderProfil();
   renderBaromij();
   renderYaumiyan();
+  renderBinaan();
   renderRekrutmen();
   renderIB();
 }
@@ -1198,6 +1277,7 @@ function renderTab(prefix) {
   if (prefix === "profil") renderProfil();
   else if (prefix === "baromij") renderBaromij();
   else if (prefix === "yaumiyan") renderYaumiyan();
+  else if (prefix === "binaan") renderBinaan();
   else if (prefix === "rekrutmen") renderRekrutmen();
   else if (prefix === "ib") renderIB();
 }
@@ -1218,10 +1298,11 @@ function renderProfil() {
     return;
   }
 
-  let html = `<table><thead><tr><th>Proda</th><th>Kelas</th><th>ID Anggota</th></tr></thead><tbody>`;
+  let html = `<table><thead><tr><th>Daerah</th><th>Proca / PJ</th><th>Kelas</th><th>ID Anggota</th></tr></thead><tbody>`;
   rows.forEach(r => {
     html += `<tr>
       <td>${escapeHtml(r[cols.idSektor] || '-')}</td>
+      <td>${escapeHtml(r[cols.procaPj] || '-')}</td>
       <td>${escapeHtml(r[cols.idKelas] || '-')}</td>
       <td><strong>${escapeHtml(r[cols.idAnggota] || '-')}</strong></td>
     </tr>`;
@@ -1282,13 +1363,14 @@ function renderBaromij() {
     return;
   }
 
-  let html = `<table><thead><tr><th>Waktu</th><th>Proda</th><th>Kelas</th><th>ID Anggota</th><th>Walas Hadir</th><th>Tilawah</th><th>Taujih</th><th>Kultum</th><th>Pengumuman</th><th>Offline</th><th>Rekrutmen Jama'i</th><th>Keterangan</th></tr></thead><tbody>`;
+  let html = `<table><thead><tr><th>Waktu</th><th>Daerah</th><th>Proca/PJ</th><th>Kelas</th><th>ID Anggota</th><th>Walas Hadir</th><th>Tilawah</th><th>Taujih</th><th>Kultum</th><th>Pengumuman</th><th>Offline</th><th>Rekrutmen Jama'i</th><th>Keterangan</th></tr></thead><tbody>`;
   const rekrutmenJamaiCol = findColumn(DATA.baromij, ["rekrutmen_jamai"]);
 
   rows.forEach(r => {
     html += `<tr>
       <td>${formatDateFormatted(r[cols.timestamp])}</td>
       <td>${escapeHtml(r[cols.idSektor] || '-')}</td>
+      <td>${escapeHtml(r[cols.procaPj] || '-')}</td>
       <td>${escapeHtml(r[cols.idKelas] || '-')}</td>
       <td><strong>${escapeHtml(r[cols.idAnggota] || '-')}</strong></td>
       <td>${escapeHtml(r[walasCol] || '-')}</td>
@@ -1368,11 +1450,12 @@ function renderYaumiyan() {
     return;
   }
 
-  let html = `<table><thead><tr><th>Waktu</th><th>Proda</th><th>Kelas</th><th>ID Anggota</th><th>Hadir</th><th>Sholat Jam.</th><th>Qiyam</th><th>Tilawah</th><th>Shoum</th><th>Olahraga</th><th>Ma'tsurat</th><th>Keterangan</th></tr></thead><tbody>`;
+  let html = `<table><thead><tr><th>Waktu</th><th>Daerah</th><th>Proca/PJ</th><th>Kelas</th><th>ID Anggota</th><th>Hadir</th><th>Sholat Jam.</th><th>Qiyam</th><th>Tilawah</th><th>Shoum</th><th>Olahraga</th><th>Ma'tsurat</th><th>Keterangan</th></tr></thead><tbody>`;
   rows.forEach(r => {
     html += `<tr>
       <td>${formatDateFormatted(r[cols.timestamp])}</td>
       <td>${escapeHtml(r[cols.idSektor] || '-')}</td>
+      <td>${escapeHtml(r[cols.procaPj] || '-')}</td>
       <td>${escapeHtml(r[cols.idKelas] || '-')}</td>
       <td><strong>${escapeHtml(r[cols.idAnggota] || '-')}</strong></td>
       <td>${escapeHtml(r[hadirCol] || '-')}</td>
@@ -1388,7 +1471,57 @@ function renderYaumiyan() {
   document.getElementById("yaumiyanKetTable").innerHTML = html + `</tbody></table>`;
 }
 
-/* 4. REKRUTMEN (JAMA'I & FARDI) */
+/* 4. BINAAN */
+function renderBinaan() {
+  const rows = getFilteredRows(DATA.binaan, "binaan");
+  const cols = columnInfo(DATA.binaan);
+
+  const mutasiL0 = findColumn(DATA.binaan, ["mutasi_l0"]);
+  const seleksiL0 = findColumn(DATA.binaan, ["seleksi_l0"]);
+  const mutasiL1 = findColumn(DATA.binaan, ["mutasi_l1"]);
+  const seleksiL1 = findColumn(DATA.binaan, ["seleksi_l1"]);
+  const mutasiL2 = findColumn(DATA.binaan, ["mutasi_l2"]);
+  const seleksiL2 = findColumn(DATA.binaan, ["seleksi_l2"]);
+
+  const sumCol = (col) => col ? rows.reduce((acc, r) => acc + (parseInt(r[col]) || 0), 0) : 0;
+
+  const totalMutasi = sumCol(mutasiL0) + sumCol(mutasiL1) + sumCol(mutasiL2);
+  const totalSeleksi = sumCol(seleksiL0) + sumCol(seleksiL1) + sumCol(seleksiL2);
+
+  document.getElementById("binaanStats").innerHTML = `
+    <div class="stat"><div class="stat-number">${rows.length}</div><div class="stat-label">Total Isian Binaan</div></div>
+    <div class="stat teal"><div class="stat-number">${totalMutasi}</div><div class="stat-label">Total Mutasi</div></div>
+    <div class="stat green"><div class="stat-number">${totalSeleksi}</div><div class="stat-label">Total Seleksi</div></div>
+  `;
+
+  document.getElementById("binaanCount").textContent = `${rows.length} Laporan`;
+
+  if (!rows.length) {
+    document.getElementById("binaanTable").innerHTML = `<div class="empty">Tidak ada data binaan.</div>`;
+    return;
+  }
+
+  let html = `<table><thead><tr><th>Waktu</th><th>Daerah</th><th>Proca/PJ</th><th>Kelas</th><th>ID Anggota</th><th>Mutasi L0</th><th>Seleksi L0</th><th>Mutasi L1</th><th>Seleksi L1</th><th>Mutasi L2</th><th>Seleksi L2</th><th>Keterangan</th></tr></thead><tbody>`;
+  rows.forEach(r => {
+    html += `<tr>
+      <td>${formatDateFormatted(r[cols.timestamp])}</td>
+      <td>${escapeHtml(r[cols.idSektor] || '-')}</td>
+      <td>${escapeHtml(r[cols.procaPj] || '-')}</td>
+      <td>${escapeHtml(r[cols.idKelas] || '-')}</td>
+      <td><strong>${escapeHtml(r[cols.idAnggota] || '-')}</strong></td>
+      <td>${parseInt(r[mutasiL0]) || 0}</td>
+      <td>${parseInt(r[seleksiL0]) || 0}</td>
+      <td>${parseInt(r[mutasiL1]) || 0}</td>
+      <td>${parseInt(r[seleksiL1]) || 0}</td>
+      <td>${parseInt(r[mutasiL2]) || 0}</td>
+      <td>${parseInt(r[seleksiL2]) || 0}</td>
+      <td class="keterangan">${escapeHtml(r[cols.keterangan] || '-')}</td>
+    </tr>`;
+  });
+  document.getElementById("binaanTable").innerHTML = html + `</tbody></table>`;
+}
+
+/* 5. REKRUTMEN (JAMA'I & FARDI) + CAPAIAN TARGET */
 function renderRekrutmen() {
   const fardiRows = getFilteredRows(DATA.rekrutmen, "rekrutmen");
   const jamaiRows = getFilteredRows(DATA.baromij, "rekrutmen");
@@ -1401,13 +1534,115 @@ function renderRekrutmen() {
   const totalKeseluruhan = totalFardi + totalJamai;
 
   document.getElementById("rekrutmenStats").innerHTML = `
-    <div class="stat teal"><div class="stat-number">${totalKeseluruhan}</div><div class="stat-label">Total Rekrutmen Total</div></div>
+    <div class="stat teal"><div class="stat-number">${totalKeseluruhan}</div><div class="stat-label">Total Realisasi Rekrutmen</div></div>
     <div class="stat green"><div class="stat-number">${totalFardi}</div><div class="stat-label">Rekrutmen Fardi</div></div>
     <div class="stat blue"><div class="stat-number">${totalJamai}</div><div class="stat-label">Rekrutmen Jama'i</div></div>
-    <div class="stat orange"><div class="stat-number">${fardiRows.length + jamaiRows.length}</div><div class="stat-label">Total Transaksi Laporan</div></div>
   `;
+//    <div class="stat orange"><div class="stat-number">${fardiRows.length + jamaiRows.length}</div><div class="stat-label">Total Transaksi Laporan</div></div>
 
-  // Gabungkan riwayat rekrutmen Fardi & Jama'i untuk tabel
+  // 1. OLAH DATA TARGET PER PROCA / PJ
+  const keyTypeCol = findColumn(DATA.targetrekrutmen, ["type"]);
+  const keyKeyCol = findColumn(DATA.targetrekrutmen, ["key"]);
+  const keyValueCol = findColumn(DATA.targetrekrutmen, ["value"]);
+
+  const targetsByProca = {};
+  DATA.targetrekrutmen.forEach(row => {
+    const type = clean(row[keyTypeCol]);
+    const keyVal = clean(row[keyKeyCol]);
+    const val = parseInt(row[keyValueCol]) || 0;
+
+    if (type === "proca" && keyVal) {
+      targetsByProca[keyVal] = val;
+    }
+  });
+
+  // Hitung Realisasi Rekrutmen per Proca
+  const realisasiByProca = {};
+  const sektorByProca = {};
+
+  // Ambil pemetaan sektor & proca dari profil
+  const colProfSektor = findColumn(DATA.profil, ["id_sektor"]);
+  const colProfProca = findColumn(DATA.profil, ["proca_pj"]);
+  DATA.profil.forEach(r => {
+    const prc = clean(r[colProfProca]);
+    const sek = clean(r[colProfSektor]);
+    if (prc) sektorByProca[prc] = sek;
+  });
+
+  // Realisasi Fardi
+  const colFardiProca = findColumn(DATA.rekrutmen, ["proca_pj"]);
+  fardiRows.forEach(r => {
+    const prc = clean(r[colFardiProca]);
+    if (prc) {
+      realisasiByProca[prc] = (realisasiByProca[prc] || 0) + (parseInt(r[colJmlFardi]) || 0);
+    }
+  });
+
+  // Realisasi Jama'i
+  const colJamaiProca = findColumn(DATA.baromij, ["proca_pj"]);
+  jamaiRows.forEach(r => {
+    const prc = clean(r[colJamaiProca]);
+    if (prc) {
+      realisasiByProca[prc] = (realisasiByProca[prc] || 0) + (parseInt(r[colJmlJamai]) || 0);
+    }
+  });
+
+  // Daftar seluruh Proca unik
+  const allProcas = Array.from(new Set([
+    ...Object.keys(targetsByProca),
+    ...Object.keys(realisasiByProca),
+    ...Object.keys(sektorByProca)
+  ])).filter(Boolean).sort();
+
+  // Filter Proca berdasarkan kriteria filter UI aktif
+  const filterMode = document.getElementById("rekrutmenFilter")?.value || "all";
+  const filterVal = document.getElementById("rekrutmenValue")?.value || "";
+
+  let filteredProcas = allProcas.filter(prc => {
+    if (filterMode === "sektor" && filterVal) {
+      return sektorByProca[prc] === filterVal;
+    }
+    if (filterMode === "proca" && filterVal) {
+      return prc === filterVal;
+    }
+    return true;
+  });
+
+  if (!filteredProcas.length) {
+    document.getElementById("rekrutmenTargetTable").innerHTML = `<div class="empty">Tidak ada data target rekrutmen.</div>`;
+  } else {
+    let targetHtml = `<table><thead><tr><th>Daerah</th><th>Proca / PJ</th><th>Target</th><th>Realisasi</th><th>Capaian (%)</th><th>Status</th></tr></thead><tbody>`;
+    
+    filteredProcas.forEach(prc => {
+      const target = targetsByProca[prc] || 0;
+      const realisasi = realisasiByProca[prc] || 0;
+      const pct = target > 0 ? (realisasi / target) * 100 : 0;
+      
+      let badgeClass = "badge-danger";
+      let statusText = "Belum Tercapai";
+
+      if (pct >= 100) {
+        badgeClass = "badge-success";
+        statusText = "Tercapai";
+      } else if (pct >= 50) {
+        badgeClass = "badge-warning";
+        statusText = "Progres Baik";
+      }
+
+      targetHtml += `<tr>
+        <td>${escapeHtml(sektorByProca[prc] || '-')}</td>
+        <td><strong>${escapeHtml(prc)}</strong></td>
+        <td>${target}</td>
+        <td><strong>${realisasi}</strong></td>
+        <td>${formatPercent(pct)}</td>
+        <td><span class="badge ${badgeClass}">${statusText}</span></td>
+      </tr>`;
+    });
+
+    document.getElementById("rekrutmenTargetTable").innerHTML = targetHtml + `</tbody></table>`;
+  }
+
+  // 2. RIWAYAT LAPORAN REKRUTMEN
   const combinedList = [];
 
   const colsFardi = columnInfo(DATA.rekrutmen);
@@ -1415,11 +1650,12 @@ function renderRekrutmen() {
     combinedList.push({
       timestamp: r[colsFardi.timestamp],
       sektor: r[colsFardi.idSektor],
+      proca: r[colsFardi.procaPj],
       kelas: r[colsFardi.idKelas],
       anggota: r[colsFardi.idAnggota],
       tipe: "Fardi",
       jumlah: parseInt(r[colJmlFardi]) || 0,
-      keterangan: "Laporan Rekrutmen Fardi"
+//      keterangan: "Laporan Rekrutmen Fardi"
     });
   });
 
@@ -1430,6 +1666,7 @@ function renderRekrutmen() {
       combinedList.push({
         timestamp: r[colsJamai.timestamp],
         sektor: r[colsJamai.idSektor],
+        proca: r[colsJamai.procaPj],
         kelas: r[colsJamai.idKelas],
         anggota: r[colsJamai.idAnggota],
         tipe: "Jama'i",
@@ -1449,13 +1686,14 @@ function renderRekrutmen() {
     return;
   }
 
-  let html = `<table><thead><tr><th>Waktu</th><th>Proda</th><th>Kelas</th><th>ID Anggota</th><th>Jenis Rekrutmen</th><th>Jumlah</th><th>Keterangan</th></tr></thead><tbody>`;
+  let html = `<table><thead><tr><th>Waktu</th><th>Daerah</th><th>Proca/PJ</th><th>Kelas</th><th>ID Anggota</th><th>Jenis Rekrutmen</th><th>Jumlah</th><th>Keterangan</th></tr></thead><tbody>`;
   combinedList.forEach(item => {
     const badgeClass = item.tipe === "Fardi" ? "badge-success" : "badge-info";
     const jmlDisplay = item.jumlah > 0 ? `+${item.jumlah}` : item.jumlah;
     html += `<tr>
       <td>${formatDateFormatted(item.timestamp)}</td>
       <td>${escapeHtml(item.sektor || '-')}</td>
+      <td>${escapeHtml(item.proca || '-')}</td>
       <td>${escapeHtml(item.kelas || '-')}</td>
       <td><strong>${escapeHtml(item.anggota || '-')}</strong></td>
       <td><span class="badge ${badgeClass}">${item.tipe}</span></td>
@@ -1466,7 +1704,7 @@ function renderRekrutmen() {
   document.getElementById("rekrutmenTable").innerHTML = html + `</tbody></table>`;
 }
 
-/* 5. IB */
+/* 6. IB */
 function renderIB() {
   const rows = getFilteredRows(DATA.ib, "ib");
   const selectedMo = document.getElementById("ibMonth")?.value;
@@ -1498,12 +1736,13 @@ function renderIB() {
   }
 
   const cols = columnInfo(DATA.ib);
-  let html = `<table><thead><tr><th>Waktu</th><th>Proda</th><th>Kelas</th><th>ID Anggota</th><th>Bulan/Tahun</th><th>Status</th></tr></thead><tbody>`;
+  let html = `<table><thead><tr><th>Waktu</th><th>Daerah</th><th>Proca/PJ</th><th>Kelas</th><th>ID Anggota</th><th>Bulan/Tahun</th><th>Status</th></tr></thead><tbody>`;
   
   filteredIB.forEach(r => {
     html += `<tr>
       <td>${formatDateFormatted(r[cols.timestamp])}</td>
       <td>${escapeHtml(r[cols.idSektor] || '-')}</td>
+      <td>${escapeHtml(r[cols.procaPj] || '-')}</td>
       <td>${escapeHtml(r[cols.idKelas] || '-')}</td>
       <td><strong>${escapeHtml(r[cols.idAnggota] || '-')}</strong></td>
       <td><strong>${escapeHtml(clean(r[mCol]))}/${escapeHtml(clean(r[yCol]))}</strong></td>
