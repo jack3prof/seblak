@@ -75,7 +75,7 @@
         .container { max-width: 1200px; margin: auto; padding: 12px; }
         .tabs {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(90px, 1fr));
             gap: 4px;
             background: white;
             padding: 4px;
@@ -244,6 +244,9 @@
             </button>
             <button id="tabBtnRekrutmen" class="tab-btn hidden" onclick="switchMainTab('rekrutmen')">
                 <span>👥</span> <span>Rekrutmen</span>
+            </button>
+            <button id="tabBtnBinaan" class="tab-btn hidden" onclick="switchMainTab('binaan')">
+                <span>🌱</span> <span>Binaan</span>
             </button>
             <button class="tab-btn" onclick="switchMainTab('ib')">
                 <span>💰</span> <span>Lapor IB</span>
@@ -644,6 +647,102 @@
         </section>
 
         <!-- =========================================================
+             TAB 6: BINAAN (BARU)
+        ========================================================= -->
+        <section id="sec-binaan" class="panel space-y-6">
+            <!-- KARTU: BINAAN SAAT INI -->
+            <div class="card bg-gradient-to-r from-teal-800 to-teal-900 text-white">
+                <h2 class="card-title text-white mb-1">🌱 Binaan Saat Ini</h2>
+                <p class="card-subtitle text-teal-100 mb-4">Akumulasi jumlah binaan aktif saat ini berdasarkan laporan mutasi dan seleksi</p>
+                <div class="grid grid-cols-3 gap-4 text-center">
+                    <div class="bg-white/10 p-3 rounded-xl border border-white/15">
+                        <div class="text-xs uppercase text-teal-200 font-semibold">Binaan L0</div>
+                        <div id="valBinaanL0" class="text-2xl font-black font-mono mt-1 text-amber-300">0</div>
+                    </div>
+                    <div class="bg-white/10 p-3 rounded-xl border border-white/15">
+                        <div class="text-xs uppercase text-teal-200 font-semibold">Binaan L1</div>
+                        <div id="valBinaanL1" class="text-2xl font-black font-mono mt-1 text-emerald-300">0</div>
+                    </div>
+                    <div class="bg-white/10 p-3 rounded-xl border border-white/15">
+                        <div class="text-xs uppercase text-teal-200 font-semibold">Binaan L2</div>
+                        <div id="valBinaanL2" class="text-2xl font-black font-mono mt-1 text-cyan-300">0</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- FORM INPUT BINAAN -->
+            <div class="card max-w-xl mx-auto">
+                <h2 class="card-title">📝 Input Data Binaan</h2>
+                <p class="card-subtitle">Masukkan nilai mutasi dan seleksi per level binaan</p>
+
+                <form id="formBinaan" onsubmit="handleBinaanSubmit(event)" class="space-y-4">
+                    <!-- Binaan L0 -->
+                    <div class="p-3 bg-slate-50 border rounded-xl space-y-3">
+                        <h4 class="font-bold text-xs uppercase text-slate-700">Binaan L0</h4>
+                        <div class="grid grid-cols-2 gap-3">
+                            <div>
+                                <label class="block text-[11px] font-bold text-slate-600 mb-1">Mutasi L0 (+ / -)</label>
+                                <input type="number" step="1" id="mutasiL0" value="0" class="w-full p-2 border rounded-lg text-sm bg-white focus:ring-2 focus:ring-teal-600 outline-none font-mono">
+                            </div>
+                            <div>
+                                <label class="block text-[11px] font-bold text-slate-400 mb-1">Seleksi L0 (Disabled)</label>
+                                <input type="number" step="1" id="seleksiL0" value="0" disabled class="w-full p-2 border rounded-lg text-sm bg-slate-200 text-slate-500 cursor-not-allowed font-mono">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Binaan L1 -->
+                    <div class="p-3 bg-slate-50 border rounded-xl space-y-3">
+                        <h4 class="font-bold text-xs uppercase text-slate-700">Binaan L1</h4>
+                        <div class="grid grid-cols-2 gap-3">
+                            <div>
+                                <label class="block text-[11px] font-bold text-slate-600 mb-1">Mutasi L1 (+ / -)</label>
+                                <input type="number" step="1" id="mutasiL1" value="0" class="w-full p-2 border rounded-lg text-sm bg-white focus:ring-2 focus:ring-teal-600 outline-none font-mono">
+                            </div>
+                            <div>
+                                <label class="block text-[11px] font-bold text-slate-600 mb-1">Seleksi L1 (+ / -)</label>
+                                <input type="number" step="1" id="seleksiL1" value="0" class="w-full p-2 border rounded-lg text-sm bg-white focus:ring-2 focus:ring-teal-600 outline-none font-mono">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Binaan L2 -->
+                    <div class="p-3 bg-slate-50 border rounded-xl space-y-3">
+                        <h4 class="font-bold text-xs uppercase text-slate-700">Binaan L2</h4>
+                        <div class="grid grid-cols-2 gap-3">
+                            <div>
+                                <label class="block text-[11px] font-bold text-slate-600 mb-1">Mutasi L2 (+ / -)</label>
+                                <input type="number" step="1" id="mutasiL2" value="0" class="w-full p-2 border rounded-lg text-sm bg-white focus:ring-2 focus:ring-teal-600 outline-none font-mono">
+                            </div>
+                            <div>
+                                <label class="block text-[11px] font-bold text-slate-600 mb-1">Seleksi L2 (+ / -)</label>
+                                <input type="number" step="1" id="seleksiL2" value="0" class="w-full p-2 border rounded-lg text-sm bg-white focus:ring-2 focus:ring-teal-600 outline-none font-mono">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="block text-xs font-bold text-slate-600 mb-1">Keterangan</label>
+                        <input type="text" id="binaanKeterangan" value="-" class="w-full p-2.5 border rounded-lg text-sm focus:ring-2 focus:ring-teal-600 outline-none">
+                    </div>
+
+                    <button type="submit" class="w-full bg-teal-700 hover:bg-teal-800 text-white font-medium py-3 rounded-lg shadow-sm transition">
+                        Simpan & Hitung Binaan
+                    </button>
+                </form>
+            </div>
+
+            <!-- RIWAYAT BINAAN -->
+            <div class="card">
+                <div class="table-head">
+                    <h3 class="table-title">📌 Riwayat Laporan Binaan</h3>
+                    <span id="binaanStatusCount" class="table-count"></span>
+                </div>
+                <div id="binaanStatusTable" class="table-scroll-limit"></div>
+            </div>
+        </section>
+
+        <!-- =========================================================
              TAB 5: LAPOR IB
         ========================================================= -->
         <section id="sec-ib" class="panel space-y-6">
@@ -784,8 +883,8 @@
         const CONFIG_API_URL = "https://script.google.com/macros/s/AKfycbzjHM6Gvv8Z_iMWcv4Yf84SmEOSIvgj3znG2aC7C4VTtQ0ty_yz3jiXJaAdVfbicLk/exec";
         const GOOGLE_SHEET_ID = "1rEycScG3ByhgymdLW9J8rMkjz5cBxPgYNlHMah86HXA";
 
-        const SHEETS = { profil: "Profil", baromij: "Baromij", yaumiyan: "Yaumiyan", rekrutmen: "Rekrutmen", ib: "IB", id: "id", targetrekrutmen: "targetrekrutmen" };
-        const DATA = { profil: [], baromij: [], yaumiyan: [], rekrutmen: [], ib: [], id: [], targetrekrutmen: [] };
+        const SHEETS = { profil: "Profil", baromij: "Baromij", yaumiyan: "Yaumiyan", rekrutmen: "Rekrutmen", binaan: "Binaan", ib: "IB", id: "id", targetrekrutmen: "targetrekrutmen" };
+        const DATA = { profil: [], baromij: [], yaumiyan: [], rekrutmen: [], binaan: [], ib: [], id: [], targetrekrutmen: [] };
 
         // Data target default
         let TARGET_DATA = {
@@ -809,7 +908,7 @@
         let qrCodeObj = null;
         let qrCodePesertaObj = null;
 
-        const lastSubmitTimes = { baromij: 0, yaumiyan: 0, rekrutmen: 0, ib: 0 };
+        const lastSubmitTimes = { baromij: 0, yaumiyan: 0, rekrutmen: 0, binaan: 0, ib: 0 };
 
         document.addEventListener('DOMContentLoaded', () => {
             initYearOptions();
@@ -896,6 +995,7 @@
                 document.getElementById('tabBtnProfileInti').classList.remove('hidden');
                 document.getElementById('tabBtnBaromij').classList.remove('hidden');
                 document.getElementById('tabBtnRekrutmen').classList.remove('hidden');
+                document.getElementById('tabBtnBinaan').classList.remove('hidden');
                 
                 // Sembunyikan tab Profil Peserta jika diinginkan:
                 document.getElementById('tabBtnProfilePeserta').classList.add('hidden');
@@ -903,7 +1003,7 @@
                 // Pindah tampilan aktif ke tab Profil Inti
                 switchMainTab('profileInti');
 
-                showAlert('Akses Advance diterima. Tab Profil Inti, Agenda Kelas & Rekrutmen berhasil ditampilkan!', 'bg-emerald-100 text-emerald-800 border-emerald-300');
+                showAlert('Akses Advance diterima. Tab Profil Inti, Agenda Kelas, Rekrutmen & Binaan berhasil ditampilkan!', 'bg-emerald-100 text-emerald-800 border-emerald-300');
             } else if (pwd !== null) {
                 showAlert('Password salah!', 'bg-red-100 text-red-800 border-red-300');
             }
@@ -1500,14 +1600,13 @@
         }
 
         /* =========================================================
-           HANDLING SUBMIT YAUMIYAN (DIPERBAIKI)
+           HANDLING SUBMIT YAUMIYAN
         ========================================================= */
         function handleYaumiyanSubmit(e) {
             e.preventDefault();
             if (!checkUserRegistered()) return;
             if (!checkSubmitCooldown('yaumiyan')) return;
 
-            // Mengambil profil sesuai status Advance
             const activeUser = getActiveProfileData();
 
             if (!activeUser) {
@@ -1519,7 +1618,7 @@
             const data = {
                 id_sektor: activeUser.id_sektor,
                 proca_pj: activeUser.proca_pj,
-                id_kelas: activeUser.id_kelas, // Terisi NAMA (Sebelum Advance) atau ID_KELAS (Setelah Advance)
+                id_kelas: activeUser.id_kelas,
                 id_anggota: activeUser.id_anggota,
                 kehadiran_kelas: form.kehadiran_kelas.checked ? 'ya' : 'tidak',
                 sholat_jamaah: form.sholat_jamaah.value || 0,
@@ -1560,14 +1659,50 @@
         }
 
         /* =========================================================
-           HANDLING SUBMIT LAPOR IB (DIPERBAIKI)
+           HANDLING SUBMIT BINAAN (BARU)
+        ========================================================= */
+        function handleBinaanSubmit(e) {
+            e.preventDefault();
+            if (!checkUserRegistered()) return;
+            if (!checkSubmitCooldown('binaan')) return;
+
+            const activeUser = getActiveProfileData();
+            if (!activeUser) {
+                showAlert('Data profil belum lengkap!', 'bg-amber-100 text-amber-800 border-amber-300');
+                return;
+            }
+
+            const data = {
+                id_sektor: activeUser.id_sektor,
+                proca_pj: activeUser.proca_pj || '',
+                id_kelas: activeUser.id_kelas || '',
+                id_anggota: activeUser.id_anggota,
+                mutasi_l0: parseInt(document.getElementById('mutasiL0').value) || 0,
+                seleksi_l0: 0,
+                mutasi_l1: parseInt(document.getElementById('mutasiL1').value) || 0,
+                seleksi_l1: parseInt(document.getElementById('seleksiL1').value) || 0,
+                mutasi_l2: parseInt(document.getElementById('mutasiL2').value) || 0,
+                seleksi_l2: parseInt(document.getElementById('seleksiL2').value) || 0,
+                keterangan: document.getElementById('binaanKeterangan').value || '-'
+            };
+
+            sendToGoogleSheet('saveBinaan', data, (res) => {
+                showAlert('Data Binaan berhasil disimpan!', 'bg-emerald-100 text-emerald-800 border-emerald-300');
+                document.getElementById('formBinaan').reset();
+                document.getElementById('seleksiL0').value = 0;
+                document.getElementById('binaanKeterangan').value = '-';
+                loadAllData(true);
+            });
+        }
+
+        /* =========================================================
+           HANDLING SUBMIT LAPOR IB
         ========================================================= */
         function handleIbSubmit(e) {
             e.preventDefault();
             if (!checkUserRegistered()) return;
             if (!checkSubmitCooldown('ib')) return;
 
-            // Mengambil profil sesuai status Advance
             const activeUser = getActiveProfileData();
 
             if (!activeUser) {
@@ -1578,7 +1713,7 @@
             const data = {
                 id_sektor: activeUser.id_sektor,
                 proca_pj: activeUser.proca_pj,
-                id_kelas: activeUser.id_kelas, // Terisi NAMA (Sebelum Advance) atau ID_KELAS (Setelah Advance)
+                id_kelas: activeUser.id_kelas,
                 id_anggota: activeUser.id_anggota,
                 bulan: document.getElementById('ibBulan').value,
                 tahun: document.getElementById('ibTahun').value
@@ -1590,9 +1725,6 @@
             });
         }
 
-        /* =========================================================
-           PENYESUAIAN CEK REGISTRASI USER (DIPERBAIKI)
-        ========================================================= */
         function checkUserRegistered() {
             const activeUser = getActiveProfileData();
             if (!activeUser || !activeUser.id_anggota || !activeUser.id_sektor) {
@@ -1691,16 +1823,19 @@
             try {
                 const results = await Promise.all([
                     fetchSheet(SHEETS.profil), fetchSheet(SHEETS.baromij),
-                    fetchSheet(SHEETS.yaumiyan), fetchSheet(SHEETS.rekrutmen), fetchSheet(SHEETS.ib),
-                    fetchSheet(SHEETS.id).catch(() => []) // Fetch Sheet ID jika ada
+                    fetchSheet(SHEETS.yaumiyan), fetchSheet(SHEETS.rekrutmen), 
+                    fetchSheet(SHEETS.binaan).catch(() => []),
+                    fetchSheet(SHEETS.ib),
+                    fetchSheet(SHEETS.id).catch(() => [])
                 ]);
 
                 DATA.profil = results[0].filter(row => Object.values(row).some(v => clean(v)));
                 DATA.baromij = results[1].filter(row => Object.values(row).some(v => clean(v)));
                 DATA.yaumiyan = results[2].filter(row => Object.values(row).some(v => clean(v)));
                 DATA.rekrutmen = results[3].filter(row => Object.values(row).some(v => clean(v)));
-                DATA.ib = results[4].filter(row => Object.values(row).some(v => clean(v)));
-                DATA.id = results[5].filter(row => Object.values(row).some(v => clean(v)));
+                DATA.binaan = results[4].filter(row => Object.values(row).some(v => clean(v)));
+                DATA.ib = results[5].filter(row => Object.values(row).some(v => clean(v)));
+                DATA.id = results[6].filter(row => Object.values(row).some(v => clean(v)));
 
                 setConnection("Terhubung · System Active", "success");
                 renderAll();
@@ -1719,14 +1854,14 @@
 
         function showGlobalError(error) {
             const msg = `<div class="error-box"><strong>Gagal memuat data.</strong><br>Detail: ${escapeHtml(error.message)}</div>`;
-            ["baromijStatusTable", "yaumiyanStatusTable", "rekrutmenStatusTable", "ibStatusTable"].forEach(id => {
+            ["baromijStatusTable", "yaumiyanStatusTable", "rekrutmenStatusTable", "binaanStatusTable", "ibStatusTable"].forEach(id => {
                 const el = document.getElementById(id); if (el) el.innerHTML = msg;
             });
         }
 
         function showLoading() {
             const html = `<div class="loading"><div class="spinner"></div>Memuat data...</div>`;
-            ["baromijStatusTable", "yaumiyanStatusTable", "rekrutmenStatusTable", "ibStatusTable"].forEach(id => {
+            ["baromijStatusTable", "yaumiyanStatusTable", "rekrutmenStatusTable", "binaanStatusTable", "ibStatusTable"].forEach(id => {
                 const el = document.getElementById(id); if (el) el.innerHTML = html;
             });
         }
@@ -1815,7 +1950,7 @@
         }
 
         /* =========================================================
-           RENDER ENGINES (AGENDA, YAUMIYAN, REKRUTMEN & IB)
+           RENDER ENGINES (AGENDA, YAUMIYAN, REKRUTMEN, BINAAN & IB)
         ========================================================= */
 
         /* 1. AGENDA KELAS RENDER */
@@ -2042,7 +2177,97 @@
             }
         }
 
-        /* 4. IB RENDER */
+        /* 4. BINAAN RENDER (BARU) */
+        function renderBinaan() {
+            const activeUser = getActiveProfileData();
+            const rekrutmenRows = getFilteredRowsByValidMembers(DATA.rekrutmen);
+            const binaanRows = getFilteredRowsByValidMembers(DATA.binaan);
+            
+            const statusTableEl = document.getElementById("binaanStatusTable");
+            const statusCountEl = document.getElementById("binaanStatusCount");
+
+            // Hitung total seluruh rekrutmen (Fardi + Jamai jika ada)
+            let totalRekrutmen = 0;
+            rekrutmenRows.forEach(r => {
+                const val = parseInt(r[findColumn(DATA.rekrutmen, ["jumlah_rekrutmen", "jumlah"])] || 0);
+                totalRekrutmen += val;
+            });
+
+            // Akumulasi mutasi dan seleksi dari laporan binaan
+            let sumMutasiL0 = 0, sumMutasiL1 = 0, sumSeleksiL1 = 0, sumMutasiL2 = 0, sumSeleksiL2 = 0;
+
+            binaanRows.forEach(r => {
+                sumMutasiL0 += parseInt(r["mutasi_l0"] || r["Mutasi_L0"] || 0);
+                sumMutasiL1 += parseInt(r["mutasi_l1"] || r["Mutasi_L1"] || 0);
+                sumSeleksiL1 += parseInt(r["seleksi_l1"] || r["Seleksi_L1"] || 0);
+                sumMutasiL2 += parseInt(r["mutasi_l2"] || r["Mutasi_L2"] || 0);
+                sumSeleksiL2 += parseInt(r["seleksi_l2"] || r["Seleksi_L2"] || 0);
+            });
+
+            // Rumus perhitungan Binaan Saat Ini sesuai ketentuan:
+            // Binaan L0 = total seluruh rekrutmen + mutasi L0 - seleksi L1 (karena seleksi L1 mengurangi L0)
+            const finalL0 = totalRekrutmen + sumMutasiL0 - sumSeleksiL1;
+            
+            // Binaan L1 = mutasi L1 + seleksi L1 - seleksi L2
+            const finalL1 = sumMutasiL1 + sumSeleksiL1 - sumSeleksiL2;
+            
+            // Binaan L2 = mutasi L2 + seleksi L2
+            const finalL2 = sumMutasiL2 + sumSeleksiL2;
+
+            document.getElementById("valBinaanL0").textContent = finalL0;
+            document.getElementById("valBinaanL1").textContent = finalL1;
+            document.getElementById("valBinaanL2").textContent = finalL2;
+
+            if (!activeUser || !activeUser.id_anggota) {
+                statusCountEl.textContent = "Profil Belum Diisi";
+                statusTableEl.innerHTML = `<div class="empty">Silakan isi Profil terlebih dahulu.</div>`;
+                return;
+            }
+
+            if (!binaanRows.length) {
+                statusCountEl.textContent = "0 Laporan Binaan";
+                statusTableEl.innerHTML = `<div class="empty">Belum ada riwayat laporan Binaan.</div>`;
+            } else {
+                const sortedRows = sortByTimestampDesc(binaanRows, DATA.binaan);
+                statusCountEl.textContent = `${sortedRows.length} Total Laporan`;
+
+                const cols = {
+                    ts: columnInfo(DATA.binaan).timestamp,
+                    mutL0: findColumn(DATA.binaan, ["mutasi_l0"]),
+                    mutL1: findColumn(DATA.binaan, ["mutasi_l1"]),
+                    selL1: findColumn(DATA.binaan, ["seleksi_l1"]),
+                    mutL2: findColumn(DATA.binaan, ["mutasi_l2"]),
+                    selL2: findColumn(DATA.binaan, ["seleksi_l2"]),
+                    ket: columnInfo(DATA.binaan).keterangan
+                };
+
+                let html = `<table><thead><tr>
+                    <th>Waktu</th>
+                    <th>Mutasi L0</th>
+                    <th>Mutasi L1</th>
+                    <th>Seleksi L1</th>
+                    <th>Mutasi L2</th>
+                    <th>Seleksi L2</th>
+                    <th>Keterangan</th>
+                </tr></thead><tbody>`;
+
+                sortedRows.forEach(r => {
+                    html += `<tr>
+                        <td>${formatTimestamp(r[cols.ts])}</td>
+                        <td>${escapeHtml(r[cols.mutL0] ?? 0)}</td>
+                        <td>${escapeHtml(r[cols.mutL1] ?? 0)}</td>
+                        <td>${escapeHtml(r[cols.selL1] ?? 0)}</td>
+                        <td>${escapeHtml(r[cols.mutL2] ?? 0)}</td>
+                        <td>${escapeHtml(r[cols.selL2] ?? 0)}</td>
+                        <td class="keterangan">${escapeHtml(r[cols.ket] || '-')}</td>
+                    </tr>`;
+                });
+
+                statusTableEl.innerHTML = html + `</tbody></table>`;
+            }
+        }
+
+        /* 5. IB RENDER */
         function renderIb() {
             const activeUser = getActiveProfileData();
             const rows = getFilteredRowsByValidMembers(DATA.ib);
@@ -2105,6 +2330,7 @@
             renderBaromij();
             renderYaumiyan();
             renderRekrutmen();
+            renderBinaan();
             renderIb();
         }
     </script>
