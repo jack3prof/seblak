@@ -1,0 +1,2123 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard Laporan Evaluasi - Sektor ALL</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.2.0"></script>
+    <style>
+        body { background-color: #f4f6f9; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
+        .metric-card { background: white; border-radius: 10px; padding: 12px; text-align: center; box-shadow: 0 2px 4px rgba(0,0,0,0.05); }
+        .chart-container { position: relative; height: 300px; width: 100%; }
+
+        table, table th, table td { 
+            text-align: center !important; 
+            vertical-align: middle !important; 
+        }
+
+        @media (max-width: 576px) {
+            .chart-container { height: 260px; }
+            .card-body { padding: 10px; }
+            table { font-size: 11px; }
+        }
+    </style>
+</head>
+<body>
+<div class="container my-3 px-2 px-md-3">
+    <div class="text-center mb-3">
+        <h4 class="fw-bold mb-1">LAPORAN EVALUASI AKTIVITAS</h4>
+        <h6 class="fw-bold text-primary mb-1">untuk Sektor: ALL</h6>
+        <p class="text-secondary small mb-0">Periode: <b>21 Aug 26</b> s/d <b>20 Sep 26</b></p>
+    </div>
+
+    <div class="row g-2 mb-3">
+        <div class="col-6">
+            <div class="metric-card">
+                <span class="text-muted extra-small">Total User</span>
+                <h4 class="fw-bold text-primary mb-0">586</h4>
+            </div>
+        </div>
+        <div class="col-6">
+            <div class="metric-card">
+                <span class="text-muted extra-small">Total Kelas</span>
+                <h4 class="fw-bold text-success mb-0">108</h4>
+            </div>
+        </div>
+    </div>
+
+    
+    <div class="card shadow-sm mb-4">
+        <div class="card-header bg-white fw-bold text-primary">
+            1. Partisipasi: Jumlah User Terdaftar per Sektor
+        </div>
+        <div class="card-body">
+            <p class="text-muted small mb-2">Grafik menampilkan distribusi jumlah user terdaftar per sektor. Total user terdaftar: 586.</p>
+            <div class="row align-items-center">
+                <div class="col-12 col-lg-7 mb-3 mb-lg-0">
+                    <div class="chart-container">
+                        <canvas id="chart_0"></canvas>
+                    </div>
+                </div>
+                <div class="col-12 col-lg-5">
+                    <div class="table-responsive small">
+                        <table border="1" class="dataframe table table-striped table-hover table-sm text-center mb-0">
+  <thead>
+    <tr style="text-align: center;">
+      <th>Sektor</th>
+      <th>Total User Terdaftar</th>
+      <th>Proporsi (%)</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>BA</td>
+      <td>98</td>
+      <td>17</td>
+    </tr>
+    <tr>
+      <td>BI</td>
+      <td>6</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <td>GA</td>
+      <td>103</td>
+      <td>18</td>
+    </tr>
+    <tr>
+      <td>MA</td>
+      <td>17</td>
+      <td>3</td>
+    </tr>
+    <tr>
+      <td>PR</td>
+      <td>68</td>
+      <td>12</td>
+    </tr>
+    <tr>
+      <td>RG</td>
+      <td>47</td>
+      <td>8</td>
+    </tr>
+    <tr>
+      <td>RW</td>
+      <td>66</td>
+      <td>11</td>
+    </tr>
+    <tr>
+      <td>SA</td>
+      <td>110</td>
+      <td>19</td>
+    </tr>
+    <tr>
+      <td>SL</td>
+      <td>34</td>
+      <td>6</td>
+    </tr>
+    <tr>
+      <td>SU</td>
+      <td>37</td>
+      <td>6</td>
+    </tr>
+    <tr>
+      <td>ALL</td>
+      <td>586</td>
+      <td>100</td>
+    </tr>
+  </tbody>
+</table>
+                    </div>
+                    
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="card shadow-sm mb-4">
+        <div class="card-header bg-white fw-bold text-primary">
+            2. Keaktifan Yaumiyan: Keaktifan Pengisian Yaumiyan per Sektor (User Aktif vs Terdaftar)
+        </div>
+        <div class="card-body">
+            <p class="text-muted small mb-2">Membandingkan user yang aktif mengisi Yaumiyan terhadap total user terdaftar (21 Aug 26 s/d 20 Sep 26).</p>
+            <div class="row align-items-center">
+                <div class="col-12 col-lg-7 mb-3 mb-lg-0">
+                    <div class="chart-container">
+                        <canvas id="chart_1"></canvas>
+                    </div>
+                </div>
+                <div class="col-12 col-lg-5">
+                    <div class="table-responsive small">
+                        <table border="1" class="dataframe table table-striped table-hover table-sm text-center mb-0">
+  <thead>
+    <tr style="text-align: center;">
+      <th>Sektor</th>
+      <th>User Mengisi</th>
+      <th>User Terdaftar</th>
+      <th>Tingkat Keaktifan (%)</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>BA</td>
+      <td>56</td>
+      <td>98</td>
+      <td>57</td>
+    </tr>
+    <tr>
+      <td>BI</td>
+      <td>0</td>
+      <td>6</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <td>GA</td>
+      <td>76</td>
+      <td>103</td>
+      <td>74</td>
+    </tr>
+    <tr>
+      <td>MA</td>
+      <td>9</td>
+      <td>17</td>
+      <td>53</td>
+    </tr>
+    <tr>
+      <td>PR</td>
+      <td>56</td>
+      <td>68</td>
+      <td>82</td>
+    </tr>
+    <tr>
+      <td>RG</td>
+      <td>27</td>
+      <td>47</td>
+      <td>57</td>
+    </tr>
+    <tr>
+      <td>RW</td>
+      <td>48</td>
+      <td>66</td>
+      <td>73</td>
+    </tr>
+    <tr>
+      <td>SA</td>
+      <td>79</td>
+      <td>110</td>
+      <td>72</td>
+    </tr>
+    <tr>
+      <td>SL</td>
+      <td>15</td>
+      <td>34</td>
+      <td>44</td>
+    </tr>
+    <tr>
+      <td>SU</td>
+      <td>11</td>
+      <td>37</td>
+      <td>30</td>
+    </tr>
+    <tr>
+      <td>ALL</td>
+      <td>377</td>
+      <td>586</td>
+      <td>64</td>
+    </tr>
+  </tbody>
+</table>
+                    </div>
+                    
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="card shadow-sm mb-4">
+        <div class="card-header bg-white fw-bold text-primary">
+            3. Keaktifan Kelas: Keaktifan Kelas per Sektor (Kelas Aktif vs Terdaftar)
+        </div>
+        <div class="card-body">
+            <p class="text-muted small mb-2">Perbandingan ID Kelas aktif mengisi Baromij vs total ID Kelas (21 Aug 26 s/d 20 Sep 26). Total kelas: 108.</p>
+            <div class="row align-items-center">
+                <div class="col-12 col-lg-7 mb-3 mb-lg-0">
+                    <div class="chart-container">
+                        <canvas id="chart_2"></canvas>
+                    </div>
+                </div>
+                <div class="col-12 col-lg-5">
+                    <div class="table-responsive small">
+                        <table border="1" class="dataframe table table-striped table-hover table-sm text-center mb-0">
+  <thead>
+    <tr style="text-align: center;">
+      <th>Sektor</th>
+      <th>Kelas Aktif Mengisi</th>
+      <th>Total Kelas Terdaftar</th>
+      <th>Rasio Keaktifan Kelas (%)</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>BA</td>
+      <td>8</td>
+      <td>17</td>
+      <td>47</td>
+    </tr>
+    <tr>
+      <td>BI</td>
+      <td>0</td>
+      <td>4</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <td>GA</td>
+      <td>14</td>
+      <td>16</td>
+      <td>88</td>
+    </tr>
+    <tr>
+      <td>MA</td>
+      <td>2</td>
+      <td>4</td>
+      <td>50</td>
+    </tr>
+    <tr>
+      <td>PR</td>
+      <td>10</td>
+      <td>11</td>
+      <td>91</td>
+    </tr>
+    <tr>
+      <td>RG</td>
+      <td>7</td>
+      <td>9</td>
+      <td>78</td>
+    </tr>
+    <tr>
+      <td>RW</td>
+      <td>9</td>
+      <td>14</td>
+      <td>64</td>
+    </tr>
+    <tr>
+      <td>SA</td>
+      <td>11</td>
+      <td>18</td>
+      <td>61</td>
+    </tr>
+    <tr>
+      <td>SL</td>
+      <td>2</td>
+      <td>7</td>
+      <td>29</td>
+    </tr>
+    <tr>
+      <td>SU</td>
+      <td>4</td>
+      <td>8</td>
+      <td>50</td>
+    </tr>
+    <tr>
+      <td>ALL</td>
+      <td>67</td>
+      <td>108</td>
+      <td>62</td>
+    </tr>
+  </tbody>
+</table>
+                    </div>
+                    
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="card shadow-sm mb-4">
+        <div class="card-header bg-white fw-bold text-primary">
+            4. Kepatuhan IB: Kepatuhan Pelaporan IB per Sektor
+        </div>
+        <div class="card-body">
+            <p class="text-muted small mb-2">Pelaporan IB (21 Aug 26 s/d 20 Sep 26). Total pelapor: 143 user.</p>
+            <div class="row align-items-center">
+                <div class="col-12 col-lg-7 mb-3 mb-lg-0">
+                    <div class="chart-container">
+                        <canvas id="chart_3"></canvas>
+                    </div>
+                </div>
+                <div class="col-12 col-lg-5">
+                    <div class="table-responsive small">
+                        <table border="1" class="dataframe table table-striped table-hover table-sm text-center mb-0">
+  <thead>
+    <tr style="text-align: center;">
+      <th>Sektor</th>
+      <th>User Mengisi IB</th>
+      <th>User Terdaftar Sektor</th>
+      <th>Kepatuhan Sektor (%)</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>BA</td>
+      <td>18</td>
+      <td>98</td>
+      <td>18</td>
+    </tr>
+    <tr>
+      <td>BI</td>
+      <td>0</td>
+      <td>6</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <td>GA</td>
+      <td>40</td>
+      <td>103</td>
+      <td>39</td>
+    </tr>
+    <tr>
+      <td>MA</td>
+      <td>2</td>
+      <td>17</td>
+      <td>12</td>
+    </tr>
+    <tr>
+      <td>PR</td>
+      <td>27</td>
+      <td>68</td>
+      <td>40</td>
+    </tr>
+    <tr>
+      <td>RG</td>
+      <td>4</td>
+      <td>47</td>
+      <td>9</td>
+    </tr>
+    <tr>
+      <td>RW</td>
+      <td>9</td>
+      <td>66</td>
+      <td>14</td>
+    </tr>
+    <tr>
+      <td>SA</td>
+      <td>39</td>
+      <td>110</td>
+      <td>35</td>
+    </tr>
+    <tr>
+      <td>SL</td>
+      <td>1</td>
+      <td>34</td>
+      <td>3</td>
+    </tr>
+    <tr>
+      <td>SU</td>
+      <td>3</td>
+      <td>37</td>
+      <td>8</td>
+    </tr>
+    <tr>
+      <td>ALL</td>
+      <td>143</td>
+      <td>586</td>
+      <td>24</td>
+    </tr>
+  </tbody>
+</table>
+                    </div>
+                    
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="card shadow-sm mb-4">
+        <div class="card-header bg-white fw-bold text-primary">
+            5. Capaian Yaumiyan: Rata-rata Capaian Yaumiyan Per Sektor
+        </div>
+        <div class="card-body">
+            <p class="text-muted small mb-2">Performa rata-rata amalan yaumiyan per sektor (21 Aug 26 s/d 20 Sep 26).</p>
+            <div class="row align-items-center">
+                <div class="col-12 col-lg-7 mb-3 mb-lg-0">
+                    <div class="chart-container">
+                        <canvas id="chart_4"></canvas>
+                    </div>
+                </div>
+                <div class="col-12 col-lg-5">
+                    <div class="table-responsive small">
+                        <style type="text/css">
+#T_99119_row0_col1, #T_99119_row0_col2, #T_99119_row0_col5, #T_99119_row1_col1, #T_99119_row1_col2, #T_99119_row1_col5, #T_99119_row2_col2, #T_99119_row2_col4, #T_99119_row2_col5, #T_99119_row3_col1, #T_99119_row3_col2, #T_99119_row3_col5, #T_99119_row3_col6, #T_99119_row4_col1, #T_99119_row4_col2, #T_99119_row4_col5, #T_99119_row5_col1, #T_99119_row5_col2, #T_99119_row5_col3, #T_99119_row5_col5, #T_99119_row5_col6, #T_99119_row6_col2, #T_99119_row6_col5, #T_99119_row6_col6, #T_99119_row7_col1, #T_99119_row7_col2, #T_99119_row7_col3, #T_99119_row7_col4, #T_99119_row7_col5, #T_99119_row8_col1, #T_99119_row8_col2, #T_99119_row8_col3, #T_99119_row8_col5, #T_99119_row9_col1, #T_99119_row9_col2, #T_99119_row9_col5, #T_99119_row9_col6 {
+  background-color: #28a745;
+  color: #155724;
+  font-weight: bold;
+}
+#T_99119_row0_col3, #T_99119_row0_col4, #T_99119_row0_col6, #T_99119_row1_col3, #T_99119_row1_col4, #T_99119_row1_col6, #T_99119_row2_col1, #T_99119_row2_col3, #T_99119_row2_col6, #T_99119_row3_col3, #T_99119_row3_col4, #T_99119_row4_col3, #T_99119_row4_col4, #T_99119_row4_col6, #T_99119_row5_col4, #T_99119_row6_col1, #T_99119_row6_col3, #T_99119_row6_col4, #T_99119_row7_col6, #T_99119_row8_col4, #T_99119_row8_col6, #T_99119_row9_col3, #T_99119_row9_col4 {
+  background-color: #ffc107;
+  color: #856404;
+  font-weight: bold;
+}
+</style>
+<table id="T_99119">
+  <thead>
+    <tr>
+      <th id="T_99119_level0_col0" class="col_heading level0 col0" >Sektor</th>
+      <th id="T_99119_level0_col1" class="col_heading level0 col1" >Sholat Jamaah</th>
+      <th id="T_99119_level0_col2" class="col_heading level0 col2" >Qiyamul Lail</th>
+      <th id="T_99119_level0_col3" class="col_heading level0 col3" >Tilawah</th>
+      <th id="T_99119_level0_col4" class="col_heading level0 col4" >Shoum Sunnah</th>
+      <th id="T_99119_level0_col5" class="col_heading level0 col5" >Olah Raga</th>
+      <th id="T_99119_level0_col6" class="col_heading level0 col6" >Al-Matsurot</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td id="T_99119_row0_col0" class="data row0 col0" >BA</td>
+      <td id="T_99119_row0_col1" class="data row0 col1" >22</td>
+      <td id="T_99119_row0_col2" class="data row0 col2" >3</td>
+      <td id="T_99119_row0_col3" class="data row0 col3" >5</td>
+      <td id="T_99119_row0_col4" class="data row0 col4" >1</td>
+      <td id="T_99119_row0_col5" class="data row0 col5" >2</td>
+      <td id="T_99119_row0_col6" class="data row0 col6" >6</td>
+    </tr>
+    <tr>
+      <td id="T_99119_row1_col0" class="data row1 col0" >GA</td>
+      <td id="T_99119_row1_col1" class="data row1 col1" >27</td>
+      <td id="T_99119_row1_col2" class="data row1 col2" >3</td>
+      <td id="T_99119_row1_col3" class="data row1 col3" >5</td>
+      <td id="T_99119_row1_col4" class="data row1 col4" >1</td>
+      <td id="T_99119_row1_col5" class="data row1 col5" >3</td>
+      <td id="T_99119_row1_col6" class="data row1 col6" >6</td>
+    </tr>
+    <tr>
+      <td id="T_99119_row2_col0" class="data row2 col0" >MA</td>
+      <td id="T_99119_row2_col1" class="data row2 col1" >19</td>
+      <td id="T_99119_row2_col2" class="data row2 col2" >4</td>
+      <td id="T_99119_row2_col3" class="data row2 col3" >6</td>
+      <td id="T_99119_row2_col4" class="data row2 col4" >2</td>
+      <td id="T_99119_row2_col5" class="data row2 col5" >2</td>
+      <td id="T_99119_row2_col6" class="data row2 col6" >6</td>
+    </tr>
+    <tr>
+      <td id="T_99119_row3_col0" class="data row3 col0" >PR</td>
+      <td id="T_99119_row3_col1" class="data row3 col1" >24</td>
+      <td id="T_99119_row3_col2" class="data row3 col2" >5</td>
+      <td id="T_99119_row3_col3" class="data row3 col3" >6</td>
+      <td id="T_99119_row3_col4" class="data row3 col4" >1</td>
+      <td id="T_99119_row3_col5" class="data row3 col5" >2</td>
+      <td id="T_99119_row3_col6" class="data row3 col6" >8</td>
+    </tr>
+    <tr>
+      <td id="T_99119_row4_col0" class="data row4 col0" >RG</td>
+      <td id="T_99119_row4_col1" class="data row4 col1" >23</td>
+      <td id="T_99119_row4_col2" class="data row4 col2" >3</td>
+      <td id="T_99119_row4_col3" class="data row4 col3" >5</td>
+      <td id="T_99119_row4_col4" class="data row4 col4" >1</td>
+      <td id="T_99119_row4_col5" class="data row4 col5" >2</td>
+      <td id="T_99119_row4_col6" class="data row4 col6" >6</td>
+    </tr>
+    <tr>
+      <td id="T_99119_row5_col0" class="data row5 col0" >RW</td>
+      <td id="T_99119_row5_col1" class="data row5 col1" >25</td>
+      <td id="T_99119_row5_col2" class="data row5 col2" >4</td>
+      <td id="T_99119_row5_col3" class="data row5 col3" >7</td>
+      <td id="T_99119_row5_col4" class="data row5 col4" >1</td>
+      <td id="T_99119_row5_col5" class="data row5 col5" >2</td>
+      <td id="T_99119_row5_col6" class="data row5 col6" >7</td>
+    </tr>
+    <tr>
+      <td id="T_99119_row6_col0" class="data row6 col0" >SA</td>
+      <td id="T_99119_row6_col1" class="data row6 col1" >20</td>
+      <td id="T_99119_row6_col2" class="data row6 col2" >4</td>
+      <td id="T_99119_row6_col3" class="data row6 col3" >5</td>
+      <td id="T_99119_row6_col4" class="data row6 col4" >1</td>
+      <td id="T_99119_row6_col5" class="data row6 col5" >2</td>
+      <td id="T_99119_row6_col6" class="data row6 col6" >7</td>
+    </tr>
+    <tr>
+      <td id="T_99119_row7_col0" class="data row7 col0" >SL</td>
+      <td id="T_99119_row7_col1" class="data row7 col1" >22</td>
+      <td id="T_99119_row7_col2" class="data row7 col2" >3</td>
+      <td id="T_99119_row7_col3" class="data row7 col3" >8</td>
+      <td id="T_99119_row7_col4" class="data row7 col4" >2</td>
+      <td id="T_99119_row7_col5" class="data row7 col5" >3</td>
+      <td id="T_99119_row7_col6" class="data row7 col6" >6</td>
+    </tr>
+    <tr>
+      <td id="T_99119_row8_col0" class="data row8 col0" >SU</td>
+      <td id="T_99119_row8_col1" class="data row8 col1" >26</td>
+      <td id="T_99119_row8_col2" class="data row8 col2" >3</td>
+      <td id="T_99119_row8_col3" class="data row8 col3" >9</td>
+      <td id="T_99119_row8_col4" class="data row8 col4" >1</td>
+      <td id="T_99119_row8_col5" class="data row8 col5" >2</td>
+      <td id="T_99119_row8_col6" class="data row8 col6" >5</td>
+    </tr>
+    <tr>
+      <td id="T_99119_row9_col0" class="data row9 col0" >ALL</td>
+      <td id="T_99119_row9_col1" class="data row9 col1" >23</td>
+      <td id="T_99119_row9_col2" class="data row9 col2" >4</td>
+      <td id="T_99119_row9_col3" class="data row9 col3" >6</td>
+      <td id="T_99119_row9_col4" class="data row9 col4" >1</td>
+      <td id="T_99119_row9_col5" class="data row9 col5" >2</td>
+      <td id="T_99119_row9_col6" class="data row9 col6" >7</td>
+    </tr>
+  </tbody>
+</table>
+
+                    </div>
+                    
+<div class="mt-3 p-2 bg-light border rounded">
+    <div class="fw-bold small text-secondary mb-1">Legenda Capaian Yaumiyan:</div>
+    <div class="table-responsive">
+        <table class="table table-bordered table-sm text-center mb-0 align-middle" style="font-size: 11px;">
+            <thead class="table-dark">
+                <tr>
+                    <th>Amalan Yaumiyan</th>
+                    <th style="background-color: #28a745; color: white;">Hijau (Baik)</th>
+                    <th style="background-color: #ffc107; color: black;">Kuning (Cukup)</th>
+                    <th style="background-color: #dc3545; color: white;">Merah (Kurang)</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr><td class="fw-bold">Sholat Jamaah</td><td>&gt; 20</td><td>7 – 20</td><td>0 – 6</td></tr>
+                <tr><td class="fw-bold">Qiyamul Lail</td><td>&gt; 2</td><td>1 – 2</td><td>0</td></tr>
+                <tr><td class="fw-bold">Tilawah</td><td>&gt; 6</td><td>4 – 6</td><td>0 – 3</td></tr>
+                <tr><td class="fw-bold">Shoum Sunnah</td><td>&gt; 1</td><td>1</td><td>0</td></tr>
+                <tr><td class="fw-bold">Al-Matsurot</td><td>&gt; 6</td><td>4 – 6</td><td>0 – 3</td></tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="card shadow-sm mb-4">
+        <div class="card-header bg-white fw-bold text-primary">
+            6. Capaian Baromij: Persentase Capaian Baromij Per Sektor (%)
+        </div>
+        <div class="card-body">
+            <p class="text-muted small mb-2">Persentase pemenuhan indikator Baromij (21 Aug 26 s/d 20 Sep 26).</p>
+            <div class="row align-items-center">
+                <div class="col-12 col-lg-7 mb-3 mb-lg-0">
+                    <div class="chart-container">
+                        <canvas id="chart_5"></canvas>
+                    </div>
+                </div>
+                <div class="col-12 col-lg-5">
+                    <div class="table-responsive small">
+                        <table border="1" class="dataframe table table-striped table-hover table-sm text-center mb-0">
+  <thead>
+    <tr style="text-align: center;">
+      <th>Sektor</th>
+      <th>Walashadir</th>
+      <th>Tilawah &amp; Hafalan</th>
+      <th>Kalam Naqib</th>
+      <th>Membaca MR</th>
+      <th>Tatsqif Usroh</th>
+      <th>Talimat</th>
+      <th>Monev Program</th>
+      <th>Qodhoya Rawai</th>
+      <th>Kelas Offline</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>BA</td>
+      <td>96</td>
+      <td>92</td>
+      <td>84</td>
+      <td>68</td>
+      <td>72</td>
+      <td>92</td>
+      <td>88</td>
+      <td>84</td>
+      <td>96</td>
+    </tr>
+    <tr>
+      <td>GA</td>
+      <td>88</td>
+      <td>90</td>
+      <td>86</td>
+      <td>66</td>
+      <td>71</td>
+      <td>90</td>
+      <td>78</td>
+      <td>88</td>
+      <td>51</td>
+    </tr>
+    <tr>
+      <td>MA</td>
+      <td>100</td>
+      <td>100</td>
+      <td>100</td>
+      <td>50</td>
+      <td>100</td>
+      <td>100</td>
+      <td>50</td>
+      <td>100</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <td>PR</td>
+      <td>93</td>
+      <td>73</td>
+      <td>73</td>
+      <td>57</td>
+      <td>60</td>
+      <td>67</td>
+      <td>60</td>
+      <td>63</td>
+      <td>77</td>
+    </tr>
+    <tr>
+      <td>RG</td>
+      <td>94</td>
+      <td>89</td>
+      <td>89</td>
+      <td>50</td>
+      <td>89</td>
+      <td>94</td>
+      <td>89</td>
+      <td>94</td>
+      <td>78</td>
+    </tr>
+    <tr>
+      <td>RW</td>
+      <td>90</td>
+      <td>84</td>
+      <td>84</td>
+      <td>65</td>
+      <td>77</td>
+      <td>71</td>
+      <td>74</td>
+      <td>87</td>
+      <td>68</td>
+    </tr>
+    <tr>
+      <td>SA</td>
+      <td>85</td>
+      <td>90</td>
+      <td>76</td>
+      <td>66</td>
+      <td>76</td>
+      <td>63</td>
+      <td>66</td>
+      <td>73</td>
+      <td>76</td>
+    </tr>
+    <tr>
+      <td>SL</td>
+      <td>80</td>
+      <td>100</td>
+      <td>80</td>
+      <td>80</td>
+      <td>80</td>
+      <td>100</td>
+      <td>100</td>
+      <td>100</td>
+      <td>80</td>
+    </tr>
+    <tr>
+      <td>SU</td>
+      <td>92</td>
+      <td>85</td>
+      <td>92</td>
+      <td>54</td>
+      <td>38</td>
+      <td>69</td>
+      <td>77</td>
+      <td>77</td>
+      <td>46</td>
+    </tr>
+    <tr>
+      <td>ALL</td>
+      <td>90</td>
+      <td>87</td>
+      <td>83</td>
+      <td>63</td>
+      <td>72</td>
+      <td>79</td>
+      <td>75</td>
+      <td>82</td>
+      <td>68</td>
+    </tr>
+  </tbody>
+</table>
+                    </div>
+                    
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="card shadow-sm mb-4">
+        <div class="card-header bg-white fw-bold text-primary">
+            7. Yaumiyan Gender: Perbandingan Rata-rata Yaumiyan Berdasarkan Gender
+        </div>
+        <div class="card-body">
+            <p class="text-muted small mb-2">Rata-rata amalan harian Ikhwan vs Akhwat (21 Aug 26 s/d 20 Sep 26).</p>
+            <div class="row align-items-center">
+                <div class="col-12 col-lg-7 mb-3 mb-lg-0">
+                    <div class="chart-container">
+                        <canvas id="chart_6"></canvas>
+                    </div>
+                </div>
+                <div class="col-12 col-lg-5">
+                    <div class="table-responsive small">
+                        <style type="text/css">
+#T_20a0f_row0_col1, #T_20a0f_row0_col2, #T_20a0f_row0_col5, #T_20a0f_row1_col1, #T_20a0f_row1_col2, #T_20a0f_row1_col5 {
+  background-color: #28a745;
+  color: #155724;
+  font-weight: bold;
+}
+#T_20a0f_row0_col3, #T_20a0f_row0_col4, #T_20a0f_row0_col6, #T_20a0f_row1_col3, #T_20a0f_row1_col4, #T_20a0f_row1_col6 {
+  background-color: #ffc107;
+  color: #856404;
+  font-weight: bold;
+}
+</style>
+<table id="T_20a0f">
+  <thead>
+    <tr>
+      <th id="T_20a0f_level0_col0" class="col_heading level0 col0" >Gender</th>
+      <th id="T_20a0f_level0_col1" class="col_heading level0 col1" >Sholat Jamaah</th>
+      <th id="T_20a0f_level0_col2" class="col_heading level0 col2" >Qiyamul Lail</th>
+      <th id="T_20a0f_level0_col3" class="col_heading level0 col3" >Tilawah</th>
+      <th id="T_20a0f_level0_col4" class="col_heading level0 col4" >Shoum Sunnah</th>
+      <th id="T_20a0f_level0_col5" class="col_heading level0 col5" >Olah Raga</th>
+      <th id="T_20a0f_level0_col6" class="col_heading level0 col6" >Al-Matsurot</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td id="T_20a0f_row0_col0" class="data row0 col0" >Akhwat</td>
+      <td id="T_20a0f_row0_col1" class="data row0 col1" >24</td>
+      <td id="T_20a0f_row0_col2" class="data row0 col2" >4</td>
+      <td id="T_20a0f_row0_col3" class="data row0 col3" >5</td>
+      <td id="T_20a0f_row0_col4" class="data row0 col4" >1</td>
+      <td id="T_20a0f_row0_col5" class="data row0 col5" >2</td>
+      <td id="T_20a0f_row0_col6" class="data row0 col6" >6</td>
+    </tr>
+    <tr>
+      <td id="T_20a0f_row1_col0" class="data row1 col0" >Ikhwan</td>
+      <td id="T_20a0f_row1_col1" class="data row1 col1" >24</td>
+      <td id="T_20a0f_row1_col2" class="data row1 col2" >3</td>
+      <td id="T_20a0f_row1_col3" class="data row1 col3" >5</td>
+      <td id="T_20a0f_row1_col4" class="data row1 col4" >1</td>
+      <td id="T_20a0f_row1_col5" class="data row1 col5" >2</td>
+      <td id="T_20a0f_row1_col6" class="data row1 col6" >6</td>
+    </tr>
+  </tbody>
+</table>
+
+                    </div>
+                    
+<div class="mt-3 p-2 bg-light border rounded">
+    <div class="fw-bold small text-secondary mb-1">Legenda Capaian Yaumiyan:</div>
+    <div class="table-responsive">
+        <table class="table table-bordered table-sm text-center mb-0 align-middle" style="font-size: 11px;">
+            <thead class="table-dark">
+                <tr>
+                    <th>Amalan Yaumiyan</th>
+                    <th style="background-color: #28a745; color: white;">Hijau (Baik)</th>
+                    <th style="background-color: #ffc107; color: black;">Kuning (Cukup)</th>
+                    <th style="background-color: #dc3545; color: white;">Merah (Kurang)</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr><td class="fw-bold">Sholat Jamaah</td><td>&gt; 20</td><td>7 – 20</td><td>0 – 6</td></tr>
+                <tr><td class="fw-bold">Qiyamul Lail</td><td>&gt; 2</td><td>1 – 2</td><td>0</td></tr>
+                <tr><td class="fw-bold">Tilawah</td><td>&gt; 6</td><td>4 – 6</td><td>0 – 3</td></tr>
+                <tr><td class="fw-bold">Shoum Sunnah</td><td>&gt; 1</td><td>1</td><td>0</td></tr>
+                <tr><td class="fw-bold">Al-Matsurot</td><td>&gt; 6</td><td>4 – 6</td><td>0 – 3</td></tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+    
+<div class="card shadow-sm mb-4">
+    <div class="card-header bg-white fw-bold text-primary">
+        8. Demografi Anggota: Piramida Tingkatan L5 - L0
+    </div>
+    <div class="card-body">
+        <p class="text-muted small mb-2">
+            Piramida struktur tingkatan dari L5 (puncak) hingga L0 (dasar). L5-L3 berdasarkan data user, L2-L0 berdasarkan data binaan.
+        </p>
+        <div class="row align-items-center">
+            <div class="col-12 col-lg-7 mb-3 mb-lg-0">
+                <div class="chart-container">
+                    <canvas id="pyramid_chart"></canvas>
+                </div>
+            </div>
+            <div class="col-12 col-lg-5">
+                <div class="table-responsive small">
+                    <table border="1" class="dataframe table table-striped table-hover table-sm text-center mb-0">
+  <thead>
+    <tr style="text-align: center;">
+      <th>Tingkatan</th>
+      <th>Ikhwan (I)</th>
+      <th>Akhwat (A)</th>
+      <th>Total</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>L5</td>
+      <td>45</td>
+      <td>12</td>
+      <td>57</td>
+    </tr>
+    <tr>
+      <td>L4</td>
+      <td>128</td>
+      <td>72</td>
+      <td>200</td>
+    </tr>
+    <tr>
+      <td>L3</td>
+      <td>179</td>
+      <td>150</td>
+      <td>329</td>
+    </tr>
+    <tr>
+      <td>L2</td>
+      <td>32</td>
+      <td>62</td>
+      <td>94</td>
+    </tr>
+    <tr>
+      <td>L1</td>
+      <td>51</td>
+      <td>89</td>
+      <td>140</td>
+    </tr>
+    <tr>
+      <td>L0</td>
+      <td>97</td>
+      <td>175</td>
+      <td>272</td>
+    </tr>
+    <tr>
+      <td>ALL</td>
+      <td>532</td>
+      <td>560</td>
+      <td>1092</td>
+    </tr>
+  </tbody>
+</table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="card shadow-sm mb-4">
+    <div class="card-header bg-white fw-bold text-primary">
+        9. Analisis & Pemantauan Kelas (Integrasi Laporan Analysis)
+    </div>
+    <div class="card-body">
+        <h6 class="fw-bold text-dark mb-2">A. Kelas Belum Mengisi Laporan</h6>
+        <p class="text-muted small mb-2">Daftar kelas terdaftar yang belum menginputkan laporan pada tabel Yaumiyan maupun Baromij pada periode tgl 21 Aug 26 sampai dengan tgl 20 Sep 26:</p>
+        <div class="p-2 bg-light border rounded mb-3">
+            <span class="badge bg-secondary me-1 mb-1">BA - AA305</span><span class="badge bg-secondary me-1 mb-1">BA - IA401</span><span class="badge bg-secondary me-1 mb-1">BI - IA301</span><span class="badge bg-secondary me-1 mb-1">BI - IA302</span><span class="badge bg-secondary me-1 mb-1">BI - IA303</span><span class="badge bg-secondary me-1 mb-1">BI - IA401</span><span class="badge bg-secondary me-1 mb-1">RG - IA302</span><span class="badge bg-secondary me-1 mb-1">RW - AA307</span><span class="badge bg-secondary me-1 mb-1">SA - AA303</span><span class="badge bg-secondary me-1 mb-1">SL - IA301</span><span class="badge bg-secondary me-1 mb-1">SU - IA304</span><span class="badge bg-secondary me-1 mb-1">SU - IA508</span>
+        </div>
+
+        <h6 class="fw-bold text-dark mb-2">B. Evaluasi Capaian Kinerja Yaumiyan Per Kelas</h6>
+        <div class="table-responsive small">
+            <style type="text/css">
+#T_e3e43_row0_col2, #T_e3e43_row0_col3, #T_e3e43_row0_col5, #T_e3e43_row0_col6, #T_e3e43_row1_col3, #T_e3e43_row1_col6, #T_e3e43_row2_col2, #T_e3e43_row2_col3, #T_e3e43_row2_col5, #T_e3e43_row2_col6, #T_e3e43_row3_col2, #T_e3e43_row3_col3, #T_e3e43_row3_col5, #T_e3e43_row3_col6, #T_e3e43_row4_col2, #T_e3e43_row4_col3, #T_e3e43_row4_col5, #T_e3e43_row4_col6, #T_e3e43_row5_col2, #T_e3e43_row5_col3, #T_e3e43_row6_col2, #T_e3e43_row6_col3, #T_e3e43_row6_col5, #T_e3e43_row7_col2, #T_e3e43_row8_col2, #T_e3e43_row8_col3, #T_e3e43_row8_col5, #T_e3e43_row10_col2, #T_e3e43_row10_col3, #T_e3e43_row11_col2, #T_e3e43_row11_col3, #T_e3e43_row11_col4, #T_e3e43_row11_col5, #T_e3e43_row11_col6, #T_e3e43_row12_col2, #T_e3e43_row12_col3, #T_e3e43_row13_col2, #T_e3e43_row13_col3, #T_e3e43_row13_col5, #T_e3e43_row13_col6, #T_e3e43_row14_col2, #T_e3e43_row14_col4, #T_e3e43_row14_col5, #T_e3e43_row14_col6, #T_e3e43_row15_col2, #T_e3e43_row15_col3, #T_e3e43_row15_col4, #T_e3e43_row15_col5, #T_e3e43_row17_col3, #T_e3e43_row17_col5, #T_e3e43_row17_col6, #T_e3e43_row18_col2, #T_e3e43_row18_col3, #T_e3e43_row18_col6, #T_e3e43_row19_col2, #T_e3e43_row19_col4, #T_e3e43_row19_col6, #T_e3e43_row20_col2, #T_e3e43_row20_col3, #T_e3e43_row20_col4, #T_e3e43_row21_col2, #T_e3e43_row22_col2, #T_e3e43_row22_col3, #T_e3e43_row22_col4, #T_e3e43_row22_col6, #T_e3e43_row23_col2, #T_e3e43_row23_col3, #T_e3e43_row24_col2, #T_e3e43_row24_col5, #T_e3e43_row25_col2, #T_e3e43_row25_col3, #T_e3e43_row26_col2, #T_e3e43_row26_col3, #T_e3e43_row26_col5, #T_e3e43_row27_col2, #T_e3e43_row27_col3, #T_e3e43_row28_col2, #T_e3e43_row28_col3, #T_e3e43_row28_col4, #T_e3e43_row28_col6, #T_e3e43_row29_col2, #T_e3e43_row29_col3, #T_e3e43_row29_col5, #T_e3e43_row29_col6, #T_e3e43_row30_col2, #T_e3e43_row30_col3, #T_e3e43_row30_col5, #T_e3e43_row30_col6, #T_e3e43_row31_col3, #T_e3e43_row31_col5, #T_e3e43_row32_col3, #T_e3e43_row32_col4, #T_e3e43_row32_col5, #T_e3e43_row32_col6, #T_e3e43_row33_col2, #T_e3e43_row33_col3, #T_e3e43_row33_col6, #T_e3e43_row34_col2, #T_e3e43_row34_col3, #T_e3e43_row35_col2, #T_e3e43_row35_col3, #T_e3e43_row35_col5, #T_e3e43_row35_col6, #T_e3e43_row36_col2, #T_e3e43_row36_col3, #T_e3e43_row36_col6, #T_e3e43_row37_col3, #T_e3e43_row37_col4, #T_e3e43_row37_col5, #T_e3e43_row38_col2, #T_e3e43_row38_col3, #T_e3e43_row38_col4, #T_e3e43_row38_col5, #T_e3e43_row38_col6, #T_e3e43_row39_col3, #T_e3e43_row39_col4, #T_e3e43_row39_col5, #T_e3e43_row39_col6, #T_e3e43_row40_col2, #T_e3e43_row40_col3, #T_e3e43_row40_col4, #T_e3e43_row40_col5, #T_e3e43_row40_col6, #T_e3e43_row41_col2, #T_e3e43_row41_col3, #T_e3e43_row41_col4, #T_e3e43_row41_col6, #T_e3e43_row42_col2, #T_e3e43_row42_col3, #T_e3e43_row42_col5, #T_e3e43_row42_col6, #T_e3e43_row43_col2, #T_e3e43_row43_col5, #T_e3e43_row44_col2, #T_e3e43_row44_col3, #T_e3e43_row44_col4, #T_e3e43_row44_col6, #T_e3e43_row45_col2, #T_e3e43_row45_col3, #T_e3e43_row45_col4, #T_e3e43_row45_col5, #T_e3e43_row45_col6, #T_e3e43_row46_col3, #T_e3e43_row46_col6, #T_e3e43_row47_col2, #T_e3e43_row47_col3, #T_e3e43_row47_col5, #T_e3e43_row47_col6, #T_e3e43_row48_col2, #T_e3e43_row48_col3, #T_e3e43_row48_col6, #T_e3e43_row50_col2, #T_e3e43_row50_col5, #T_e3e43_row51_col2, #T_e3e43_row51_col3, #T_e3e43_row51_col6, #T_e3e43_row52_col2, #T_e3e43_row52_col3, #T_e3e43_row52_col4, #T_e3e43_row52_col5, #T_e3e43_row53_col2, #T_e3e43_row53_col3, #T_e3e43_row53_col4, #T_e3e43_row54_col3, #T_e3e43_row54_col6, #T_e3e43_row55_col2, #T_e3e43_row55_col3, #T_e3e43_row55_col4, #T_e3e43_row55_col5, #T_e3e43_row55_col6, #T_e3e43_row56_col2, #T_e3e43_row56_col3, #T_e3e43_row56_col5, #T_e3e43_row56_col6, #T_e3e43_row57_col2, #T_e3e43_row57_col3, #T_e3e43_row57_col4, #T_e3e43_row57_col5, #T_e3e43_row57_col6, #T_e3e43_row58_col3, #T_e3e43_row58_col5, #T_e3e43_row58_col6, #T_e3e43_row59_col2, #T_e3e43_row59_col3, #T_e3e43_row59_col4, #T_e3e43_row59_col6, #T_e3e43_row60_col2, #T_e3e43_row60_col3, #T_e3e43_row61_col2, #T_e3e43_row61_col3, #T_e3e43_row61_col4, #T_e3e43_row61_col5, #T_e3e43_row61_col6, #T_e3e43_row62_col2, #T_e3e43_row63_col2, #T_e3e43_row63_col3, #T_e3e43_row63_col4, #T_e3e43_row64_col2, #T_e3e43_row64_col3, #T_e3e43_row64_col4, #T_e3e43_row65_col2, #T_e3e43_row65_col3, #T_e3e43_row65_col4, #T_e3e43_row65_col6, #T_e3e43_row66_col2, #T_e3e43_row66_col3, #T_e3e43_row66_col5, #T_e3e43_row66_col6, #T_e3e43_row67_col2, #T_e3e43_row67_col3, #T_e3e43_row67_col5, #T_e3e43_row68_col3, #T_e3e43_row68_col5, #T_e3e43_row69_col3, #T_e3e43_row70_col2, #T_e3e43_row70_col3, #T_e3e43_row70_col4, #T_e3e43_row70_col5, #T_e3e43_row70_col6, #T_e3e43_row71_col3, #T_e3e43_row71_col5, #T_e3e43_row71_col6, #T_e3e43_row72_col3, #T_e3e43_row72_col4, #T_e3e43_row72_col6, #T_e3e43_row73_col3, #T_e3e43_row73_col5, #T_e3e43_row73_col6, #T_e3e43_row74_col3, #T_e3e43_row74_col4, #T_e3e43_row74_col5, #T_e3e43_row75_col2, #T_e3e43_row75_col3, #T_e3e43_row75_col6, #T_e3e43_row76_col3, #T_e3e43_row76_col6, #T_e3e43_row77_col2, #T_e3e43_row77_col3, #T_e3e43_row77_col4, #T_e3e43_row77_col5, #T_e3e43_row77_col6, #T_e3e43_row78_col2, #T_e3e43_row78_col3, #T_e3e43_row79_col2, #T_e3e43_row79_col3, #T_e3e43_row79_col4, #T_e3e43_row79_col6, #T_e3e43_row80_col3, #T_e3e43_row81_col2, #T_e3e43_row82_col2, #T_e3e43_row82_col3, #T_e3e43_row83_col3, #T_e3e43_row83_col4, #T_e3e43_row83_col5, #T_e3e43_row84_col2, #T_e3e43_row84_col3, #T_e3e43_row84_col4, #T_e3e43_row84_col5, #T_e3e43_row84_col6, #T_e3e43_row85_col3, #T_e3e43_row85_col5, #T_e3e43_row85_col6, #T_e3e43_row86_col2, #T_e3e43_row86_col3, #T_e3e43_row86_col4, #T_e3e43_row86_col5, #T_e3e43_row86_col6, #T_e3e43_row87_col2, #T_e3e43_row87_col4, #T_e3e43_row87_col5, #T_e3e43_row88_col2, #T_e3e43_row88_col3, #T_e3e43_row89_col2, #T_e3e43_row89_col3, #T_e3e43_row89_col4, #T_e3e43_row89_col5, #T_e3e43_row89_col6, #T_e3e43_row90_col2, #T_e3e43_row90_col3, #T_e3e43_row90_col4, #T_e3e43_row90_col5, #T_e3e43_row91_col3, #T_e3e43_row91_col5, #T_e3e43_row91_col6, #T_e3e43_row92_col2, #T_e3e43_row92_col3, #T_e3e43_row92_col4, #T_e3e43_row92_col5, #T_e3e43_row92_col6, #T_e3e43_row93_col2, #T_e3e43_row93_col4, #T_e3e43_row93_col5, #T_e3e43_row94_col2, #T_e3e43_row94_col4, #T_e3e43_row94_col5, #T_e3e43_row95_col2, #T_e3e43_row95_col3, #T_e3e43_row95_col5, #T_e3e43_row95_col6, #T_e3e43_row96_col2, #T_e3e43_row96_col3, #T_e3e43_row96_col4, #T_e3e43_row96_col6 {
+  background-color: #28a745;
+  color: #155724;
+  font-weight: bold;
+}
+#T_e3e43_row0_col4, #T_e3e43_row1_col4, #T_e3e43_row1_col5, #T_e3e43_row5_col5, #T_e3e43_row6_col6, #T_e3e43_row7_col4, #T_e3e43_row7_col6, #T_e3e43_row8_col6, #T_e3e43_row9_col4, #T_e3e43_row9_col5, #T_e3e43_row9_col6, #T_e3e43_row10_col4, #T_e3e43_row10_col5, #T_e3e43_row10_col6, #T_e3e43_row12_col4, #T_e3e43_row12_col5, #T_e3e43_row15_col6, #T_e3e43_row16_col4, #T_e3e43_row16_col5, #T_e3e43_row18_col4, #T_e3e43_row18_col5, #T_e3e43_row19_col5, #T_e3e43_row21_col3, #T_e3e43_row21_col4, #T_e3e43_row21_col5, #T_e3e43_row21_col6, #T_e3e43_row23_col4, #T_e3e43_row23_col5, #T_e3e43_row25_col4, #T_e3e43_row25_col5, #T_e3e43_row27_col5, #T_e3e43_row33_col5, #T_e3e43_row34_col4, #T_e3e43_row34_col5, #T_e3e43_row34_col6, #T_e3e43_row35_col4, #T_e3e43_row36_col5, #T_e3e43_row41_col5, #T_e3e43_row43_col4, #T_e3e43_row43_col6, #T_e3e43_row44_col5, #T_e3e43_row46_col4, #T_e3e43_row46_col5, #T_e3e43_row48_col5, #T_e3e43_row49_col4, #T_e3e43_row49_col5, #T_e3e43_row49_col6, #T_e3e43_row51_col4, #T_e3e43_row51_col5, #T_e3e43_row52_col6, #T_e3e43_row53_col5, #T_e3e43_row54_col4, #T_e3e43_row54_col5, #T_e3e43_row59_col5, #T_e3e43_row60_col5, #T_e3e43_row60_col6, #T_e3e43_row62_col4, #T_e3e43_row62_col6, #T_e3e43_row63_col6, #T_e3e43_row64_col5, #T_e3e43_row65_col5, #T_e3e43_row68_col4, #T_e3e43_row69_col4, #T_e3e43_row69_col6, #T_e3e43_row71_col4, #T_e3e43_row72_col5, #T_e3e43_row73_col4, #T_e3e43_row74_col6, #T_e3e43_row75_col4, #T_e3e43_row76_col4, #T_e3e43_row76_col5, #T_e3e43_row78_col4, #T_e3e43_row78_col5, #T_e3e43_row80_col4, #T_e3e43_row80_col6, #T_e3e43_row81_col4, #T_e3e43_row81_col5, #T_e3e43_row82_col5, #T_e3e43_row87_col6, #T_e3e43_row88_col5, #T_e3e43_row88_col6, #T_e3e43_row90_col6, #T_e3e43_row91_col2, #T_e3e43_row91_col4, #T_e3e43_row93_col6, #T_e3e43_row94_col6, #T_e3e43_row96_col5 {
+  background-color: #dc3545;
+  color: #721c24;
+  font-weight: bold;
+}
+#T_e3e43_row1_col2, #T_e3e43_row2_col4, #T_e3e43_row3_col4, #T_e3e43_row4_col4, #T_e3e43_row5_col4, #T_e3e43_row5_col6, #T_e3e43_row6_col4, #T_e3e43_row7_col3, #T_e3e43_row7_col5, #T_e3e43_row8_col4, #T_e3e43_row9_col2, #T_e3e43_row9_col3, #T_e3e43_row12_col6, #T_e3e43_row13_col4, #T_e3e43_row14_col3, #T_e3e43_row16_col2, #T_e3e43_row16_col3, #T_e3e43_row16_col6, #T_e3e43_row17_col2, #T_e3e43_row17_col4, #T_e3e43_row19_col3, #T_e3e43_row20_col5, #T_e3e43_row20_col6, #T_e3e43_row22_col5, #T_e3e43_row23_col6, #T_e3e43_row24_col3, #T_e3e43_row24_col4, #T_e3e43_row24_col6, #T_e3e43_row25_col6, #T_e3e43_row26_col4, #T_e3e43_row26_col6, #T_e3e43_row27_col4, #T_e3e43_row27_col6, #T_e3e43_row28_col5, #T_e3e43_row29_col4, #T_e3e43_row30_col4, #T_e3e43_row31_col2, #T_e3e43_row31_col4, #T_e3e43_row31_col6, #T_e3e43_row32_col2, #T_e3e43_row33_col4, #T_e3e43_row36_col4, #T_e3e43_row37_col2, #T_e3e43_row37_col6, #T_e3e43_row39_col2, #T_e3e43_row42_col4, #T_e3e43_row43_col3, #T_e3e43_row46_col2, #T_e3e43_row47_col4, #T_e3e43_row48_col4, #T_e3e43_row49_col2, #T_e3e43_row49_col3, #T_e3e43_row50_col3, #T_e3e43_row50_col4, #T_e3e43_row50_col6, #T_e3e43_row53_col6, #T_e3e43_row54_col2, #T_e3e43_row56_col4, #T_e3e43_row58_col2, #T_e3e43_row58_col4, #T_e3e43_row60_col4, #T_e3e43_row62_col3, #T_e3e43_row62_col5, #T_e3e43_row63_col5, #T_e3e43_row64_col6, #T_e3e43_row66_col4, #T_e3e43_row67_col4, #T_e3e43_row67_col6, #T_e3e43_row68_col2, #T_e3e43_row68_col6, #T_e3e43_row69_col2, #T_e3e43_row69_col5, #T_e3e43_row71_col2, #T_e3e43_row72_col2, #T_e3e43_row73_col2, #T_e3e43_row74_col2, #T_e3e43_row75_col5, #T_e3e43_row76_col2, #T_e3e43_row78_col6, #T_e3e43_row79_col5, #T_e3e43_row80_col2, #T_e3e43_row80_col5, #T_e3e43_row81_col3, #T_e3e43_row81_col6, #T_e3e43_row82_col4, #T_e3e43_row82_col6, #T_e3e43_row83_col2, #T_e3e43_row83_col6, #T_e3e43_row85_col2, #T_e3e43_row85_col4, #T_e3e43_row87_col3, #T_e3e43_row88_col4, #T_e3e43_row93_col3, #T_e3e43_row94_col3, #T_e3e43_row95_col4 {
+  background-color: #ffc107;
+  color: #856404;
+  font-weight: bold;
+}
+</style>
+<table id="T_e3e43">
+  <thead>
+    <tr>
+      <th id="T_e3e43_level0_col0" class="col_heading level0 col0" >No.</th>
+      <th id="T_e3e43_level0_col1" class="col_heading level0 col1" >ID Kelas</th>
+      <th id="T_e3e43_level0_col2" class="col_heading level0 col2" >Sholat Jamaah</th>
+      <th id="T_e3e43_level0_col3" class="col_heading level0 col3" >Qiyamul Lail</th>
+      <th id="T_e3e43_level0_col4" class="col_heading level0 col4" >Tilawah</th>
+      <th id="T_e3e43_level0_col5" class="col_heading level0 col5" >Shoum Sunnah</th>
+      <th id="T_e3e43_level0_col6" class="col_heading level0 col6" >Al-Matsurot</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td id="T_e3e43_row0_col0" class="data row0 col0" >1</td>
+      <td id="T_e3e43_row0_col1" class="data row0 col1" >BA - AA301</td>
+      <td id="T_e3e43_row0_col2" class="data row0 col2" >23.3</td>
+      <td id="T_e3e43_row0_col3" class="data row0 col3" >3.6</td>
+      <td id="T_e3e43_row0_col4" class="data row0 col4" >3.9</td>
+      <td id="T_e3e43_row0_col5" class="data row0 col5" >1.9</td>
+      <td id="T_e3e43_row0_col6" class="data row0 col6" >8.6</td>
+    </tr>
+    <tr>
+      <td id="T_e3e43_row1_col0" class="data row1 col0" >2</td>
+      <td id="T_e3e43_row1_col1" class="data row1 col1" >BA - AA302</td>
+      <td id="T_e3e43_row1_col2" class="data row1 col2" >14.6</td>
+      <td id="T_e3e43_row1_col3" class="data row1 col3" >2.5</td>
+      <td id="T_e3e43_row1_col4" class="data row1 col4" >3.5</td>
+      <td id="T_e3e43_row1_col5" class="data row1 col5" >0.6</td>
+      <td id="T_e3e43_row1_col6" class="data row1 col6" >7.8</td>
+    </tr>
+    <tr>
+      <td id="T_e3e43_row2_col0" class="data row2 col0" >3</td>
+      <td id="T_e3e43_row2_col1" class="data row2 col1" >BA - AA303</td>
+      <td id="T_e3e43_row2_col2" class="data row2 col2" >27</td>
+      <td id="T_e3e43_row2_col3" class="data row2 col3" >3.8</td>
+      <td id="T_e3e43_row2_col4" class="data row2 col4" >5.3</td>
+      <td id="T_e3e43_row2_col5" class="data row2 col5" >2.5</td>
+      <td id="T_e3e43_row2_col6" class="data row2 col6" >7.2</td>
+    </tr>
+    <tr>
+      <td id="T_e3e43_row3_col0" class="data row3 col0" >4</td>
+      <td id="T_e3e43_row3_col1" class="data row3 col1" >BA - AA304</td>
+      <td id="T_e3e43_row3_col2" class="data row3 col2" >23.2</td>
+      <td id="T_e3e43_row3_col3" class="data row3 col3" >4.9</td>
+      <td id="T_e3e43_row3_col4" class="data row3 col4" >4.8</td>
+      <td id="T_e3e43_row3_col5" class="data row3 col5" >2.5</td>
+      <td id="T_e3e43_row3_col6" class="data row3 col6" >8</td>
+    </tr>
+    <tr>
+      <td id="T_e3e43_row4_col0" class="data row4 col0" >5</td>
+      <td id="T_e3e43_row4_col1" class="data row4 col1" >BA - AA401</td>
+      <td id="T_e3e43_row4_col2" class="data row4 col2" >22.6</td>
+      <td id="T_e3e43_row4_col3" class="data row4 col3" >4.4</td>
+      <td id="T_e3e43_row4_col4" class="data row4 col4" >5.2</td>
+      <td id="T_e3e43_row4_col5" class="data row4 col5" >1.2</td>
+      <td id="T_e3e43_row4_col6" class="data row4 col6" >6.6</td>
+    </tr>
+    <tr>
+      <td id="T_e3e43_row5_col0" class="data row5 col0" >6</td>
+      <td id="T_e3e43_row5_col1" class="data row5 col1" >BA - IA301</td>
+      <td id="T_e3e43_row5_col2" class="data row5 col2" >26.6</td>
+      <td id="T_e3e43_row5_col3" class="data row5 col3" >3.1</td>
+      <td id="T_e3e43_row5_col4" class="data row5 col4" >6</td>
+      <td id="T_e3e43_row5_col5" class="data row5 col5" >0.5</td>
+      <td id="T_e3e43_row5_col6" class="data row5 col6" >5.1</td>
+    </tr>
+    <tr>
+      <td id="T_e3e43_row6_col0" class="data row6 col0" >7</td>
+      <td id="T_e3e43_row6_col1" class="data row6 col1" >BA - IA302</td>
+      <td id="T_e3e43_row6_col2" class="data row6 col2" >33</td>
+      <td id="T_e3e43_row6_col3" class="data row6 col3" >4</td>
+      <td id="T_e3e43_row6_col4" class="data row6 col4" >4</td>
+      <td id="T_e3e43_row6_col5" class="data row6 col5" >2</td>
+      <td id="T_e3e43_row6_col6" class="data row6 col6" >3</td>
+    </tr>
+    <tr>
+      <td id="T_e3e43_row7_col0" class="data row7 col0" >8</td>
+      <td id="T_e3e43_row7_col1" class="data row7 col1" >BA - IA303</td>
+      <td id="T_e3e43_row7_col2" class="data row7 col2" >32</td>
+      <td id="T_e3e43_row7_col3" class="data row7 col3" >1</td>
+      <td id="T_e3e43_row7_col4" class="data row7 col4" >3</td>
+      <td id="T_e3e43_row7_col5" class="data row7 col5" >1</td>
+      <td id="T_e3e43_row7_col6" class="data row7 col6" >1</td>
+    </tr>
+    <tr>
+      <td id="T_e3e43_row8_col0" class="data row8 col0" >9</td>
+      <td id="T_e3e43_row8_col1" class="data row8 col1" >BA - IA304</td>
+      <td id="T_e3e43_row8_col2" class="data row8 col2" >24.9</td>
+      <td id="T_e3e43_row8_col3" class="data row8 col3" >3.1</td>
+      <td id="T_e3e43_row8_col4" class="data row8 col4" >4.7</td>
+      <td id="T_e3e43_row8_col5" class="data row8 col5" >2.5</td>
+      <td id="T_e3e43_row8_col6" class="data row8 col6" >2.5</td>
+    </tr>
+    <tr>
+      <td id="T_e3e43_row9_col0" class="data row9 col0" >10</td>
+      <td id="T_e3e43_row9_col1" class="data row9 col1" >BA - IA305</td>
+      <td id="T_e3e43_row9_col2" class="data row9 col2" >10</td>
+      <td id="T_e3e43_row9_col3" class="data row9 col3" >2</td>
+      <td id="T_e3e43_row9_col4" class="data row9 col4" >1.5</td>
+      <td id="T_e3e43_row9_col5" class="data row9 col5" >0</td>
+      <td id="T_e3e43_row9_col6" class="data row9 col6" >3.5</td>
+    </tr>
+    <tr>
+      <td id="T_e3e43_row10_col0" class="data row10 col0" >11</td>
+      <td id="T_e3e43_row10_col1" class="data row10 col1" >BA - IA402</td>
+      <td id="T_e3e43_row10_col2" class="data row10 col2" >25</td>
+      <td id="T_e3e43_row10_col3" class="data row10 col3" >5</td>
+      <td id="T_e3e43_row10_col4" class="data row10 col4" >2</td>
+      <td id="T_e3e43_row10_col5" class="data row10 col5" >0</td>
+      <td id="T_e3e43_row10_col6" class="data row10 col6" >3</td>
+    </tr>
+    <tr>
+      <td id="T_e3e43_row11_col0" class="data row11 col0" >12</td>
+      <td id="T_e3e43_row11_col1" class="data row11 col1" >BA - IA403</td>
+      <td id="T_e3e43_row11_col2" class="data row11 col2" >31.4</td>
+      <td id="T_e3e43_row11_col3" class="data row11 col3" >3.2</td>
+      <td id="T_e3e43_row11_col4" class="data row11 col4" >7</td>
+      <td id="T_e3e43_row11_col5" class="data row11 col5" >1.2</td>
+      <td id="T_e3e43_row11_col6" class="data row11 col6" >6.2</td>
+    </tr>
+    <tr>
+      <td id="T_e3e43_row12_col0" class="data row12 col0" >13</td>
+      <td id="T_e3e43_row12_col1" class="data row12 col1" >BA - IA404</td>
+      <td id="T_e3e43_row12_col2" class="data row12 col2" >20.2</td>
+      <td id="T_e3e43_row12_col3" class="data row12 col3" >2.5</td>
+      <td id="T_e3e43_row12_col4" class="data row12 col4" >3.8</td>
+      <td id="T_e3e43_row12_col5" class="data row12 col5" >0.6</td>
+      <td id="T_e3e43_row12_col6" class="data row12 col6" >5.3</td>
+    </tr>
+    <tr>
+      <td id="T_e3e43_row13_col0" class="data row13 col0" >14</td>
+      <td id="T_e3e43_row13_col1" class="data row13 col1" >BA - IA501</td>
+      <td id="T_e3e43_row13_col2" class="data row13 col2" >30.2</td>
+      <td id="T_e3e43_row13_col3" class="data row13 col3" >4.8</td>
+      <td id="T_e3e43_row13_col4" class="data row13 col4" >4.2</td>
+      <td id="T_e3e43_row13_col5" class="data row13 col5" >1.2</td>
+      <td id="T_e3e43_row13_col6" class="data row13 col6" >10.2</td>
+    </tr>
+    <tr>
+      <td id="T_e3e43_row14_col0" class="data row14 col0" >15</td>
+      <td id="T_e3e43_row14_col1" class="data row14 col1" >BA - IA503</td>
+      <td id="T_e3e43_row14_col2" class="data row14 col2" >26</td>
+      <td id="T_e3e43_row14_col3" class="data row14 col3" >2</td>
+      <td id="T_e3e43_row14_col4" class="data row14 col4" >7</td>
+      <td id="T_e3e43_row14_col5" class="data row14 col5" >2</td>
+      <td id="T_e3e43_row14_col6" class="data row14 col6" >10</td>
+    </tr>
+    <tr>
+      <td id="T_e3e43_row15_col0" class="data row15 col0" >16</td>
+      <td id="T_e3e43_row15_col1" class="data row15 col1" >GA - AA301</td>
+      <td id="T_e3e43_row15_col2" class="data row15 col2" >33.5</td>
+      <td id="T_e3e43_row15_col3" class="data row15 col3" >2.5</td>
+      <td id="T_e3e43_row15_col4" class="data row15 col4" >10.5</td>
+      <td id="T_e3e43_row15_col5" class="data row15 col5" >2.5</td>
+      <td id="T_e3e43_row15_col6" class="data row15 col6" >3.5</td>
+    </tr>
+    <tr>
+      <td id="T_e3e43_row16_col0" class="data row16 col0" >17</td>
+      <td id="T_e3e43_row16_col1" class="data row16 col1" >GA - AA302</td>
+      <td id="T_e3e43_row16_col2" class="data row16 col2" >12</td>
+      <td id="T_e3e43_row16_col3" class="data row16 col3" >1.5</td>
+      <td id="T_e3e43_row16_col4" class="data row16 col4" >2.3</td>
+      <td id="T_e3e43_row16_col5" class="data row16 col5" >0.9</td>
+      <td id="T_e3e43_row16_col6" class="data row16 col6" >4.1</td>
+    </tr>
+    <tr>
+      <td id="T_e3e43_row17_col0" class="data row17 col0" >18</td>
+      <td id="T_e3e43_row17_col1" class="data row17 col1" >GA - AA401</td>
+      <td id="T_e3e43_row17_col2" class="data row17 col2" >16</td>
+      <td id="T_e3e43_row17_col3" class="data row17 col3" >3.3</td>
+      <td id="T_e3e43_row17_col4" class="data row17 col4" >6</td>
+      <td id="T_e3e43_row17_col5" class="data row17 col5" >2</td>
+      <td id="T_e3e43_row17_col6" class="data row17 col6" >6.8</td>
+    </tr>
+    <tr>
+      <td id="T_e3e43_row18_col0" class="data row18 col0" >19</td>
+      <td id="T_e3e43_row18_col1" class="data row18 col1" >GA - IA301</td>
+      <td id="T_e3e43_row18_col2" class="data row18 col2" >24.8</td>
+      <td id="T_e3e43_row18_col3" class="data row18 col3" >4.7</td>
+      <td id="T_e3e43_row18_col4" class="data row18 col4" >3.4</td>
+      <td id="T_e3e43_row18_col5" class="data row18 col5" >0.6</td>
+      <td id="T_e3e43_row18_col6" class="data row18 col6" >6.4</td>
+    </tr>
+    <tr>
+      <td id="T_e3e43_row19_col0" class="data row19 col0" >20</td>
+      <td id="T_e3e43_row19_col1" class="data row19 col1" >GA - IA302</td>
+      <td id="T_e3e43_row19_col2" class="data row19 col2" >29.6</td>
+      <td id="T_e3e43_row19_col3" class="data row19 col3" >1.2</td>
+      <td id="T_e3e43_row19_col4" class="data row19 col4" >6.2</td>
+      <td id="T_e3e43_row19_col5" class="data row19 col5" >0.6</td>
+      <td id="T_e3e43_row19_col6" class="data row19 col6" >6.6</td>
+    </tr>
+    <tr>
+      <td id="T_e3e43_row20_col0" class="data row20 col0" >21</td>
+      <td id="T_e3e43_row20_col1" class="data row20 col1" >GA - IA303</td>
+      <td id="T_e3e43_row20_col2" class="data row20 col2" >27.4</td>
+      <td id="T_e3e43_row20_col3" class="data row20 col3" >3.3</td>
+      <td id="T_e3e43_row20_col4" class="data row20 col4" >6.3</td>
+      <td id="T_e3e43_row20_col5" class="data row20 col5" >1</td>
+      <td id="T_e3e43_row20_col6" class="data row20 col6" >6</td>
+    </tr>
+    <tr>
+      <td id="T_e3e43_row21_col0" class="data row21 col0" >22</td>
+      <td id="T_e3e43_row21_col1" class="data row21 col1" >GA - IA304</td>
+      <td id="T_e3e43_row21_col2" class="data row21 col2" >28.2</td>
+      <td id="T_e3e43_row21_col3" class="data row21 col3" >0.8</td>
+      <td id="T_e3e43_row21_col4" class="data row21 col4" >3.5</td>
+      <td id="T_e3e43_row21_col5" class="data row21 col5" >0.6</td>
+      <td id="T_e3e43_row21_col6" class="data row21 col6" >3.6</td>
+    </tr>
+    <tr>
+      <td id="T_e3e43_row22_col0" class="data row22 col0" >23</td>
+      <td id="T_e3e43_row22_col1" class="data row22 col1" >GA - IA305</td>
+      <td id="T_e3e43_row22_col2" class="data row22 col2" >34.5</td>
+      <td id="T_e3e43_row22_col3" class="data row22 col3" >7</td>
+      <td id="T_e3e43_row22_col4" class="data row22 col4" >7</td>
+      <td id="T_e3e43_row22_col5" class="data row22 col5" >1</td>
+      <td id="T_e3e43_row22_col6" class="data row22 col6" >9</td>
+    </tr>
+    <tr>
+      <td id="T_e3e43_row23_col0" class="data row23 col0" >24</td>
+      <td id="T_e3e43_row23_col1" class="data row23 col1" >GA - IA306</td>
+      <td id="T_e3e43_row23_col2" class="data row23 col2" >29</td>
+      <td id="T_e3e43_row23_col3" class="data row23 col3" >4.1</td>
+      <td id="T_e3e43_row23_col4" class="data row23 col4" >2.7</td>
+      <td id="T_e3e43_row23_col5" class="data row23 col5" >0.9</td>
+      <td id="T_e3e43_row23_col6" class="data row23 col6" >5.7</td>
+    </tr>
+    <tr>
+      <td id="T_e3e43_row24_col0" class="data row24 col0" >25</td>
+      <td id="T_e3e43_row24_col1" class="data row24 col1" >GA - IA307</td>
+      <td id="T_e3e43_row24_col2" class="data row24 col2" >30.9</td>
+      <td id="T_e3e43_row24_col3" class="data row24 col3" >1.6</td>
+      <td id="T_e3e43_row24_col4" class="data row24 col4" >4.4</td>
+      <td id="T_e3e43_row24_col5" class="data row24 col5" >1.1</td>
+      <td id="T_e3e43_row24_col6" class="data row24 col6" >4.1</td>
+    </tr>
+    <tr>
+      <td id="T_e3e43_row25_col0" class="data row25 col0" >26</td>
+      <td id="T_e3e43_row25_col1" class="data row25 col1" >GA - IA401</td>
+      <td id="T_e3e43_row25_col2" class="data row25 col2" >28.7</td>
+      <td id="T_e3e43_row25_col3" class="data row25 col3" >3</td>
+      <td id="T_e3e43_row25_col4" class="data row25 col4" >3.3</td>
+      <td id="T_e3e43_row25_col5" class="data row25 col5" >0.3</td>
+      <td id="T_e3e43_row25_col6" class="data row25 col6" >4</td>
+    </tr>
+    <tr>
+      <td id="T_e3e43_row26_col0" class="data row26 col0" >27</td>
+      <td id="T_e3e43_row26_col1" class="data row26 col1" >GA - IA402</td>
+      <td id="T_e3e43_row26_col2" class="data row26 col2" >23.5</td>
+      <td id="T_e3e43_row26_col3" class="data row26 col3" >2.3</td>
+      <td id="T_e3e43_row26_col4" class="data row26 col4" >5.2</td>
+      <td id="T_e3e43_row26_col5" class="data row26 col5" >1.1</td>
+      <td id="T_e3e43_row26_col6" class="data row26 col6" >4.8</td>
+    </tr>
+    <tr>
+      <td id="T_e3e43_row27_col0" class="data row27 col0" >28</td>
+      <td id="T_e3e43_row27_col1" class="data row27 col1" >GA - IA403</td>
+      <td id="T_e3e43_row27_col2" class="data row27 col2" >29.3</td>
+      <td id="T_e3e43_row27_col3" class="data row27 col3" >2.8</td>
+      <td id="T_e3e43_row27_col4" class="data row27 col4" >5</td>
+      <td id="T_e3e43_row27_col5" class="data row27 col5" >0.4</td>
+      <td id="T_e3e43_row27_col6" class="data row27 col6" >5.2</td>
+    </tr>
+    <tr>
+      <td id="T_e3e43_row28_col0" class="data row28 col0" >29</td>
+      <td id="T_e3e43_row28_col1" class="data row28 col1" >GA - IA404</td>
+      <td id="T_e3e43_row28_col2" class="data row28 col2" >29</td>
+      <td id="T_e3e43_row28_col3" class="data row28 col3" >5</td>
+      <td id="T_e3e43_row28_col4" class="data row28 col4" >7.7</td>
+      <td id="T_e3e43_row28_col5" class="data row28 col5" >1</td>
+      <td id="T_e3e43_row28_col6" class="data row28 col6" >7.6</td>
+    </tr>
+    <tr>
+      <td id="T_e3e43_row29_col0" class="data row29 col0" >30</td>
+      <td id="T_e3e43_row29_col1" class="data row29 col1" >GA - IA405</td>
+      <td id="T_e3e43_row29_col2" class="data row29 col2" >30.8</td>
+      <td id="T_e3e43_row29_col3" class="data row29 col3" >3.9</td>
+      <td id="T_e3e43_row29_col4" class="data row29 col4" >5.8</td>
+      <td id="T_e3e43_row29_col5" class="data row29 col5" >1.3</td>
+      <td id="T_e3e43_row29_col6" class="data row29 col6" >7.5</td>
+    </tr>
+    <tr>
+      <td id="T_e3e43_row30_col0" class="data row30 col0" >31</td>
+      <td id="T_e3e43_row30_col1" class="data row30 col1" >GA - IA507</td>
+      <td id="T_e3e43_row30_col2" class="data row30 col2" >32.8</td>
+      <td id="T_e3e43_row30_col3" class="data row30 col3" >4.3</td>
+      <td id="T_e3e43_row30_col4" class="data row30 col4" >5.7</td>
+      <td id="T_e3e43_row30_col5" class="data row30 col5" >1.9</td>
+      <td id="T_e3e43_row30_col6" class="data row30 col6" >7</td>
+    </tr>
+    <tr>
+      <td id="T_e3e43_row31_col0" class="data row31 col0" >32</td>
+      <td id="T_e3e43_row31_col1" class="data row31 col1" >MA - AA301</td>
+      <td id="T_e3e43_row31_col2" class="data row31 col2" >15.4</td>
+      <td id="T_e3e43_row31_col3" class="data row31 col3" >3.4</td>
+      <td id="T_e3e43_row31_col4" class="data row31 col4" >5.8</td>
+      <td id="T_e3e43_row31_col5" class="data row31 col5" >2.6</td>
+      <td id="T_e3e43_row31_col6" class="data row31 col6" >5</td>
+    </tr>
+    <tr>
+      <td id="T_e3e43_row32_col0" class="data row32 col0" >33</td>
+      <td id="T_e3e43_row32_col1" class="data row32 col1" >MA - AA302</td>
+      <td id="T_e3e43_row32_col2" class="data row32 col2" >19</td>
+      <td id="T_e3e43_row32_col3" class="data row32 col3" >3.8</td>
+      <td id="T_e3e43_row32_col4" class="data row32 col4" >6.2</td>
+      <td id="T_e3e43_row32_col5" class="data row32 col5" >1.8</td>
+      <td id="T_e3e43_row32_col6" class="data row32 col6" >8.2</td>
+    </tr>
+    <tr>
+      <td id="T_e3e43_row33_col0" class="data row33 col0" >34</td>
+      <td id="T_e3e43_row33_col1" class="data row33 col1" >MA - AA401</td>
+      <td id="T_e3e43_row33_col2" class="data row33 col2" >22</td>
+      <td id="T_e3e43_row33_col3" class="data row33 col3" >5</td>
+      <td id="T_e3e43_row33_col4" class="data row33 col4" >5</td>
+      <td id="T_e3e43_row33_col5" class="data row33 col5" >0</td>
+      <td id="T_e3e43_row33_col6" class="data row33 col6" >7</td>
+    </tr>
+    <tr>
+      <td id="T_e3e43_row34_col0" class="data row34 col0" >35</td>
+      <td id="T_e3e43_row34_col1" class="data row34 col1" >MA - IA301</td>
+      <td id="T_e3e43_row34_col2" class="data row34 col2" >25</td>
+      <td id="T_e3e43_row34_col3" class="data row34 col3" >3</td>
+      <td id="T_e3e43_row34_col4" class="data row34 col4" >2</td>
+      <td id="T_e3e43_row34_col5" class="data row34 col5" >0</td>
+      <td id="T_e3e43_row34_col6" class="data row34 col6" >2</td>
+    </tr>
+    <tr>
+      <td id="T_e3e43_row35_col0" class="data row35 col0" >36</td>
+      <td id="T_e3e43_row35_col1" class="data row35 col1" >PR - AA301</td>
+      <td id="T_e3e43_row35_col2" class="data row35 col2" >24.4</td>
+      <td id="T_e3e43_row35_col3" class="data row35 col3" >4.3</td>
+      <td id="T_e3e43_row35_col4" class="data row35 col4" >3.6</td>
+      <td id="T_e3e43_row35_col5" class="data row35 col5" >1.5</td>
+      <td id="T_e3e43_row35_col6" class="data row35 col6" >10.3</td>
+    </tr>
+    <tr>
+      <td id="T_e3e43_row36_col0" class="data row36 col0" >37</td>
+      <td id="T_e3e43_row36_col1" class="data row36 col1" >PR - AA302</td>
+      <td id="T_e3e43_row36_col2" class="data row36 col2" >22</td>
+      <td id="T_e3e43_row36_col3" class="data row36 col3" >5.1</td>
+      <td id="T_e3e43_row36_col4" class="data row36 col4" >5.5</td>
+      <td id="T_e3e43_row36_col5" class="data row36 col5" >0.7</td>
+      <td id="T_e3e43_row36_col6" class="data row36 col6" >8.1</td>
+    </tr>
+    <tr>
+      <td id="T_e3e43_row37_col0" class="data row37 col0" >38</td>
+      <td id="T_e3e43_row37_col1" class="data row37 col1" >PR - AA303</td>
+      <td id="T_e3e43_row37_col2" class="data row37 col2" >19.2</td>
+      <td id="T_e3e43_row37_col3" class="data row37 col3" >4.4</td>
+      <td id="T_e3e43_row37_col4" class="data row37 col4" >9</td>
+      <td id="T_e3e43_row37_col5" class="data row37 col5" >3.6</td>
+      <td id="T_e3e43_row37_col6" class="data row37 col6" >4.2</td>
+    </tr>
+    <tr>
+      <td id="T_e3e43_row38_col0" class="data row38 col0" >39</td>
+      <td id="T_e3e43_row38_col1" class="data row38 col1" >PR - AA401</td>
+      <td id="T_e3e43_row38_col2" class="data row38 col2" >21.5</td>
+      <td id="T_e3e43_row38_col3" class="data row38 col3" >6</td>
+      <td id="T_e3e43_row38_col4" class="data row38 col4" >6.1</td>
+      <td id="T_e3e43_row38_col5" class="data row38 col5" >2.1</td>
+      <td id="T_e3e43_row38_col6" class="data row38 col6" >9.4</td>
+    </tr>
+    <tr>
+      <td id="T_e3e43_row39_col0" class="data row39 col0" >40</td>
+      <td id="T_e3e43_row39_col1" class="data row39 col1" >PR - AA402</td>
+      <td id="T_e3e43_row39_col2" class="data row39 col2" >17.3</td>
+      <td id="T_e3e43_row39_col3" class="data row39 col3" >4.1</td>
+      <td id="T_e3e43_row39_col4" class="data row39 col4" >6.1</td>
+      <td id="T_e3e43_row39_col5" class="data row39 col5" >1.4</td>
+      <td id="T_e3e43_row39_col6" class="data row39 col6" >8.9</td>
+    </tr>
+    <tr>
+      <td id="T_e3e43_row40_col0" class="data row40 col0" >41</td>
+      <td id="T_e3e43_row40_col1" class="data row40 col1" >PR - AA501</td>
+      <td id="T_e3e43_row40_col2" class="data row40 col2" >28.1</td>
+      <td id="T_e3e43_row40_col3" class="data row40 col3" >6.5</td>
+      <td id="T_e3e43_row40_col4" class="data row40 col4" >8.4</td>
+      <td id="T_e3e43_row40_col5" class="data row40 col5" >2.2</td>
+      <td id="T_e3e43_row40_col6" class="data row40 col6" >9.4</td>
+    </tr>
+    <tr>
+      <td id="T_e3e43_row41_col0" class="data row41 col0" >42</td>
+      <td id="T_e3e43_row41_col1" class="data row41 col1" >PR - AX301</td>
+      <td id="T_e3e43_row41_col2" class="data row41 col2" >20.9</td>
+      <td id="T_e3e43_row41_col3" class="data row41 col3" >5.5</td>
+      <td id="T_e3e43_row41_col4" class="data row41 col4" >6.8</td>
+      <td id="T_e3e43_row41_col5" class="data row41 col5" >0.6</td>
+      <td id="T_e3e43_row41_col6" class="data row41 col6" >14</td>
+    </tr>
+    <tr>
+      <td id="T_e3e43_row42_col0" class="data row42 col0" >43</td>
+      <td id="T_e3e43_row42_col1" class="data row42 col1" >PR - IA301</td>
+      <td id="T_e3e43_row42_col2" class="data row42 col2" >21</td>
+      <td id="T_e3e43_row42_col3" class="data row42 col3" >4</td>
+      <td id="T_e3e43_row42_col4" class="data row42 col4" >4.2</td>
+      <td id="T_e3e43_row42_col5" class="data row42 col5" >1.1</td>
+      <td id="T_e3e43_row42_col6" class="data row42 col6" >6.6</td>
+    </tr>
+    <tr>
+      <td id="T_e3e43_row43_col0" class="data row43 col0" >44</td>
+      <td id="T_e3e43_row43_col1" class="data row43 col1" >PR - IA302</td>
+      <td id="T_e3e43_row43_col2" class="data row43 col2" >26.1</td>
+      <td id="T_e3e43_row43_col3" class="data row43 col3" >1.4</td>
+      <td id="T_e3e43_row43_col4" class="data row43 col4" >2</td>
+      <td id="T_e3e43_row43_col5" class="data row43 col5" >1.1</td>
+      <td id="T_e3e43_row43_col6" class="data row43 col6" >3.3</td>
+    </tr>
+    <tr>
+      <td id="T_e3e43_row44_col0" class="data row44 col0" >45</td>
+      <td id="T_e3e43_row44_col1" class="data row44 col1" >PR - IA401</td>
+      <td id="T_e3e43_row44_col2" class="data row44 col2" >25.6</td>
+      <td id="T_e3e43_row44_col3" class="data row44 col3" >3.1</td>
+      <td id="T_e3e43_row44_col4" class="data row44 col4" >7.8</td>
+      <td id="T_e3e43_row44_col5" class="data row44 col5" >0.7</td>
+      <td id="T_e3e43_row44_col6" class="data row44 col6" >8</td>
+    </tr>
+    <tr>
+      <td id="T_e3e43_row45_col0" class="data row45 col0" >46</td>
+      <td id="T_e3e43_row45_col1" class="data row45 col1" >PR - IA506</td>
+      <td id="T_e3e43_row45_col2" class="data row45 col2" >27.1</td>
+      <td id="T_e3e43_row45_col3" class="data row45 col3" >3.8</td>
+      <td id="T_e3e43_row45_col4" class="data row45 col4" >8.2</td>
+      <td id="T_e3e43_row45_col5" class="data row45 col5" >1.2</td>
+      <td id="T_e3e43_row45_col6" class="data row45 col6" >7.5</td>
+    </tr>
+    <tr>
+      <td id="T_e3e43_row46_col0" class="data row46 col0" >47</td>
+      <td id="T_e3e43_row46_col1" class="data row46 col1" >RG - AA301</td>
+      <td id="T_e3e43_row46_col2" class="data row46 col2" >17.5</td>
+      <td id="T_e3e43_row46_col3" class="data row46 col3" >2.8</td>
+      <td id="T_e3e43_row46_col4" class="data row46 col4" >3.2</td>
+      <td id="T_e3e43_row46_col5" class="data row46 col5" >0.8</td>
+      <td id="T_e3e43_row46_col6" class="data row46 col6" >6.5</td>
+    </tr>
+    <tr>
+      <td id="T_e3e43_row47_col0" class="data row47 col0" >48</td>
+      <td id="T_e3e43_row47_col1" class="data row47 col1" >RG - AA302</td>
+      <td id="T_e3e43_row47_col2" class="data row47 col2" >33.7</td>
+      <td id="T_e3e43_row47_col3" class="data row47 col3" >5.8</td>
+      <td id="T_e3e43_row47_col4" class="data row47 col4" >5.8</td>
+      <td id="T_e3e43_row47_col5" class="data row47 col5" >2.3</td>
+      <td id="T_e3e43_row47_col6" class="data row47 col6" >10.7</td>
+    </tr>
+    <tr>
+      <td id="T_e3e43_row48_col0" class="data row48 col0" >49</td>
+      <td id="T_e3e43_row48_col1" class="data row48 col1" >RG - AA401</td>
+      <td id="T_e3e43_row48_col2" class="data row48 col2" >20.5</td>
+      <td id="T_e3e43_row48_col3" class="data row48 col3" >3.9</td>
+      <td id="T_e3e43_row48_col4" class="data row48 col4" >4</td>
+      <td id="T_e3e43_row48_col5" class="data row48 col5" >0.7</td>
+      <td id="T_e3e43_row48_col6" class="data row48 col6" >8.1</td>
+    </tr>
+    <tr>
+      <td id="T_e3e43_row49_col0" class="data row49 col0" >50</td>
+      <td id="T_e3e43_row49_col1" class="data row49 col1" >RG - IA301</td>
+      <td id="T_e3e43_row49_col2" class="data row49 col2" >7.5</td>
+      <td id="T_e3e43_row49_col3" class="data row49 col3" >1</td>
+      <td id="T_e3e43_row49_col4" class="data row49 col4" >1.5</td>
+      <td id="T_e3e43_row49_col5" class="data row49 col5" >0.5</td>
+      <td id="T_e3e43_row49_col6" class="data row49 col6" >1</td>
+    </tr>
+    <tr>
+      <td id="T_e3e43_row50_col0" class="data row50 col0" >51</td>
+      <td id="T_e3e43_row50_col1" class="data row50 col1" >RG - IA303</td>
+      <td id="T_e3e43_row50_col2" class="data row50 col2" >26.4</td>
+      <td id="T_e3e43_row50_col3" class="data row50 col3" >2</td>
+      <td id="T_e3e43_row50_col4" class="data row50 col4" >5.8</td>
+      <td id="T_e3e43_row50_col5" class="data row50 col5" >1.5</td>
+      <td id="T_e3e43_row50_col6" class="data row50 col6" >5.5</td>
+    </tr>
+    <tr>
+      <td id="T_e3e43_row51_col0" class="data row51 col0" >52</td>
+      <td id="T_e3e43_row51_col1" class="data row51 col1" >RG - IA304</td>
+      <td id="T_e3e43_row51_col2" class="data row51 col2" >26</td>
+      <td id="T_e3e43_row51_col3" class="data row51 col3" >2.2</td>
+      <td id="T_e3e43_row51_col4" class="data row51 col4" >3.8</td>
+      <td id="T_e3e43_row51_col5" class="data row51 col5" >0</td>
+      <td id="T_e3e43_row51_col6" class="data row51 col6" >6.2</td>
+    </tr>
+    <tr>
+      <td id="T_e3e43_row52_col0" class="data row52 col0" >53</td>
+      <td id="T_e3e43_row52_col1" class="data row52 col1" >RG - IA305</td>
+      <td id="T_e3e43_row52_col2" class="data row52 col2" >22.4</td>
+      <td id="T_e3e43_row52_col3" class="data row52 col3" >2.9</td>
+      <td id="T_e3e43_row52_col4" class="data row52 col4" >7.6</td>
+      <td id="T_e3e43_row52_col5" class="data row52 col5" >1.6</td>
+      <td id="T_e3e43_row52_col6" class="data row52 col6" >3.8</td>
+    </tr>
+    <tr>
+      <td id="T_e3e43_row53_col0" class="data row53 col0" >54</td>
+      <td id="T_e3e43_row53_col1" class="data row53 col1" >RG - IA401</td>
+      <td id="T_e3e43_row53_col2" class="data row53 col2" >25.2</td>
+      <td id="T_e3e43_row53_col3" class="data row53 col3" >2.8</td>
+      <td id="T_e3e43_row53_col4" class="data row53 col4" >9.3</td>
+      <td id="T_e3e43_row53_col5" class="data row53 col5" >0.8</td>
+      <td id="T_e3e43_row53_col6" class="data row53 col6" >5.3</td>
+    </tr>
+    <tr>
+      <td id="T_e3e43_row54_col0" class="data row54 col0" >55</td>
+      <td id="T_e3e43_row54_col1" class="data row54 col1" >RW - AA301</td>
+      <td id="T_e3e43_row54_col2" class="data row54 col2" >15.8</td>
+      <td id="T_e3e43_row54_col3" class="data row54 col3" >5</td>
+      <td id="T_e3e43_row54_col4" class="data row54 col4" >1</td>
+      <td id="T_e3e43_row54_col5" class="data row54 col5" >0.6</td>
+      <td id="T_e3e43_row54_col6" class="data row54 col6" >10</td>
+    </tr>
+    <tr>
+      <td id="T_e3e43_row55_col0" class="data row55 col0" >56</td>
+      <td id="T_e3e43_row55_col1" class="data row55 col1" >RW - AA502</td>
+      <td id="T_e3e43_row55_col2" class="data row55 col2" >23.1</td>
+      <td id="T_e3e43_row55_col3" class="data row55 col3" >4.1</td>
+      <td id="T_e3e43_row55_col4" class="data row55 col4" >7</td>
+      <td id="T_e3e43_row55_col5" class="data row55 col5" >1.1</td>
+      <td id="T_e3e43_row55_col6" class="data row55 col6" >8.4</td>
+    </tr>
+    <tr>
+      <td id="T_e3e43_row56_col0" class="data row56 col0" >57</td>
+      <td id="T_e3e43_row56_col1" class="data row56 col1" >RW - AX301</td>
+      <td id="T_e3e43_row56_col2" class="data row56 col2" >21.6</td>
+      <td id="T_e3e43_row56_col3" class="data row56 col3" >3.4</td>
+      <td id="T_e3e43_row56_col4" class="data row56 col4" >5</td>
+      <td id="T_e3e43_row56_col5" class="data row56 col5" >4.7</td>
+      <td id="T_e3e43_row56_col6" class="data row56 col6" >6.9</td>
+    </tr>
+    <tr>
+      <td id="T_e3e43_row57_col0" class="data row57 col0" >58</td>
+      <td id="T_e3e43_row57_col1" class="data row57 col1" >RW - AX401</td>
+      <td id="T_e3e43_row57_col2" class="data row57 col2" >26.3</td>
+      <td id="T_e3e43_row57_col3" class="data row57 col3" >5.2</td>
+      <td id="T_e3e43_row57_col4" class="data row57 col4" >11.1</td>
+      <td id="T_e3e43_row57_col5" class="data row57 col5" >1.1</td>
+      <td id="T_e3e43_row57_col6" class="data row57 col6" >7</td>
+    </tr>
+    <tr>
+      <td id="T_e3e43_row58_col0" class="data row58 col0" >59</td>
+      <td id="T_e3e43_row58_col1" class="data row58 col1" >RW - AX402</td>
+      <td id="T_e3e43_row58_col2" class="data row58 col2" >19.6</td>
+      <td id="T_e3e43_row58_col3" class="data row58 col3" >4.2</td>
+      <td id="T_e3e43_row58_col4" class="data row58 col4" >5</td>
+      <td id="T_e3e43_row58_col5" class="data row58 col5" >1.3</td>
+      <td id="T_e3e43_row58_col6" class="data row58 col6" >6.5</td>
+    </tr>
+    <tr>
+      <td id="T_e3e43_row59_col0" class="data row59 col0" >60</td>
+      <td id="T_e3e43_row59_col1" class="data row59 col1" >RW - IA301</td>
+      <td id="T_e3e43_row59_col2" class="data row59 col2" >21</td>
+      <td id="T_e3e43_row59_col3" class="data row59 col3" >3</td>
+      <td id="T_e3e43_row59_col4" class="data row59 col4" >7</td>
+      <td id="T_e3e43_row59_col5" class="data row59 col5" >0</td>
+      <td id="T_e3e43_row59_col6" class="data row59 col6" >8</td>
+    </tr>
+    <tr>
+      <td id="T_e3e43_row60_col0" class="data row60 col0" >61</td>
+      <td id="T_e3e43_row60_col1" class="data row60 col1" >RW - IA302</td>
+      <td id="T_e3e43_row60_col2" class="data row60 col2" >30.8</td>
+      <td id="T_e3e43_row60_col3" class="data row60 col3" >7</td>
+      <td id="T_e3e43_row60_col4" class="data row60 col4" >5.5</td>
+      <td id="T_e3e43_row60_col5" class="data row60 col5" >0.8</td>
+      <td id="T_e3e43_row60_col6" class="data row60 col6" >0</td>
+    </tr>
+    <tr>
+      <td id="T_e3e43_row61_col0" class="data row61 col0" >62</td>
+      <td id="T_e3e43_row61_col1" class="data row61 col1" >RW - IA303</td>
+      <td id="T_e3e43_row61_col2" class="data row61 col2" >26</td>
+      <td id="T_e3e43_row61_col3" class="data row61 col3" >4</td>
+      <td id="T_e3e43_row61_col4" class="data row61 col4" >7.3</td>
+      <td id="T_e3e43_row61_col5" class="data row61 col5" >1.3</td>
+      <td id="T_e3e43_row61_col6" class="data row61 col6" >9.3</td>
+    </tr>
+    <tr>
+      <td id="T_e3e43_row62_col0" class="data row62 col0" >63</td>
+      <td id="T_e3e43_row62_col1" class="data row62 col1" >RW - IA304</td>
+      <td id="T_e3e43_row62_col2" class="data row62 col2" >26.8</td>
+      <td id="T_e3e43_row62_col3" class="data row62 col3" >1.5</td>
+      <td id="T_e3e43_row62_col4" class="data row62 col4" >3.7</td>
+      <td id="T_e3e43_row62_col5" class="data row62 col5" >1</td>
+      <td id="T_e3e43_row62_col6" class="data row62 col6" >3.8</td>
+    </tr>
+    <tr>
+      <td id="T_e3e43_row63_col0" class="data row63 col0" >64</td>
+      <td id="T_e3e43_row63_col1" class="data row63 col1" >RW - IA305</td>
+      <td id="T_e3e43_row63_col2" class="data row63 col2" >28.4</td>
+      <td id="T_e3e43_row63_col3" class="data row63 col3" >3</td>
+      <td id="T_e3e43_row63_col4" class="data row63 col4" >10.9</td>
+      <td id="T_e3e43_row63_col5" class="data row63 col5" >1</td>
+      <td id="T_e3e43_row63_col6" class="data row63 col6" >3.3</td>
+    </tr>
+    <tr>
+      <td id="T_e3e43_row64_col0" class="data row64 col0" >65</td>
+      <td id="T_e3e43_row64_col1" class="data row64 col1" >RW - IA401</td>
+      <td id="T_e3e43_row64_col2" class="data row64 col2" >30.9</td>
+      <td id="T_e3e43_row64_col3" class="data row64 col3" >2.7</td>
+      <td id="T_e3e43_row64_col4" class="data row64 col4" >6.6</td>
+      <td id="T_e3e43_row64_col5" class="data row64 col5" >0.9</td>
+      <td id="T_e3e43_row64_col6" class="data row64 col6" >4.8</td>
+    </tr>
+    <tr>
+      <td id="T_e3e43_row65_col0" class="data row65 col0" >66</td>
+      <td id="T_e3e43_row65_col1" class="data row65 col1" >RW - IA402</td>
+      <td id="T_e3e43_row65_col2" class="data row65 col2" >27.5</td>
+      <td id="T_e3e43_row65_col3" class="data row65 col3" >4.2</td>
+      <td id="T_e3e43_row65_col4" class="data row65 col4" >6.6</td>
+      <td id="T_e3e43_row65_col5" class="data row65 col5" >0.9</td>
+      <td id="T_e3e43_row65_col6" class="data row65 col6" >8.9</td>
+    </tr>
+    <tr>
+      <td id="T_e3e43_row66_col0" class="data row66 col0" >67</td>
+      <td id="T_e3e43_row66_col1" class="data row66 col1" >RW - IA501</td>
+      <td id="T_e3e43_row66_col2" class="data row66 col2" >28.7</td>
+      <td id="T_e3e43_row66_col3" class="data row66 col3" >3</td>
+      <td id="T_e3e43_row66_col4" class="data row66 col4" >5.7</td>
+      <td id="T_e3e43_row66_col5" class="data row66 col5" >2.3</td>
+      <td id="T_e3e43_row66_col6" class="data row66 col6" >8.7</td>
+    </tr>
+    <tr>
+      <td id="T_e3e43_row67_col0" class="data row67 col0" >68</td>
+      <td id="T_e3e43_row67_col1" class="data row67 col1" >RW - IA504</td>
+      <td id="T_e3e43_row67_col2" class="data row67 col2" >25</td>
+      <td id="T_e3e43_row67_col3" class="data row67 col3" >4</td>
+      <td id="T_e3e43_row67_col4" class="data row67 col4" >5</td>
+      <td id="T_e3e43_row67_col5" class="data row67 col5" >2</td>
+      <td id="T_e3e43_row67_col6" class="data row67 col6" >4</td>
+    </tr>
+    <tr>
+      <td id="T_e3e43_row68_col0" class="data row68 col0" >69</td>
+      <td id="T_e3e43_row68_col1" class="data row68 col1" >SA - AA301</td>
+      <td id="T_e3e43_row68_col2" class="data row68 col2" >18</td>
+      <td id="T_e3e43_row68_col3" class="data row68 col3" >4.1</td>
+      <td id="T_e3e43_row68_col4" class="data row68 col4" >2.8</td>
+      <td id="T_e3e43_row68_col5" class="data row68 col5" >1.1</td>
+      <td id="T_e3e43_row68_col6" class="data row68 col6" >5.5</td>
+    </tr>
+    <tr>
+      <td id="T_e3e43_row69_col0" class="data row69 col0" >70</td>
+      <td id="T_e3e43_row69_col1" class="data row69 col1" >SA - AA302</td>
+      <td id="T_e3e43_row69_col2" class="data row69 col2" >14.8</td>
+      <td id="T_e3e43_row69_col3" class="data row69 col3" >2.6</td>
+      <td id="T_e3e43_row69_col4" class="data row69 col4" >3.1</td>
+      <td id="T_e3e43_row69_col5" class="data row69 col5" >1</td>
+      <td id="T_e3e43_row69_col6" class="data row69 col6" >3</td>
+    </tr>
+    <tr>
+      <td id="T_e3e43_row70_col0" class="data row70 col0" >71</td>
+      <td id="T_e3e43_row70_col1" class="data row70 col1" >SA - AA304</td>
+      <td id="T_e3e43_row70_col2" class="data row70 col2" >22.6</td>
+      <td id="T_e3e43_row70_col3" class="data row70 col3" >4.1</td>
+      <td id="T_e3e43_row70_col4" class="data row70 col4" >7.1</td>
+      <td id="T_e3e43_row70_col5" class="data row70 col5" >1.6</td>
+      <td id="T_e3e43_row70_col6" class="data row70 col6" >7.8</td>
+    </tr>
+    <tr>
+      <td id="T_e3e43_row71_col0" class="data row71 col0" >72</td>
+      <td id="T_e3e43_row71_col1" class="data row71 col1" >SA - AA305</td>
+      <td id="T_e3e43_row71_col2" class="data row71 col2" >17.8</td>
+      <td id="T_e3e43_row71_col3" class="data row71 col3" >2.6</td>
+      <td id="T_e3e43_row71_col4" class="data row71 col4" >3.6</td>
+      <td id="T_e3e43_row71_col5" class="data row71 col5" >2</td>
+      <td id="T_e3e43_row71_col6" class="data row71 col6" >8.8</td>
+    </tr>
+    <tr>
+      <td id="T_e3e43_row72_col0" class="data row72 col0" >73</td>
+      <td id="T_e3e43_row72_col1" class="data row72 col1" >SA - AA306</td>
+      <td id="T_e3e43_row72_col2" class="data row72 col2" >17.6</td>
+      <td id="T_e3e43_row72_col3" class="data row72 col3" >3.7</td>
+      <td id="T_e3e43_row72_col4" class="data row72 col4" >7.5</td>
+      <td id="T_e3e43_row72_col5" class="data row72 col5" >0.4</td>
+      <td id="T_e3e43_row72_col6" class="data row72 col6" >10.1</td>
+    </tr>
+    <tr>
+      <td id="T_e3e43_row73_col0" class="data row73 col0" >74</td>
+      <td id="T_e3e43_row73_col1" class="data row73 col1" >SA - AA307</td>
+      <td id="T_e3e43_row73_col2" class="data row73 col2" >14.5</td>
+      <td id="T_e3e43_row73_col3" class="data row73 col3" >2.5</td>
+      <td id="T_e3e43_row73_col4" class="data row73 col4" >3.8</td>
+      <td id="T_e3e43_row73_col5" class="data row73 col5" >1.6</td>
+      <td id="T_e3e43_row73_col6" class="data row73 col6" >6.7</td>
+    </tr>
+    <tr>
+      <td id="T_e3e43_row74_col0" class="data row74 col0" >75</td>
+      <td id="T_e3e43_row74_col1" class="data row74 col1" >SA - AA308</td>
+      <td id="T_e3e43_row74_col2" class="data row74 col2" >11</td>
+      <td id="T_e3e43_row74_col3" class="data row74 col3" >2.6</td>
+      <td id="T_e3e43_row74_col4" class="data row74 col4" >7.5</td>
+      <td id="T_e3e43_row74_col5" class="data row74 col5" >1.1</td>
+      <td id="T_e3e43_row74_col6" class="data row74 col6" >2.5</td>
+    </tr>
+    <tr>
+      <td id="T_e3e43_row75_col0" class="data row75 col0" >76</td>
+      <td id="T_e3e43_row75_col1" class="data row75 col1" >SA - AA401</td>
+      <td id="T_e3e43_row75_col2" class="data row75 col2" >21</td>
+      <td id="T_e3e43_row75_col3" class="data row75 col3" >4.7</td>
+      <td id="T_e3e43_row75_col4" class="data row75 col4" >3.7</td>
+      <td id="T_e3e43_row75_col5" class="data row75 col5" >1</td>
+      <td id="T_e3e43_row75_col6" class="data row75 col6" >8.1</td>
+    </tr>
+    <tr>
+      <td id="T_e3e43_row76_col0" class="data row76 col0" >77</td>
+      <td id="T_e3e43_row76_col1" class="data row76 col1" >SA - AA402</td>
+      <td id="T_e3e43_row76_col2" class="data row76 col2" >18.2</td>
+      <td id="T_e3e43_row76_col3" class="data row76 col3" >2.6</td>
+      <td id="T_e3e43_row76_col4" class="data row76 col4" >3.7</td>
+      <td id="T_e3e43_row76_col5" class="data row76 col5" >0.7</td>
+      <td id="T_e3e43_row76_col6" class="data row76 col6" >10.1</td>
+    </tr>
+    <tr>
+      <td id="T_e3e43_row77_col0" class="data row77 col0" >78</td>
+      <td id="T_e3e43_row77_col1" class="data row77 col1" >SA - AA403</td>
+      <td id="T_e3e43_row77_col2" class="data row77 col2" >23.3</td>
+      <td id="T_e3e43_row77_col3" class="data row77 col3" >5.2</td>
+      <td id="T_e3e43_row77_col4" class="data row77 col4" >6.3</td>
+      <td id="T_e3e43_row77_col5" class="data row77 col5" >1.8</td>
+      <td id="T_e3e43_row77_col6" class="data row77 col6" >8.3</td>
+    </tr>
+    <tr>
+      <td id="T_e3e43_row78_col0" class="data row78 col0" >79</td>
+      <td id="T_e3e43_row78_col1" class="data row78 col1" >SA - IA301</td>
+      <td id="T_e3e43_row78_col2" class="data row78 col2" >25.2</td>
+      <td id="T_e3e43_row78_col3" class="data row78 col3" >3</td>
+      <td id="T_e3e43_row78_col4" class="data row78 col4" >3.8</td>
+      <td id="T_e3e43_row78_col5" class="data row78 col5" >0.5</td>
+      <td id="T_e3e43_row78_col6" class="data row78 col6" >4.8</td>
+    </tr>
+    <tr>
+      <td id="T_e3e43_row79_col0" class="data row79 col0" >80</td>
+      <td id="T_e3e43_row79_col1" class="data row79 col1" >SA - IA302</td>
+      <td id="T_e3e43_row79_col2" class="data row79 col2" >35</td>
+      <td id="T_e3e43_row79_col3" class="data row79 col3" >7</td>
+      <td id="T_e3e43_row79_col4" class="data row79 col4" >29</td>
+      <td id="T_e3e43_row79_col5" class="data row79 col5" >1</td>
+      <td id="T_e3e43_row79_col6" class="data row79 col6" >14</td>
+    </tr>
+    <tr>
+      <td id="T_e3e43_row80_col0" class="data row80 col0" >81</td>
+      <td id="T_e3e43_row80_col1" class="data row80 col1" >SA - IA303</td>
+      <td id="T_e3e43_row80_col2" class="data row80 col2" >18</td>
+      <td id="T_e3e43_row80_col3" class="data row80 col3" >3</td>
+      <td id="T_e3e43_row80_col4" class="data row80 col4" >2</td>
+      <td id="T_e3e43_row80_col5" class="data row80 col5" >1</td>
+      <td id="T_e3e43_row80_col6" class="data row80 col6" >0</td>
+    </tr>
+    <tr>
+      <td id="T_e3e43_row81_col0" class="data row81 col0" >82</td>
+      <td id="T_e3e43_row81_col1" class="data row81 col1" >SA - IA305</td>
+      <td id="T_e3e43_row81_col2" class="data row81 col2" >31.5</td>
+      <td id="T_e3e43_row81_col3" class="data row81 col3" >2</td>
+      <td id="T_e3e43_row81_col4" class="data row81 col4" >3.5</td>
+      <td id="T_e3e43_row81_col5" class="data row81 col5" >0</td>
+      <td id="T_e3e43_row81_col6" class="data row81 col6" >4</td>
+    </tr>
+    <tr>
+      <td id="T_e3e43_row82_col0" class="data row82 col0" >83</td>
+      <td id="T_e3e43_row82_col1" class="data row82 col1" >SA - IA401</td>
+      <td id="T_e3e43_row82_col2" class="data row82 col2" >29.4</td>
+      <td id="T_e3e43_row82_col3" class="data row82 col3" >3.1</td>
+      <td id="T_e3e43_row82_col4" class="data row82 col4" >4.7</td>
+      <td id="T_e3e43_row82_col5" class="data row82 col5" >0.7</td>
+      <td id="T_e3e43_row82_col6" class="data row82 col6" >5.1</td>
+    </tr>
+    <tr>
+      <td id="T_e3e43_row83_col0" class="data row83 col0" >84</td>
+      <td id="T_e3e43_row83_col1" class="data row83 col1" >SA - IA402</td>
+      <td id="T_e3e43_row83_col2" class="data row83 col2" >20</td>
+      <td id="T_e3e43_row83_col3" class="data row83 col3" >3</td>
+      <td id="T_e3e43_row83_col4" class="data row83 col4" >15</td>
+      <td id="T_e3e43_row83_col5" class="data row83 col5" >4</td>
+      <td id="T_e3e43_row83_col6" class="data row83 col6" >4</td>
+    </tr>
+    <tr>
+      <td id="T_e3e43_row84_col0" class="data row84 col0" >85</td>
+      <td id="T_e3e43_row84_col1" class="data row84 col1" >SA - IA505</td>
+      <td id="T_e3e43_row84_col2" class="data row84 col2" >27.4</td>
+      <td id="T_e3e43_row84_col3" class="data row84 col3" >4.8</td>
+      <td id="T_e3e43_row84_col4" class="data row84 col4" >7.2</td>
+      <td id="T_e3e43_row84_col5" class="data row84 col5" >1.6</td>
+      <td id="T_e3e43_row84_col6" class="data row84 col6" >6.2</td>
+    </tr>
+    <tr>
+      <td id="T_e3e43_row85_col0" class="data row85 col0" >86</td>
+      <td id="T_e3e43_row85_col1" class="data row85 col1" >SL - AA301</td>
+      <td id="T_e3e43_row85_col2" class="data row85 col2" >19.4</td>
+      <td id="T_e3e43_row85_col3" class="data row85 col3" >3.5</td>
+      <td id="T_e3e43_row85_col4" class="data row85 col4" >4</td>
+      <td id="T_e3e43_row85_col5" class="data row85 col5" >1.2</td>
+      <td id="T_e3e43_row85_col6" class="data row85 col6" >7.4</td>
+    </tr>
+    <tr>
+      <td id="T_e3e43_row86_col0" class="data row86 col0" >87</td>
+      <td id="T_e3e43_row86_col1" class="data row86 col1" >SL - AA303</td>
+      <td id="T_e3e43_row86_col2" class="data row86 col2" >24</td>
+      <td id="T_e3e43_row86_col3" class="data row86 col3" >2.7</td>
+      <td id="T_e3e43_row86_col4" class="data row86 col4" >28.3</td>
+      <td id="T_e3e43_row86_col5" class="data row86 col5" >3.7</td>
+      <td id="T_e3e43_row86_col6" class="data row86 col6" >8.3</td>
+    </tr>
+    <tr>
+      <td id="T_e3e43_row87_col0" class="data row87 col0" >88</td>
+      <td id="T_e3e43_row87_col1" class="data row87 col1" >SL - IA302</td>
+      <td id="T_e3e43_row87_col2" class="data row87 col2" >34.3</td>
+      <td id="T_e3e43_row87_col3" class="data row87 col3" >1.7</td>
+      <td id="T_e3e43_row87_col4" class="data row87 col4" >13.3</td>
+      <td id="T_e3e43_row87_col5" class="data row87 col5" >3.7</td>
+      <td id="T_e3e43_row87_col6" class="data row87 col6" >3.3</td>
+    </tr>
+    <tr>
+      <td id="T_e3e43_row88_col0" class="data row88 col0" >89</td>
+      <td id="T_e3e43_row88_col1" class="data row88 col1" >SL - IA401</td>
+      <td id="T_e3e43_row88_col2" class="data row88 col2" >21.5</td>
+      <td id="T_e3e43_row88_col3" class="data row88 col3" >3.2</td>
+      <td id="T_e3e43_row88_col4" class="data row88 col4" >6</td>
+      <td id="T_e3e43_row88_col5" class="data row88 col5" >0.3</td>
+      <td id="T_e3e43_row88_col6" class="data row88 col6" >3.5</td>
+    </tr>
+    <tr>
+      <td id="T_e3e43_row89_col0" class="data row89 col0" >90</td>
+      <td id="T_e3e43_row89_col1" class="data row89 col1" >SL - IA402</td>
+      <td id="T_e3e43_row89_col2" class="data row89 col2" >26.3</td>
+      <td id="T_e3e43_row89_col3" class="data row89 col3" >4</td>
+      <td id="T_e3e43_row89_col4" class="data row89 col4" >7</td>
+      <td id="T_e3e43_row89_col5" class="data row89 col5" >2.3</td>
+      <td id="T_e3e43_row89_col6" class="data row89 col6" >6.7</td>
+    </tr>
+    <tr>
+      <td id="T_e3e43_row90_col0" class="data row90 col0" >91</td>
+      <td id="T_e3e43_row90_col1" class="data row90 col1" >SL - IA502</td>
+      <td id="T_e3e43_row90_col2" class="data row90 col2" >30</td>
+      <td id="T_e3e43_row90_col3" class="data row90 col3" >4</td>
+      <td id="T_e3e43_row90_col4" class="data row90 col4" >7</td>
+      <td id="T_e3e43_row90_col5" class="data row90 col5" >3</td>
+      <td id="T_e3e43_row90_col6" class="data row90 col6" >2</td>
+    </tr>
+    <tr>
+      <td id="T_e3e43_row91_col0" class="data row91 col0" >92</td>
+      <td id="T_e3e43_row91_col1" class="data row91 col1" >SU - AA301</td>
+      <td id="T_e3e43_row91_col2" class="data row91 col2" >1</td>
+      <td id="T_e3e43_row91_col3" class="data row91 col3" >7</td>
+      <td id="T_e3e43_row91_col4" class="data row91 col4" >1</td>
+      <td id="T_e3e43_row91_col5" class="data row91 col5" >2</td>
+      <td id="T_e3e43_row91_col6" class="data row91 col6" >7</td>
+    </tr>
+    <tr>
+      <td id="T_e3e43_row92_col0" class="data row92 col0" >93</td>
+      <td id="T_e3e43_row92_col1" class="data row92 col1" >SU - AA401</td>
+      <td id="T_e3e43_row92_col2" class="data row92 col2" >23.8</td>
+      <td id="T_e3e43_row92_col3" class="data row92 col3" >5.2</td>
+      <td id="T_e3e43_row92_col4" class="data row92 col4" >7.2</td>
+      <td id="T_e3e43_row92_col5" class="data row92 col5" >1.5</td>
+      <td id="T_e3e43_row92_col6" class="data row92 col6" >6.8</td>
+    </tr>
+    <tr>
+      <td id="T_e3e43_row93_col0" class="data row93 col0" >94</td>
+      <td id="T_e3e43_row93_col1" class="data row93 col1" >SU - IA301</td>
+      <td id="T_e3e43_row93_col2" class="data row93 col2" >30</td>
+      <td id="T_e3e43_row93_col3" class="data row93 col3" >1</td>
+      <td id="T_e3e43_row93_col4" class="data row93 col4" >7</td>
+      <td id="T_e3e43_row93_col5" class="data row93 col5" >2</td>
+      <td id="T_e3e43_row93_col6" class="data row93 col6" >2</td>
+    </tr>
+    <tr>
+      <td id="T_e3e43_row94_col0" class="data row94 col0" >95</td>
+      <td id="T_e3e43_row94_col1" class="data row94 col1" >SU - IA303</td>
+      <td id="T_e3e43_row94_col2" class="data row94 col2" >28.9</td>
+      <td id="T_e3e43_row94_col3" class="data row94 col3" >1.7</td>
+      <td id="T_e3e43_row94_col4" class="data row94 col4" >8.7</td>
+      <td id="T_e3e43_row94_col5" class="data row94 col5" >1.4</td>
+      <td id="T_e3e43_row94_col6" class="data row94 col6" >3.1</td>
+    </tr>
+    <tr>
+      <td id="T_e3e43_row95_col0" class="data row95 col0" >96</td>
+      <td id="T_e3e43_row95_col1" class="data row95 col1" >SU - IA401</td>
+      <td id="T_e3e43_row95_col2" class="data row95 col2" >27.5</td>
+      <td id="T_e3e43_row95_col3" class="data row95 col3" >5.5</td>
+      <td id="T_e3e43_row95_col4" class="data row95 col4" >5</td>
+      <td id="T_e3e43_row95_col5" class="data row95 col5" >1.5</td>
+      <td id="T_e3e43_row95_col6" class="data row95 col6" >7</td>
+    </tr>
+    <tr>
+      <td id="T_e3e43_row96_col0" class="data row96 col0" >97</td>
+      <td id="T_e3e43_row96_col1" class="data row96 col1" >SU - IA402</td>
+      <td id="T_e3e43_row96_col2" class="data row96 col2" >30</td>
+      <td id="T_e3e43_row96_col3" class="data row96 col3" >3</td>
+      <td id="T_e3e43_row96_col4" class="data row96 col4" >30</td>
+      <td id="T_e3e43_row96_col5" class="data row96 col5" >0</td>
+      <td id="T_e3e43_row96_col6" class="data row96 col6" >14</td>
+    </tr>
+  </tbody>
+</table>
+
+        </div>
+        
+<div class="mt-3 p-2 bg-light border rounded">
+    <div class="fw-bold small text-secondary mb-1">Legenda Capaian Yaumiyan:</div>
+    <div class="table-responsive">
+        <table class="table table-bordered table-sm text-center mb-0 align-middle" style="font-size: 11px;">
+            <thead class="table-dark">
+                <tr>
+                    <th>Amalan Yaumiyan</th>
+                    <th style="background-color: #28a745; color: white;">Hijau (Baik)</th>
+                    <th style="background-color: #ffc107; color: black;">Kuning (Cukup)</th>
+                    <th style="background-color: #dc3545; color: white;">Merah (Kurang)</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr><td class="fw-bold">Sholat Jamaah</td><td>&gt; 20</td><td>7 – 20</td><td>0 – 6</td></tr>
+                <tr><td class="fw-bold">Qiyamul Lail</td><td>&gt; 2</td><td>1 – 2</td><td>0</td></tr>
+                <tr><td class="fw-bold">Tilawah</td><td>&gt; 6</td><td>4 – 6</td><td>0 – 3</td></tr>
+                <tr><td class="fw-bold">Shoum Sunnah</td><td>&gt; 1</td><td>1</td><td>0</td></tr>
+                <tr><td class="fw-bold">Al-Matsurot</td><td>&gt; 6</td><td>4 – 6</td><td>0 – 3</td></tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+    </div>
+</div>
+
+</div>
+
+<script>
+    
+    new Chart(document.getElementById('chart_0'), {
+        type: 'bar',
+        data: {
+            labels: ["BA", "BI", "GA", "MA", "PR", "RG", "RW", "SA", "SL", "SU"],
+            datasets: [{"label": "Total User Terdaftar", "data": [98, 6, 103, 17, 68, 47, 66, 110, 34, 37], "backgroundColor": "rgba(54, 162, 235, 0.75)"}]
+        },
+        plugins: [ChartDataLabels],
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            layout: { padding: { top: 25 } },
+            plugins: {
+                legend: { position: 'top', labels: { boxWidth: 12, font: { size: 10 } } },
+                datalabels: {
+                    anchor: 'end',
+                    align: 'top',
+                    offset: 2,
+                    rotation: -90,
+                    font: { weight: 'bold', size: 9 },
+                    formatter: function(value) { return (value !== null && value !== 0) ? value : ''; }
+                }
+            },
+            scales: {
+                y: { beginAtZero: true, grace: '12%' }
+            }
+        }
+    });
+    
+    new Chart(document.getElementById('chart_1'), {
+        type: 'bar',
+        data: {
+            labels: ["BA", "BI", "GA", "MA", "PR", "RG", "RW", "SA", "SL", "SU"],
+            datasets: [{"label": "User Mengisi", "data": [56, 0, 76, 9, 56, 27, 48, 79, 15, 11], "backgroundColor": "rgba(54, 162, 235, 0.75)"}, {"label": "User Terdaftar", "data": [98, 6, 103, 17, 68, 47, 66, 110, 34, 37], "backgroundColor": "rgba(255, 99, 132, 0.75)"}]
+        },
+        plugins: [ChartDataLabels],
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            layout: { padding: { top: 25 } },
+            plugins: {
+                legend: { position: 'top', labels: { boxWidth: 12, font: { size: 10 } } },
+                datalabels: {
+                    anchor: 'end',
+                    align: 'top',
+                    offset: 2,
+                    rotation: -90,
+                    font: { weight: 'bold', size: 9 },
+                    formatter: function(value) { return (value !== null && value !== 0) ? value : ''; }
+                }
+            },
+            scales: {
+                y: { beginAtZero: true, grace: '12%' }
+            }
+        }
+    });
+    
+    new Chart(document.getElementById('chart_2'), {
+        type: 'bar',
+        data: {
+            labels: ["BA", "BI", "GA", "MA", "PR", "RG", "RW", "SA", "SL", "SU"],
+            datasets: [{"label": "Kelas Aktif Mengisi", "data": [8, 0, 14, 2, 10, 7, 9, 11, 2, 4], "backgroundColor": "rgba(54, 162, 235, 0.75)"}, {"label": "Total Kelas Terdaftar", "data": [17, 4, 16, 4, 11, 9, 14, 18, 7, 8], "backgroundColor": "rgba(255, 99, 132, 0.75)"}]
+        },
+        plugins: [ChartDataLabels],
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            layout: { padding: { top: 25 } },
+            plugins: {
+                legend: { position: 'top', labels: { boxWidth: 12, font: { size: 10 } } },
+                datalabels: {
+                    anchor: 'end',
+                    align: 'top',
+                    offset: 2,
+                    rotation: -90,
+                    font: { weight: 'bold', size: 9 },
+                    formatter: function(value) { return (value !== null && value !== 0) ? value : ''; }
+                }
+            },
+            scales: {
+                y: { beginAtZero: true, grace: '12%' }
+            }
+        }
+    });
+    
+    new Chart(document.getElementById('chart_3'), {
+        type: 'bar',
+        data: {
+            labels: ["BA", "BI", "GA", "MA", "PR", "RG", "RW", "SA", "SL", "SU"],
+            datasets: [{"label": "User Mengisi IB", "data": [18, 0, 40, 2, 27, 4, 9, 39, 1, 3], "backgroundColor": "rgba(54, 162, 235, 0.75)"}, {"label": "User Terdaftar Sektor", "data": [98, 6, 103, 17, 68, 47, 66, 110, 34, 37], "backgroundColor": "rgba(255, 99, 132, 0.75)"}]
+        },
+        plugins: [ChartDataLabels],
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            layout: { padding: { top: 25 } },
+            plugins: {
+                legend: { position: 'top', labels: { boxWidth: 12, font: { size: 10 } } },
+                datalabels: {
+                    anchor: 'end',
+                    align: 'top',
+                    offset: 2,
+                    rotation: -90,
+                    font: { weight: 'bold', size: 9 },
+                    formatter: function(value) { return (value !== null && value !== 0) ? value : ''; }
+                }
+            },
+            scales: {
+                y: { beginAtZero: true, grace: '12%' }
+            }
+        }
+    });
+    
+    new Chart(document.getElementById('chart_4'), {
+        type: 'bar',
+        data: {
+            labels: ["BA", "GA", "MA", "PR", "RG", "RW", "SA", "SL", "SU"],
+            datasets: [{"label": "Sholat Jamaah", "data": [22, 27, 19, 24, 23, 25, 20, 22, 26], "backgroundColor": "rgba(54, 162, 235, 0.75)"}, {"label": "Qiyamul Lail", "data": [3, 3, 4, 5, 3, 4, 4, 3, 3], "backgroundColor": "rgba(255, 99, 132, 0.75)"}, {"label": "Tilawah", "data": [5, 5, 6, 6, 5, 7, 5, 8, 9], "backgroundColor": "rgba(75, 192, 192, 0.75)"}, {"label": "Shoum Sunnah", "data": [1, 1, 2, 1, 1, 1, 1, 2, 1], "backgroundColor": "rgba(255, 206, 86, 0.75)"}, {"label": "Olah Raga", "data": [2, 3, 2, 2, 2, 2, 2, 3, 2], "backgroundColor": "rgba(153, 102, 255, 0.75)"}, {"label": "Al-Matsurot", "data": [6, 6, 6, 8, 6, 7, 7, 6, 5], "backgroundColor": "rgba(255, 159, 64, 0.75)"}]
+        },
+        plugins: [ChartDataLabels],
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            layout: { padding: { top: 25 } },
+            plugins: {
+                legend: { position: 'top', labels: { boxWidth: 12, font: { size: 10 } } },
+                datalabels: {
+                    anchor: 'end',
+                    align: 'top',
+                    offset: 2,
+                    rotation: -90,
+                    font: { weight: 'bold', size: 9 },
+                    formatter: function(value) { return (value !== null && value !== 0) ? value : ''; }
+                }
+            },
+            scales: {
+                y: { beginAtZero: true, grace: '12%' }
+            }
+        }
+    });
+    
+    new Chart(document.getElementById('chart_5'), {
+        type: 'bar',
+        data: {
+            labels: ["BA", "GA", "MA", "PR", "RG", "RW", "SA", "SL", "SU"],
+            datasets: [{"label": "Walashadir", "data": [96, 88, 100, 93, 94, 90, 85, 80, 92], "backgroundColor": "rgba(54, 162, 235, 0.75)"}, {"label": "Tilawah & Hafalan", "data": [92, 90, 100, 73, 89, 84, 90, 100, 85], "backgroundColor": "rgba(255, 99, 132, 0.75)"}, {"label": "Kalam Naqib", "data": [84, 86, 100, 73, 89, 84, 76, 80, 92], "backgroundColor": "rgba(75, 192, 192, 0.75)"}, {"label": "Membaca MR", "data": [68, 66, 50, 57, 50, 65, 66, 80, 54], "backgroundColor": "rgba(255, 206, 86, 0.75)"}, {"label": "Tatsqif Usroh", "data": [72, 71, 100, 60, 89, 77, 76, 80, 38], "backgroundColor": "rgba(153, 102, 255, 0.75)"}, {"label": "Talimat", "data": [92, 90, 100, 67, 94, 71, 63, 100, 69], "backgroundColor": "rgba(255, 159, 64, 0.75)"}, {"label": "Monev Program", "data": [88, 78, 50, 60, 89, 74, 66, 100, 77], "backgroundColor": "rgba(201, 203, 207, 0.75)"}, {"label": "Qodhoya Rawai", "data": [84, 88, 100, 63, 94, 87, 73, 100, 77], "backgroundColor": "rgba(0, 200, 83, 0.75)"}, {"label": "Kelas Offline", "data": [96, 51, 0, 77, 78, 68, 76, 80, 46], "backgroundColor": "rgba(54, 162, 235, 0.75)"}]
+        },
+        plugins: [ChartDataLabels],
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            layout: { padding: { top: 25 } },
+            plugins: {
+                legend: { position: 'top', labels: { boxWidth: 12, font: { size: 10 } } },
+                datalabels: {
+                    anchor: 'end',
+                    align: 'top',
+                    offset: 2,
+                    rotation: -90,
+                    font: { weight: 'bold', size: 9 },
+                    formatter: function(value) { return (value !== null && value !== 0) ? value : ''; }
+                }
+            },
+            scales: {
+                y: { beginAtZero: true, grace: '12%' }
+            }
+        }
+    });
+    
+    new Chart(document.getElementById('chart_6'), {
+        type: 'bar',
+        data: {
+            labels: ["Akhwat", "Ikhwan"],
+            datasets: [{"label": "Sholat Jamaah", "data": [24, 24], "backgroundColor": "rgba(54, 162, 235, 0.75)"}, {"label": "Qiyamul Lail", "data": [4, 3], "backgroundColor": "rgba(255, 99, 132, 0.75)"}, {"label": "Tilawah", "data": [5, 5], "backgroundColor": "rgba(75, 192, 192, 0.75)"}, {"label": "Shoum Sunnah", "data": [1, 1], "backgroundColor": "rgba(255, 206, 86, 0.75)"}, {"label": "Olah Raga", "data": [2, 2], "backgroundColor": "rgba(153, 102, 255, 0.75)"}, {"label": "Al-Matsurot", "data": [6, 6], "backgroundColor": "rgba(255, 159, 64, 0.75)"}]
+        },
+        plugins: [ChartDataLabels],
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            layout: { padding: { top: 25 } },
+            plugins: {
+                legend: { position: 'top', labels: { boxWidth: 12, font: { size: 10 } } },
+                datalabels: {
+                    anchor: 'end',
+                    align: 'top',
+                    offset: 2,
+                    rotation: -90,
+                    font: { weight: 'bold', size: 9 },
+                    formatter: function(value) { return (value !== null && value !== 0) ? value : ''; }
+                }
+            },
+            scales: {
+                y: { beginAtZero: true, grace: '12%' }
+            }
+        }
+    });
+    
+new Chart(document.getElementById('pyramid_chart'), {
+    type: 'bar',
+    data: {
+        labels: ['L5', 'L4', 'L3', 'L2', 'L1', 'L0'],
+        datasets: [
+            {
+                label: 'Ikhwan (I)',
+                data: [-45, -128, -179, -32, -51, -97],
+                backgroundColor: 'rgba(54, 162, 235, 0.85)'
+            },
+            {
+                label: 'Akhwat (A)',
+                data: [12, 72, 150, 62, 89, 175],
+                backgroundColor: 'rgba(255, 99, 132, 0.85)'
+            }
+        ]
+    },
+    plugins: [ChartDataLabels],
+    options: {
+        indexAxis: 'y',
+        responsive: true,
+        maintainAspectRatio: false,
+        scales: {
+            x: {
+                stacked: true,
+                ticks: {
+                    callback: function(value) { return Math.abs(value); }
+                }
+            },
+            y: { stacked: true }
+        },
+        plugins: {
+            legend: { position: 'top' },
+            tooltip: {
+                callbacks: {
+                    label: function(context) {
+                        return context.dataset.label + ': ' + Math.abs(context.raw);
+                    }
+                }
+            },
+            datalabels: {
+                color: '#fff',
+                font: { weight: 'bold', size: 10 },
+                formatter: function(value) {
+                    var absVal = Math.abs(value);
+                    return absVal > 0 ? absVal : '';
+                }
+            }
+        }
+    }
+});
+
+</script>
+</body>
+</html>
